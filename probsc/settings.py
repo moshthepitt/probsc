@@ -61,10 +61,13 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'suit_redactor',
     'django_extensions',
+    'django_tables2',
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
+    # whitenoise
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

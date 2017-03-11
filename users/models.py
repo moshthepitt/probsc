@@ -15,10 +15,7 @@ class UserProfile(models.Model):
     created_on = models.DateTimeField(_("Created on"), auto_now_add=True)
     updated_on = models.DateTimeField(_("Updated on"), auto_now=True)
     user = models.OneToOneField(User, verbose_name=_("User"))
+    active = models.BooleanField(_("Active"), default=True, help_text="Is the staff member still actively employed?")
 
     def __str__(self):
         return _("{user}'s profile").format(user=self.user)
-
-
-# S I G N A L S
-from users import signals
