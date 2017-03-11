@@ -1,5 +1,5 @@
 """
-WSGI config for template3 project.
+WSGI config for probsc project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -12,6 +12,6 @@ import os
 from django.core.wsgi import get_wsgi_application
 from whitenoise.django import DjangoWhiteNoise
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "template3.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "probsc.settings")
 
 application = DjangoWhiteNoise(get_wsgi_application())
