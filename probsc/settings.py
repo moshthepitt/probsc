@@ -64,7 +64,7 @@ INSTALLED_APPS = [
     'django_tables2',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     # whitenoise
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -75,7 +75,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     # custom
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware'
@@ -219,7 +218,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 # Suit
 
 SUIT_CONFIG = {
-    'ADMIN_NAME': 'Django Template',
+    'ADMIN_NAME': 'Pro BSC',
     'SEARCH_URL': '',
 
 }
