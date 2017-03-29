@@ -8,6 +8,9 @@ from .managers import CustomerManager
 
 
 class Customer(TimeStampedModel):
+    """
+    Represents a person/organisation that uses ProBSC
+    """
     name = models.CharField(_("Name"), max_length=255)
     email = models.EmailField(_('Email Address'), blank=True)
     phone = PhoneNumberField(_('Phone Number'), max_length=255, blank=True)

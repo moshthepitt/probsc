@@ -10,6 +10,12 @@ User = settings.AUTH_USER_MODEL
 
 
 class Scorecard(TimeStampedModel):
+    """
+    Each staff member can have one ore more scorecards
+    A scorecard is a group of performance indicators that relate to:
+        1. a staff member
+        2. an appraissal period
+    """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     user = models.ForeignKey(User, verbose_name=_("User"), on_delete=models.PROTECT, blank=True, null=True)

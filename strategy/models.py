@@ -8,6 +8,9 @@ from .managers import ObjectiveManager, StrategicThemeManager
 
 
 class StrategicTheme(TimeStampedModel):
+    """
+    A way to categorise business objectives
+    """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     customer = models.ForeignKey(
@@ -26,6 +29,9 @@ class StrategicTheme(TimeStampedModel):
 
 
 class Objective(MPTTModel, TimeStampedModel):
+    """
+    Strategic objectives of the organisation
+    """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     strategic_theme = models.ForeignKey(
