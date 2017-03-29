@@ -8,6 +8,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 class StrategicTheme(TimeStampedModel):
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
+    customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
 
     class Meta:
@@ -24,6 +25,7 @@ class Objective(MPTTModel, TimeStampedModel):
     description = models.TextField(_("Description"), blank=True, default="")
     strategic_theme = models.ForeignKey(StrategicTheme, verbose_name=_("Strategic Theme"), on_delete=models.PROTECT)
     parent = TreeForeignKey('self', verbose_name=_("Contributes to"), null=True, blank=True, related_name='children', db_index=True)
+    customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
 
     class Meta:

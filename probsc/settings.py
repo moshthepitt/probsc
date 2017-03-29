@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_tables2',
     'mptt',
+    'phonenumber_field',
 ]
 
 MIDDLEWARE = [

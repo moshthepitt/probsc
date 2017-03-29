@@ -86,6 +86,7 @@ class KPI(TimeStampedModel):
     weight = models.DecimalField(_("Weight"), max_digits=5, decimal_places=2)
     reporting_period = models.CharField(_("Reporting Period"), max_length=1, choices=REPORTING_PERIOD_CHOICES, blank=False, default=ANNUALLY)
     calculation = models.CharField(_("Calculation"), max_length=1, choices=CALCULATION_CHOICES, blank=False, default=SUM)
+    customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
 
     class Meta:
