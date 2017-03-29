@@ -8,6 +8,7 @@ django-compressor==2.1.1
 django-crispy-forms==1.6.1
 django-debug-toolbar==1.7
 django-extensions==1.7.7
+django-mptt==0.8.7
 django-suit==0.2.24
 django-suit-redactor==0.0.4
 django-tables2==1.4.2

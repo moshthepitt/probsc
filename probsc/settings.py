@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'suit_redactor',
     'django_extensions',
     'django_tables2',
+    'mptt',
 ]
 
 MIDDLEWARE = [
