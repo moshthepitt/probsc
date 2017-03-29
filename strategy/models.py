@@ -4,12 +4,16 @@ from django.utils.translation import ugettext_lazy as _
 from django_extensions.db.models import TimeStampedModel
 from mptt.models import MPTTModel, TreeForeignKey
 
+from .managers import ObjectiveManager, StrategicThemeManager
+
 
 class StrategicTheme(TimeStampedModel):
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
+
+    objects = StrategicThemeManager()
 
     class Meta:
         verbose_name = _("Strategic Theme")
@@ -27,6 +31,8 @@ class Objective(MPTTModel, TimeStampedModel):
     parent = TreeForeignKey('self', verbose_name=_("Contributes to"), null=True, blank=True, related_name='children', db_index=True)
     customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
+
+    objects = ObjectiveManager()
 
     class Meta:
         verbose_name = _("Objective")

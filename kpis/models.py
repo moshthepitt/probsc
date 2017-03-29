@@ -3,6 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from django_extensions.db.models import TimeStampedModel
 
+from .managers import KPIManager
+
 
 class KPI(TimeStampedModel):
     """Key performance indicator or 'measure'"""
@@ -88,6 +90,8 @@ class KPI(TimeStampedModel):
     calculation = models.CharField(_("Calculation"), max_length=1, choices=CALCULATION_CHOICES, blank=False, default=SUM)
     customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
+
+    objects = KPIManager()
 
     class Meta:
         verbose_name = _("KPI")
