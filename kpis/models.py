@@ -76,6 +76,7 @@ class KPI(TimeStampedModel):
         (ANNUALLY, _('Annually')),
     )
 
+    objective = models.ForeignKey('strategy.Objective', verbose_name=_("Objective"), on_delete=models.PROTECT)
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     perspective = models.CharField(_("Perspective"), max_length=1, choices=PERSPECTIVE_CHOICES, blank=False)
@@ -85,6 +86,7 @@ class KPI(TimeStampedModel):
     weight = models.DecimalField(_("Weight"), max_digits=5, decimal_places=2)
     reporting_period = models.CharField(_("Reporting Period"), max_length=1, choices=REPORTING_PERIOD_CHOICES, blank=False, default=ANNUALLY)
     calculation = models.CharField(_("Calculation"), max_length=1, choices=CALCULATION_CHOICES, blank=False, default=SUM)
+    active = models.BooleanField(_("Active"), default=True)
 
     class Meta:
         verbose_name = _("KPI")
