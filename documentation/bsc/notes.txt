@@ -1,0 +1,8 @@
+Business Goals:
+    KPI
+
+Staff Member:
+    Scorecard
+
+Scorecard:
+    KPI
