@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # custom
     'core',
     'users',
+    'kpis',
 
     # third party
     'allauth',
