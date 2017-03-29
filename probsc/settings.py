@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'kpis',
     'strategy',
     'customers',
+    'scorecards',
 
     # third party
     'allauth',
