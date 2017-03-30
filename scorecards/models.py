@@ -65,6 +65,7 @@ class Score(TimeStampedModel):
     scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
     kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
     value = models.DecimalField(_("Value"), max_digits=64, decimal_places=2, default=0)
+    notes = models.TextField(_("Notes"), blank=True, default="")
 
     class Meta:
         verbose_name = _("Score")
