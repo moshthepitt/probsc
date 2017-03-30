@@ -36,9 +36,10 @@ class KPI(TimeStampedModel):
     AVG = '2'
     # reporting period
     MONTHLY = '1'
-    QUARTERLY = '2'
-    SEMI_ANNUALLY = '3'
-    ANNUALLY = '4'
+    BI_MONTHLY = '2'
+    QUARTERLY = '3'
+    SEMI_ANNUALLY = '4'
+    ANNUALLY = '5'
     # reporting method
     MANUAL = '1'
     AUTOMATED = '2'
@@ -77,6 +78,7 @@ class KPI(TimeStampedModel):
 
     REPORTING_PERIOD_CHOICES = (
         (MONTHLY, _('Monthly')),
+        (BI_MONTHLY, _('Bi-Monthly')),
         (QUARTERLY, _('Quarterly')),
         (SEMI_ANNUALLY, _('Semi-Annually')),
         (ANNUALLY, _('Annually')),
