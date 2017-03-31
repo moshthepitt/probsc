@@ -69,6 +69,8 @@ class Score(TimeStampedModel):
     scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
     kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
     value = models.DecimalField(_("Value"), max_digits=64, decimal_places=2, default=0)
+    score = models.DecimalField(_("Score"), max_digits=64, decimal_places=2, default=0, help_text=_(
+        "Performance achieved as a percentage of the target"))
     review_round = models.PositiveIntegerField(
         _("Review Round"), default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     notes = models.TextField(_("Notes"), blank=True, default="")
@@ -82,12 +84,13 @@ class Score(TimeStampedModel):
 
 
 class Initiative(TimeStampedModel):
+
     """
     Represent specific activities undertaken in the achievment of KPIs
     """
     date = models.DateField(_("Date"), default=timezone.now)
     scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
-    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("Scorecard"), on_delete=models.PROTECT)
+    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
 
