@@ -89,6 +89,13 @@ class KPI(TimeStampedModel):
         (AUTOMATED, _('Automated')),
     )
 
+    # constants
+    NO_MONTHLY = 12
+    NO_BI_MONTHLY = 6
+    NO_QUARTERLY = 4
+    NO_SEMI_ANNUALLY = 2
+    NO_ANNUALLY = 1
+
     objective = models.ForeignKey(
         'strategy.Objective', verbose_name=_("Objective"), on_delete=models.PROTECT)
     name = models.CharField(_("Key Performance Indicator"), max_length=255)
@@ -122,3 +129,16 @@ class KPI(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_number_of_scores(self):
+        if self.reporting_period == self.ANNUALLY:
+            return self.NO_ANNUALLY
+        if self.reporting_period == self.SEMI_ANNUALLY:
+            return self.NO_SEMI_ANNUALLY
+        if self.reporting_period == self.QUARTERLY:
+            return self.NO_QUARTERLY
+        if self.reporting_period == self.BI_MONTHLY:
+            return self.NO_BI_MONTHLY
+        if self.reporting_period == self.MONTHLY:
+            return self.NO_MONTHLY
+        return self.NO_ANNUALLY

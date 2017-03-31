@@ -234,6 +234,16 @@ SUIT_CONFIG = {
 SITE_ID = 1
 
 
+# Balanced scorecard
+BSC_RATING = {
+    'best': 1,
+    'good': 2,
+    'average': 3,
+    'poor': 4,
+    'very_poor': 5
+}
+
+
 try:
     from .local_settings import *
 except ImportError:
