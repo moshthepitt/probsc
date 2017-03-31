@@ -11,7 +11,7 @@ from .managers import CustomerManager
 class Customer(TimeStampedModel):
 
     """
-    Represents a person/organisation that uses ProBSC
+    Represents a person/organization that uses ProBSC
     """
     name = models.CharField(_("Name"), max_length=255)
     email = models.EmailField(_('Email Address'), blank=True)
@@ -21,6 +21,8 @@ class Customer(TimeStampedModel):
         _("Financial Year End Day"), default=31, validators=[MinValueValidator(1), MaxValueValidator(31)])
     financial_year_end_month = models.PositiveSmallIntegerField(
         _("Financial Year End Month"), default=12, validators=[MinValueValidator(1), MaxValueValidator(12)])
+    review_rounds = models.PositiveSmallIntegerField(_("Rounds of Review"), default=2, validators=[MinValueValidator(
+        1), MaxValueValidator(5)], help_text=_("How many times is each scorecard reviewed? e.g. self review, supervisor review, etc"))
     active = models.BooleanField(_("Active"), default=True)
 
     objecs = CustomerManager()
