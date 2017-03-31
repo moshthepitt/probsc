@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
 
-from .models import Scorecard, Evidence, Score, Initiative
+from .models import Scorecard, Evidence, Score, Initiative, ScorecardKPI
 
 
 @admin.register(Scorecard)
@@ -58,3 +58,10 @@ class InitiativeAdmin(admin.ModelAdmin):
     list_filter = ('date', 'scorecard', 'kpi')
     raw_id_fields = ('kpi', 'scorecard')
     search_fields = ('name',)
+
+
+@admin.register(ScorecardKPI)
+class ScorecardKPIAdmin(admin.ModelAdmin):
+    list_display = ('id', 'scorecard', 'kpi', 'score')
+    list_filter = ('scorecard', 'kpi')
+    raw_id_fields = ('kpi', 'scorecard')

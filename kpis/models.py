@@ -18,6 +18,7 @@ class KPI(TimeStampedModel):
     # direction
     UP = '1'
     DOWN = '2'
+    MAINTAIN = '3'
     # units
     VALUE = '1'
     RATIO = '2'
@@ -54,6 +55,7 @@ class KPI(TimeStampedModel):
     DIRECTION_CHOICES = (
         (UP, _('Up')),
         (DOWN, _('Down')),
+        (MAINTAIN, _('Maintain')),
     )
 
     UNIT_CHOICES = (
@@ -103,7 +105,7 @@ class KPI(TimeStampedModel):
     description = models.TextField(_("Description"), blank=True, default="")
     perspective = models.CharField(
         _("Perspective"), max_length=1, choices=PERSPECTIVE_CHOICES, blank=False)
-    baseline = models.DecimalField(_("Base Line"), max_digits=64, decimal_places=2, default=0, help_text=_(""))
+    baseline = models.DecimalField(_("Base Line"), max_digits=64, decimal_places=2, default=0)
     target = models.DecimalField(_("Target"), max_digits=64, decimal_places=2, default=0)
     unit = models.CharField(
         _("Unit"), max_length=2, choices=UNIT_CHOICES, blank=False, default=VALUE)

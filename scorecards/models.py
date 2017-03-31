@@ -38,6 +38,24 @@ class Scorecard(TimeStampedModel):
 
     objects = ScorecardManager()
 
+    def get_report(self, this_round=1):
+        total, financial, customer = Decimal(0), Decimal(0), Decimal(0)
+        process, learning = Decimal(0), Decimal(0)
+        kpis = ScorecardKPI.objects.get(scorecard=self)
+        for kpi in kpis:
+            kpi.score = kpi.get_score(this_round=this_round)
+            if kpi.perspective == kpi.FINANCIAL:
+                financial = financial + kpi.score
+            if kpi.perspective == kpi.CUSTOMER:
+                customer = customer + kpi.score
+            if kpi.perspective == kpi.PROCESS:
+                process = process + kpi.score
+            if kpi.perspective == kpi.LEARNING:
+                learning = learning + kpi.score
+            total = total + kpi.score
+        return {'kpis': kpis, 'total': total, 'financial': financial,
+                'customer': customer, 'process': process, 'learning': learning}
+
     class Meta:
         verbose_name = _("Scorecard")
         verbose_name_plural = _("Scorecards")
@@ -110,6 +128,9 @@ class ScorecardKPI(TimeStampedModel):
         records_no = self.kpi.get_number_of_scores()
         records = Score.objects.filter(
             scorecard=self.scorecard, kpi=self.kpi, review_round=this_round)[:records_no]
+        # return 0 if no records
+        if not records:
+            return Decimal(0)
         values_list = [x.value for x in records]
         # get the value
         if self.kpi.calculation == self.kpi.AVG:
