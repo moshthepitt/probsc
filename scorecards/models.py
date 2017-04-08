@@ -41,19 +41,19 @@ class Scorecard(TimeStampedModel):
     def get_report(self, this_round=1):
         total, financial, customer = Decimal(0), Decimal(0), Decimal(0)
         process, learning = Decimal(0), Decimal(0)
-        kpis = ScorecardKPI.objects.get(scorecard=self)
-        for kpi in kpis:
-            kpi.score = kpi.get_score(this_round=this_round)
-            if kpi.perspective == kpi.FINANCIAL:
-                financial = financial + kpi.score
-            if kpi.perspective == kpi.CUSTOMER:
-                customer = customer + kpi.score
-            if kpi.perspective == kpi.PROCESS:
-                process = process + kpi.score
-            if kpi.perspective == kpi.LEARNING:
-                learning = learning + kpi.score
-            total = total + kpi.score
-        return {'kpis': kpis, 'total': total, 'financial': financial,
+        scorecard_kpis = ScorecardKPI.objects.filter(scorecard=self)
+        for scorecard_kpi in scorecard_kpis:
+            scorecard_kpi.score = scorecard_kpi.get_score(this_round=this_round)
+            if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.FINANCIAL:
+                financial = financial + scorecard_kpi.score
+            if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.CUSTOMER:
+                customer = customer + scorecard_kpi.score
+            if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.PROCESS:
+                process = process + scorecard_kpi.score
+            if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.LEARNING:
+                learning = learning + scorecard_kpi.score
+            total = total + scorecard_kpi.score
+        return {'kpis': scorecard_kpis, 'total': total, 'financial': financial,
                 'customer': customer, 'process': process, 'learning': learning}
 
     class Meta:
