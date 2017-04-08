@@ -18,7 +18,6 @@ class KPI(TimeStampedModel):
     # direction
     UP = '1'
     DOWN = '2'
-    MAINTAIN = '3'
     # units
     VALUE = '1'
     RATIO = '2'
@@ -55,7 +54,6 @@ class KPI(TimeStampedModel):
     DIRECTION_CHOICES = (
         (UP, _('Up')),
         (DOWN, _('Down')),
-        (MAINTAIN, _('Maintain')),
     )
 
     UNIT_CHOICES = (

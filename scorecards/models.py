@@ -137,14 +137,21 @@ class ScorecardKPI(TimeStampedModel):
             value = statistics.mean(values_list)
         else:
             value = sum(values_list)
-        # calculate actual as a % of target
+        # calculate actual as a percentage of target
         value = Decimal(value)
-        if self.kpi.direction == self.kpi.UP:
-            actual = ((value - self.kpi.baseline) /
-                      (self.kpi.target - self.kpi.baseline)) * Decimal(100)
-        elif self.kpi.direction == self.kpi.DOWN:
-            actual = ((self.kpi.baseline - value) /
-                      (self.kpi.baseline - self.kpi.target)) * Decimal(100)
+        if self.kpi.direction == self.kpi.DOWN:
+            if value == Decimal(0):
+                # dirty hack to avoid division by zero
+                actual = (self.kpi.target / Decimal(0.0000001)) * Decimal(100)
+            else:
+                actual = (self.kpi.target / value) * Decimal(100)
+        else:
+            # direction is UP
+            if self.kpi.target == Decimal(0):
+                # dirty hack to avoid division by zero
+                actual = (value / Decimal(0.0000001)) * Decimal(100)
+            else:
+                actual = (value / self.kpi.target) * Decimal(100)
         # get the score
         score = (self.kpi.weight / Decimal(100)) * bsc_rating(actual)
         if do_save:
