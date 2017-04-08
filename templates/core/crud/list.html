@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% load i18n django_tables2 crispy_forms_tags %}
 
-{% block page_title %} {% trans "Strategic Themes" %} {% endblock %}
+{% block page_title %} {{verbose_name_plural}} {% endblock %}
 
 {% block page_content %} 
 	<div class="row">
 		<div class="col-md-12 content-box-info">
 			<div class="content-box-header">
 				<div class="clearfix">
-					<h4 class="panel-title pull-left" style="padding-top: 7.5px;">{% trans "Strategic Themes" %}</h4>
+					<h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{verbose_name_plural}}</h4>
 					<div class="btn-group pull-right margin-left-10">						
 						<a href="{% url 'strategy:strategic_themes_add' %}" class="btn btn-primary btn-sm btn-100">{% trans 'Add New' %}</a>
 					</div>

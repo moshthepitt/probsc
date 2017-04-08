@@ -78,3 +78,16 @@ class ListViewSearchMixin(object):
             form = self.form_class(initial={'name': self.request.GET.get('name')})
         context['form'] = form
         return context
+
+
+class VerboseNameMixin(object):
+    """
+    Sets the Model verbose name in the context data
+    Used in Generic CRUD views
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super(VerboseNameMixin, self).get_context_data(**kwargs)
+        context['verbose_name'] = self.model._meta.verbose_name
+        context['verbose_name_plural'] = self.model._meta.verbose_name_plural
+        return context
