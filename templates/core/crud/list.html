@@ -10,7 +10,7 @@
 				<div class="clearfix">
 					<h4 class="panel-title pull-left" style="padding-top: 7.5px;">{{verbose_name_plural}}</h4>
 					<div class="btn-group pull-right margin-left-10">						
-						<a href="{% url 'strategy:strategic_themes_add' %}" class="btn btn-primary btn-sm btn-100">{% trans 'Add New' %}</a>
+						<a href="{{create_view_url}}" class="btn btn-primary btn-sm btn-100">{% trans 'Add New' %}</a>
 					</div>
 					<div class="btn-group pull-right">
 						{% crispy form %}
@@ -20,7 +20,7 @@
 			<div class="content-box-large box-with-header">
 				{% render_table table %}
 				{% if request.GET.name %}
-					<a href="{% url 'strategy:strategic_themes_list' %}" class="btn btn-default btn-sm btn-100">{% trans 'Clear Search' %}</a>
+					<a href="{{list_view_url}}" class="btn btn-default btn-sm btn-100">{% trans 'Clear Search' %}</a>
 				{% endif %}
 			</div>
 		</div>

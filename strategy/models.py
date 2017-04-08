@@ -69,10 +69,13 @@ class Objective(MPTTModel, TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('strategy:objectives_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('strategy:objectives_delete', args=[self.pk])
+
+    def get_list_url(self):
+        return reverse('strategy:objectives_list')
 
     def __str__(self):
         return self.name
