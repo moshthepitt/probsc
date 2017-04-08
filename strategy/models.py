@@ -24,6 +24,12 @@ class StrategicTheme(TimeStampedModel):
         verbose_name_plural = _("Strategic Themes")
         ordering = ['name']
 
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
+
     def __str__(self):
         return self.name
 
@@ -52,5 +58,13 @@ class Objective(MPTTModel, TimeStampedModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
+
     def __str__(self):
         return self.name
+
+

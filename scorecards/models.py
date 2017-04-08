@@ -61,6 +61,12 @@ class Scorecard(TimeStampedModel):
         verbose_name_plural = _("Scorecards")
         ordering = ['year', 'name']
 
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
+
     def __str__(self):
         return self.name
 
@@ -80,6 +86,12 @@ class Evidence(TimeStampedModel):
         verbose_name = _("Evidence")
         verbose_name_plural = _("Evidences")
         ordering = ['name']
+
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
 
     def __str__(self):
         return self.name
@@ -164,6 +176,12 @@ class ScorecardKPI(TimeStampedModel):
         verbose_name_plural = _("Scorecard KPIs")
         ordering = ['scorecard', 'kpi']
 
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
+
     def __str__(self):
         return "{} {}".format(self.scorecard, self.kpi)
 
@@ -183,6 +201,12 @@ class Initiative(TimeStampedModel):
         verbose_name = _("Initiative")
         verbose_name_plural = _("Initiatives")
         ordering = ['-date']
+
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
 
     def __str__(self):
         return self.name

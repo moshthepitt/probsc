@@ -142,3 +142,9 @@ class KPI(TimeStampedModel):
         if self.reporting_period == self.MONTHLY:
             return self.NO_MONTHLY
         return self.NO_ANNUALLY
+
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
