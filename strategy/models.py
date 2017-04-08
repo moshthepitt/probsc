@@ -32,7 +32,10 @@ class StrategicTheme(TimeStampedModel):
         return reverse('strategy:strategic_themes_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('strategy:strategic_themes_delete', args=[self.pk])
+
+    def get_list_url(self):
+        return reverse('strategy:strategic_themes_list')
 
     def __str__(self):
         return self.name

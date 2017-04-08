@@ -151,3 +151,6 @@ class KPI(TimeStampedModel):
 
     def get_delete_url(self):
         return "#"
+
+    def get_list_url(self):
+        return "#"

@@ -46,7 +46,7 @@ class StaffmemberRequiredMixin(object):
 
 class CoreFormMixin(object):
     """
-    Adds some nice stuff to formviews used in create/update views
+    Adds some nice stuff to formviews used in create/update/delete views
     """
 
     def get_form_kwargs(self):

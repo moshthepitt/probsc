@@ -55,5 +55,8 @@ class UserProfile(models.Model):
     def get_delete_url(self):
         return "#"
 
+    def get_list_url(self):
+        return "#"
+
     def __str__(self):
         return _("{user}'s profile").format(user=self.user)
