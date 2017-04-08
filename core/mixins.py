@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_protect
 
+from .forms import ListViewSearchForm
 from .decorators import cache_page_on_auth, cache_page_for_user
 
 
@@ -55,3 +56,25 @@ class CoreFormMixin(object):
 
     def get_success_url(self):
         return self.object.get_edit_url()
+
+
+class ListViewSearchMixin(object):
+    """
+    Adds search to listview
+    """
+    form_class = ListViewSearchForm
+
+    def get_queryset(self):
+        queryset = super(ListViewSearchMixin, self).get_queryset()
+        form = self.form_class(self.request.GET)
+        if form.is_valid():
+            return queryset.filter(name__icontains=form.cleaned_data['name'])
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(ListViewSearchMixin, self).get_context_data(**kwargs)
+        form = self.form_class()
+        if self.request.GET.get('name'):
+            form = self.form_class(initial={'name': self.request.GET.get('name')})
+        context['form'] = form
+        return context

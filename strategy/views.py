@@ -5,18 +5,18 @@ from django.utils.translation import ugettext as _
 from braces.views import LoginRequiredMixin, FormMessagesMixin
 from django_tables2 import SingleTableView
 
-from core.mixins import CoreFormMixin
+from core.mixins import CoreFormMixin, ListViewSearchMixin
 from customers.mixins import CustomerFormMixin
 from .tables import StrategicThemeTable
 from .forms import StrategicThemeForm
 from .models import StrategicTheme
 
 
-class StrategicThemeListview(LoginRequiredMixin, SingleTableView, ListView):
+class StrategicThemeListview(LoginRequiredMixin, ListViewSearchMixin, SingleTableView, ListView):
     model = StrategicTheme
     table_class = StrategicThemeTable
     template_name = "strategy/strategic_theme_list.html"
-    paginate_by = 25
+    paginate_by = 1
 
 
 class AddStrategicTheme(LoginRequiredMixin, FormMessagesMixin, CoreFormMixin, CustomerFormMixin, CreateView):

@@ -4,7 +4,7 @@ from django.urls import reverse
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
-from crispy_forms.bootstrap import Field, FormActions
+from crispy_forms.bootstrap import Field, FormActions, FieldWithButtons
 
 from customers.models import Customer
 from .models import StrategicTheme
@@ -48,3 +48,7 @@ class StrategicThemeForm(forms.ModelForm):
                         reverse('strategy:strategic_themes_list'), _("Cancel")))
             )
         )
+
+
+
+
