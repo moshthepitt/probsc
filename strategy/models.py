@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
 from django_extensions.db.models import TimeStampedModel
 from mptt.models import MPTTModel, TreeForeignKey
@@ -28,7 +29,7 @@ class StrategicTheme(TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('strategy:strategic_themes_edit', args=[self.pk])
 
     def __str__(self):
         return self.name

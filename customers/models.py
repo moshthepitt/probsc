@@ -25,7 +25,7 @@ class Customer(TimeStampedModel):
         1), MaxValueValidator(5)], help_text=_("How many times is each scorecard reviewed? e.g. self review, supervisor review, etc"))
     active = models.BooleanField(_("Active"), default=True)
 
-    objecs = CustomerManager()
+    objects = CustomerManager()
 
     class Meta:
         verbose_name = _("Customer")

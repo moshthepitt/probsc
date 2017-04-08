@@ -41,3 +41,17 @@ class StaffmemberRequiredMixin(object):
     @method_decorator(staff_member_required)
     def dispatch(self, request, *args, **kwargs):
         return super(StaffmemberRequiredMixin, self).dispatch(request, *args, **kwargs)
+
+
+class CoreFormMixin(object):
+    """
+    Adds some nice stuff to formviews used in create/update views
+    """
+
+    def get_form_kwargs(self):
+        kwargs = super(CoreFormMixin, self).get_form_kwargs()
+        kwargs['request'] = self.request
+        return kwargs
+
+    def get_success_url(self):
+        return self.object.get_edit_url()

@@ -17,8 +17,8 @@ class StrategicThemeTable(tables.Table):
 
     class Meta:
         model = StrategicTheme
-        exclude = ['created', 'modified', 'description', 'id']
-        sequence = ('name', 'customer', 'active', '...')
+        exclude = ['created', 'modified', 'description', 'id', 'customer']
+        sequence = ('name', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1

@@ -27,3 +27,8 @@
 .content-box-info .box-with-header {
 	border-color: #bce8f1;
 }
+
+.btn-250 {
+	min-width:250px;
+	margin-bottom:10px;
+}
