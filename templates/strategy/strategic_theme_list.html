@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load i18n django_tables2 %}
+
+{% block page_title %} {% trans "Strategic Themes" %} {% endblock %}
+
+{% block page_content %} 
+	<div class="row">
+		<div class="col-md-12 content-box-info">
+			<div class="content-box-header">
+				<div class="clearfix">
+					<h4 class="panel-title pull-left" style="padding-top: 7.5px;">{% trans "Strategic Themes" %}</h4>
+					<div class="btn-group pull-right">
+						<a href="#" class="btn btn-success btn-sm">{% trans 'New' %}</a>
+					</div>
+				</div>
+			</div>
+			<div class="content-box-large box-with-header">
+				{% render_table table %}
+			</div>
+		</div>
+	</div>
+{% endblock %}

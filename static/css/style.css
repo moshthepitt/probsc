@@ -1,3 +1,29 @@
 .page-content {
 	min-height:80vh;
 }
+
+.table>tbody>tr.active.not-active>td, 
+.table>tbody>tr.active.not-active>th, 
+.table>tbody>tr>td.active.not-active, 
+.table>tbody>tr>th.active.not-active, 
+.table>tfoot>tr.active.not-active>td, 
+.table>tfoot>tr.active.not-active>th, 
+.table>tfoot>tr>td.active.not-active, 
+.table>tfoot>tr>th.active.not-active, 
+.table>thead>tr.active.not-active>td, 
+.table>thead>tr.active.not-active>th, 
+.table>thead>tr>td.active.not-active, 
+.table>thead>tr>th.active.not-active {
+    background-color: initial;
+}
+
+.content-box-info .content-box-header {
+	color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+    border-bottom: 1px solid transparent;
+}
+
+.content-box-info .box-with-header {
+	border-color: #bce8f1;
+}

@@ -23,8 +23,11 @@ from core.views import HomePageView
 
 urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^admin/', admin.site.urls),
+    url(r'^strategy/', include('strategy.urls', namespace='strategy')),
+
+    # third party
     url(r'^accounts/', include('allauth.urls')),
+    url(r'^admin/', admin.site.urls),
 
     # this should be last
     url(r'^page/', include('django.contrib.flatpages.urls')),
