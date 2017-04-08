@@ -7,7 +7,7 @@ from crispy_forms.bootstrap import Field, FieldWithButtons
 
 
 class ListViewSearchForm(forms.Form):
-    name = forms.CharField(label=_("Name"), required=False)
+    q = forms.CharField(label=_("Search Query"), required=False)
 
     def __init__(self, *args, **kwargs):
         super(ListViewSearchForm, self).__init__(*args, **kwargs)
@@ -22,7 +22,7 @@ class ListViewSearchForm(forms.Form):
         self.helper.field_template = 'bootstrap3/layout/inline_field.html'
         self.helper.layout = Layout(
             FieldWithButtons(
-                Field('name', css_class="input-sm"),
+                Field('q', css_class="input-sm"),
                 Submit('submitBtn', _('Search'), css_class='btn-sm')
             ),
         )

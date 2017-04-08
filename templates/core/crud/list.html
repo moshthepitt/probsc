@@ -19,7 +19,7 @@
 			</div>
 			<div class="content-box-large box-with-header">
 				{% render_table table %}
-				{% if request.GET.name %}
+				{% if request.GET.q %}
 					<a href="{{list_view_url}}" class="btn btn-default btn-sm btn-100">{% trans 'Clear Search' %}</a>
 				{% endif %}
 			</div>

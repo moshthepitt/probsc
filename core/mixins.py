@@ -3,6 +3,7 @@ from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_protect
+from django.db.models import Q
 
 from .forms import ListViewSearchForm
 from .decorators import cache_page_on_auth, cache_page_for_user
@@ -63,19 +64,27 @@ class ListViewSearchMixin(object):
     Adds search to listview
     """
     form_class = ListViewSearchForm
+    search_fields = ['name', 'description']
 
     def get_queryset(self):
         queryset = super(ListViewSearchMixin, self).get_queryset()
         form = self.form_class(self.request.GET)
-        if form.is_valid():
-            return queryset.filter(name__icontains=form.cleaned_data['name'])
+        if form.is_valid() and self.search_fields:
+            if len(self.search_fields) == 1:
+                queryset = queryset.filter(name__icontains=form.cleaned_data['q'])
+            else:
+                search_terms = ["{}__icontains".format(x) for x in self.search_fields]
+                query = Q()
+                for term in search_terms:
+                    query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)
+                queryset = queryset.filter(query)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super(ListViewSearchMixin, self).get_context_data(**kwargs)
         form = self.form_class()
-        if self.request.GET.get('name'):
-            form = self.form_class(initial={'name': self.request.GET.get('name')})
+        if self.request.GET.get('q'):
+            form = self.form_class(initial={'q': self.request.GET.get('q')})
         context['form'] = form
         return context
 
