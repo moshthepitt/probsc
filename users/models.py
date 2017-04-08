@@ -43,5 +43,8 @@ class UserProfile(models.Model):
             return self.user.last_name[0]
         return self.user.email[0]
 
+    def is_admin(self):
+        return self.role == self.ADMIN
+
     def __str__(self):
         return _("{user}'s profile").format(user=self.user)

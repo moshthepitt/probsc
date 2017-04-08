@@ -61,6 +61,17 @@
             <ul class="nav">
                 {% if request.user.is_authenticated %}
                   {% if request.user.userprofile.is_admin %}
+                    <li class="submenu">
+                      <a href="#">
+                        <i class="glyphicon glyphicon-list"></i> {% trans "Business Goals" %}
+                        <span class="caret pull-right"></span>
+                      </a>
+                      <!-- Sub menu -->
+                      <ul>
+                        <li><a href="#">{% trans "Strategic Themes" %}</a></li>
+                        <li><a href="#">{% trans "Objectives" %}</a></li>
+                      </ul>
+                    </li>
                   {% endif %}
                   <li><a href="{% url 'account_logout' %}"><i class="glyphicon glyphicon-log-out"></i> {% trans "Logout" %}</a></li>
                 {% else %}
