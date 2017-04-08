@@ -16,7 +16,6 @@ class StrategicThemeListview(LoginRequiredMixin, ListViewSearchMixin, SingleTabl
     model = StrategicTheme
     table_class = StrategicThemeTable
     template_name = "strategy/strategic_theme_list.html"
-    paginate_by = 1
 
 
 class AddStrategicTheme(LoginRequiredMixin, FormMessagesMixin, CoreFormMixin, CustomerFormMixin, CreateView):
