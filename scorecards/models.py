@@ -67,6 +67,9 @@ class Scorecard(TimeStampedModel):
     def get_edit_url(self):
         return "#"
 
+    def get_delete_url(self):
+        return "#"
+
     def __str__(self):
         return self.name
 
@@ -91,6 +94,9 @@ class Evidence(TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
+        return "#"
+
+    def get_delete_url(self):
         return "#"
 
     def __str__(self):
@@ -182,6 +188,9 @@ class ScorecardKPI(TimeStampedModel):
     def get_edit_url(self):
         return "#"
 
+    def get_delete_url(self):
+        return "#"
+
     def __str__(self):
         return "{} {}".format(self.scorecard, self.kpi)
 
@@ -206,6 +215,9 @@ class Initiative(TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
+        return "#"
+
+    def get_delete_url(self):
         return "#"
 
     def __str__(self):

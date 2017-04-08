@@ -31,6 +31,9 @@ class StrategicTheme(TimeStampedModel):
     def get_edit_url(self):
         return reverse('strategy:strategic_themes_edit', args=[self.pk])
 
+    def get_delete_url(self):
+        return "#"
+
     def __str__(self):
         return self.name
 
@@ -63,6 +66,9 @@ class Objective(MPTTModel, TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
+        return "#"
+
+    def get_delete_url(self):
         return "#"
 
     def __str__(self):

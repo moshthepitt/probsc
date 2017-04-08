@@ -46,5 +46,14 @@ class UserProfile(models.Model):
     def is_admin(self):
         return self.role == self.ADMIN
 
+    def get_absolute_url(self):
+        return "#"
+
+    def get_edit_url(self):
+        return "#"
+
+    def get_delete_url(self):
+        return "#"
+
     def __str__(self):
         return _("{user}'s profile").format(user=self.user)
