@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.urls import reverse
 
 from django_extensions.db.models import TimeStampedModel
 
@@ -98,8 +99,8 @@ class KPI(TimeStampedModel):
 
     objective = models.ForeignKey(
         'strategy.Objective', verbose_name=_("Objective"), on_delete=models.PROTECT)
-    name = models.CharField(_("Key Performance Indicator"), max_length=255)
-    measure = models.CharField(_("Measure"), max_length=255)
+    name = models.TextField(_("Key Performance Indicator"), max_length=255)
+    measure = models.TextField(_("Measure"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     perspective = models.CharField(
         _("Perspective"), max_length=1, choices=PERSPECTIVE_CHOICES, blank=False)
@@ -125,7 +126,7 @@ class KPI(TimeStampedModel):
     class Meta:
         verbose_name = _("KPI")
         verbose_name_plural = _("KPIs")
-        ordering = ['name', '-weight']
+        ordering = ['perspective', 'name', '-weight']
 
     def __str__(self):
         return self.name
@@ -147,10 +148,10 @@ class KPI(TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('kpis:kpis_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('kpis:kpis_delete', args=[self.pk])
 
     def get_list_url(self):
-        return "#"
+        return reverse('kpis:kpis_list')

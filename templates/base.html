@@ -63,13 +63,14 @@
                   {% if request.user.userprofile.is_admin %}
                     <li class="submenu">
                       <a href="#">
-                        <i class="glyphicon glyphicon-list"></i> {% trans "Business Goals" %}
+                        <i class="glyphicon glyphicon-list"></i> {% trans "Admin" %}
                         <span class="caret pull-right"></span>
                       </a>
                       <!-- Sub menu -->
                       <ul>
                         <li><a href="{% url 'strategy:strategic_themes_list' %}">{% trans "Strategic Themes" %}</a></li>
                         <li><a href="{% url 'strategy:objectives_list' %}">{% trans "Objectives" %}</a></li>
+                        <li><a href="{% url 'kpis:kpis_list' %}">{% trans "KPIs" %}</a></li>
                       </ul>
                     </li>
                   {% endif %}
