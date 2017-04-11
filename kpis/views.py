@@ -1,9 +1,9 @@
 from django.urls import reverse_lazy
-from django.shortcuts import get_object_or_404
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
-from scorecards.models import Scorecard
+
+from scorecards.mixins import ScorecardMixin
 from .tables import KPITable, ScorecardKPITable
 from .forms import KPIForm
 from .models import KPI
@@ -21,7 +21,7 @@ class KPIListview(CoreListView):
         return context
 
 
-class ScorecardKPIListview(KPIListview):
+class ScorecardKPIListview(ScorecardMixin, KPIListview):
     template_name = "scorecards/kpis_list.html"
     table_class = ScorecardKPITable
 
@@ -36,14 +36,9 @@ class ScorecardKPIListview(KPIListview):
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardKPIListview, self).get_context_data(**kwargs)
-        context['scorecard'] = self.scorecard
-        context['create_view_url'] = reverse_lazy('kpis:kpis_add')
+        context['create_view_url'] = reverse_lazy('scorecards:scorecards_kpis_add', args=[self.scorecard.pk])
         context['list_view_url'] = reverse_lazy('scorecards:scorecards_kpis_list', args=[self.scorecard.pk])
         return context
-
-    def dispatch(self, request, *args, **kwargs):
-        self.scorecard = get_object_or_404(Scorecard, pk=kwargs.pop('pk', None))
-        return super(ScorecardKPIListview, self).dispatch(request, *args, **kwargs)
 
 
 class AddKPI(CoreCreateView):
@@ -59,3 +54,20 @@ class EditKPI(CoreUpdateView):
 class DeleteKPI(CoreDeleteView):
     model = KPI
     success_url = reverse_lazy('kpis:kpis_list')
+
+
+class AddScorecardKPI(ScorecardMixin, CoreCreateView):
+    model = KPI
+    form_class = KPIForm
+    template_name = "scorecards/kpis_create.html"
+
+
+class EditScorecardKPI(ScorecardMixin, CoreUpdateView):
+    model = KPI
+    form_class = KPIForm
+    template_name = "scorecards/kpis_edit.html"
+
+
+class DeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
+    model = KPI
+    template_name = "scorecards/kpis_delete.html"

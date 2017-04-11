@@ -1,5 +1,6 @@
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
+from django.urls import reverse
 
 import django_tables2 as tables
 
@@ -28,7 +29,9 @@ class KPITable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', record.get_edit_url(), record.get_delete_url()
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            record.get_edit_url(),
+            record.get_delete_url()
         )
 
 
@@ -40,7 +43,9 @@ class ScorecardKPITable(KPITable):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', "xx", "yy"
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            reverse('scorecards:scorecards_kpis_edit', args=[record.pk, self.scorecard.pk]),
+            reverse('scorecards:scorecards_kpis_delete', args=[record.pk, self.scorecard.pk])
         )
 
     def __init__(self, *args, **kwargs):
