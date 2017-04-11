@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 
-from scorecards.mixins import ScorecardMixin
+from scorecards.mixins import ScorecardMixin, ScorecardFormMixin
 from .tables import KPITable, ScorecardKPITable
 from .forms import KPIForm
 from .models import KPI
@@ -56,13 +56,13 @@ class DeleteKPI(CoreDeleteView):
     success_url = reverse_lazy('kpis:kpis_list')
 
 
-class AddScorecardKPI(ScorecardMixin, CoreCreateView):
+class AddScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreCreateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_create.html"
 
 
-class EditScorecardKPI(ScorecardMixin, CoreUpdateView):
+class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_edit.html"

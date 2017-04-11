@@ -40,10 +40,15 @@ class KPIForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.scorecard = kwargs.pop('scorecard', None)
         super(KPIForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
+        if self.scorecard:
+            cancel_url = reverse('scorecards:scorecards_kpis_list', args=[self.scorecard.pk])
+        else:
+            cancel_url = reverse('kpis:kpis_list')
         self.fields['objective'].queryset = Objective.objects.active()
         self.helper = FormHelper()
         self.helper.form_tag = True
@@ -71,7 +76,7 @@ class KPIForm(forms.ModelForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
-                        reverse('kpis:kpis_list'), _("Cancel")))
+                        cancel_url, _("Cancel")))
             )
         )
 

@@ -20,3 +20,14 @@ class ScorecardMixin(object):
     def dispatch(self, request, *args, **kwargs):
         self.scorecard = get_object_or_404(Scorecard, pk=kwargs.pop('scorecard_pk', None))
         return super(ScorecardMixin, self).dispatch(request, *args, **kwargs)
+
+
+class ScorecardFormMixin(object):
+    """
+    Adds stuff for forms that have scorecard elements
+    """
+
+    def get_form_kwargs(self):
+        kwargs = super(ScorecardFormMixin, self).get_form_kwargs()
+        kwargs['scorecard'] = self.scorecard
+        return kwargs
