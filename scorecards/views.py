@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.urls import reverse_lazy
 
 from core.generic_views import CoreListView, CoreCreateView
@@ -21,6 +23,11 @@ class ScorecardListview(CoreListView):
 class AddScorecard(CoreCreateView):
     model = Scorecard
     form_class = ScorecardForm
+
+    def get_initial(self):
+        initial = super(AddScorecard, self).get_initial()
+        initial['year'] = datetime.now().year
+        return initial
 
 
 class EditScorecard(CoreUpdateView):

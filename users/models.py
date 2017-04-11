@@ -27,12 +27,14 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, verbose_name=_("User"))
     customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
     role = models.CharField(_("Role"), max_length=1, choices=MEMBER_ROLE_CHOICES, blank=False, default=MEMBER)
-    active = models.BooleanField(_("Active"), default=True, help_text="Is the staff member still actively employed?")
+    active = models.BooleanField(_("Active"), default=True, help_text="Is the staff member actively employed?")
 
     def get_name(self):
         if self.user.get_full_name():
             return self.user.get_full_name()
-        return self.user.email
+        if self.user.email:
+            return self.user.email
+        return self.user.username
 
     def get_initials(self):
         if self.user.first_name and self.user.last_name:

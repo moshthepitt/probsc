@@ -58,3 +58,17 @@ class PathAndRename(object):
             filename = '{}.{}'.format(slugify(str(uuid.uuid4())), ext)
         # return the whole path to the file
         return os.path.join(self.path, "{}".format(datetime.now().year), "{}".format(datetime.now().month), filename)
+
+
+def get_years():
+    now = datetime.now().year
+    first = 2014
+    years = list(range(first, now + 2))
+    if len(years) < 1:
+        years.append(now)
+    return years
+
+
+def get_year_choices():
+    years = get_years()
+    return [(x, "{}".format(x)) for x in years]
