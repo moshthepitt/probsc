@@ -23,8 +23,9 @@ from core.views import HomePageView
 
 urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='home'),
-    url(r'^strategy/', include('strategy.urls', namespace='strategy')),
     url(r'^kpis/', include('kpis.urls', namespace='kpis')),
+    url(r'^scorecards/', include('scorecards.urls', namespace='scorecards')),
+    url(r'^strategy/', include('strategy.urls', namespace='strategy')),
 
     # third party
     url(r'^accounts/', include('allauth.urls')),

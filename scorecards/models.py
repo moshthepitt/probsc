@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.urls import reverse
 
 from django_extensions.db.models import TimeStampedModel
 
@@ -24,7 +25,7 @@ class Scorecard(TimeStampedModel):
         1. a staff member
         2. an appraissal period
     """
-    name = models.CharField(_("Name"), max_length=255)
+    name = models.TextField(_("Name"), max_length=255)
     year = models.PositiveIntegerField(
         _("Year"), default=timezone.now().year, validators=[MinValueValidator(2012), MaxValueValidator(3000)])
     description = models.TextField(_("Description"), blank=True, default="")
@@ -65,13 +66,13 @@ class Scorecard(TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('scorecards:scorecards_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('scorecards:scorecards_delete', args=[self.pk])
 
     def get_list_url(self):
-        return "#"
+        return reverse('scorecards:scorecards_list')
 
     def __str__(self):
         return self.name
