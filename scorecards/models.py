@@ -60,7 +60,7 @@ class Scorecard(TimeStampedModel):
     class Meta:
         verbose_name = _("Scorecard")
         verbose_name_plural = _("Scorecards")
-        ordering = ['year', 'name']
+        ordering = ['-year', 'name']
 
     def get_absolute_url(self):
         return "#"
