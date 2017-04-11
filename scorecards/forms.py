@@ -28,24 +28,6 @@ class ScorecardForm(forms.ModelForm):
             'name': MiniTextarea(),
         }
 
-    def clean_customer(self):
-        this_customer = self.cleaned_data['customer']
-        if self.request:
-            if not self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select customer"))
-            if this_customer != self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select customer"))
-        return this_customer
-
-    def clean_user(self):
-        this_user = self.cleaned_data['user']
-        if self.request:
-            if not self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select user"))
-            if this_user.userprofile.customer != self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select user"))
-        return this_user
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ScorecardForm, self).__init__(*args, **kwargs)

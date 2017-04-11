@@ -37,20 +37,12 @@ class KPIForm(forms.ModelForm):
             'measure': MiniTextarea()
         }
 
-    def clean_customer(self):
-        this_customer = self.cleaned_data['customer']
-        if self.request:
-            if not self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select customer"))
-            if this_customer != self.request.user.userprofile.customer:
-                raise forms.ValidationError(_("Please select customer"))
-        return this_customer
-
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(KPIForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user.userprofile.customer:
-            self.fields['customer'].queryset = Customer.objects.filter(id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['customer'].queryset = Customer.objects.filter(
+                id__in=[self.request.user.userprofile.customer.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
