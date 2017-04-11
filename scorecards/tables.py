@@ -29,5 +29,8 @@ class ScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', record.get_edit_url(), record.get_delete_url()
+            '<a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            record.get_kpis_list_url(),
+            record.get_edit_url(),
+            record.get_delete_url()
         )

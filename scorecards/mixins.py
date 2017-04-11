@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 
-from scorecards.models import Scorecard
+from scorecards.models import Scorecard, ScorecardKPI
 
 
 class ScorecardMixin(object):
@@ -31,3 +31,19 @@ class ScorecardFormMixin(object):
         kwargs = super(ScorecardFormMixin, self).get_form_kwargs()
         kwargs['scorecard'] = self.scorecard
         return kwargs
+
+
+class KPICreateMixin(object):
+    """
+    Adds KPI that was created to scorecard
+    """
+
+    def get_form_kwargs(self):
+        kwargs = super(ScorecardFormMixin, self).get_form_kwargs()
+        kwargs['scorecard'] = self.scorecard
+        return kwargs
+
+    def form_valid(self, form):
+        redirect_url = super(ScorecardFormMixin, self).form_valid(form)
+        ScorecardKPI.objects.create(kpi=self.object, scorecard=self.scorecard)
+        return redirect_url

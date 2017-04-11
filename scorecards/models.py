@@ -74,6 +74,9 @@ class Scorecard(TimeStampedModel):
     def get_list_url(self):
         return reverse('scorecards:scorecards_list')
 
+    def get_kpis_list_url(self):
+        return reverse('scorecards:scorecards_kpis_list', args=[self.pk])
+
     def __str__(self):
         return self.name
 
@@ -188,18 +191,6 @@ class ScorecardKPI(TimeStampedModel):
         verbose_name = _("Scorecard KPI")
         verbose_name_plural = _("Scorecard KPIs")
         ordering = ['scorecard', 'kpi']
-
-    def get_absolute_url(self):
-        return "#"
-
-    def get_edit_url(self):
-        return "#"
-
-    def get_delete_url(self):
-        return "#"
-
-    def get_list_url(self):
-        return "#"
 
     def __str__(self):
         return "{} {}".format(self.scorecard, self.kpi)
