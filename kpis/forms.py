@@ -7,6 +7,7 @@ from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
 
 from customers.models import Customer
+from strategy.models import Objective
 from core.widgets import MiniTextarea
 from .models import KPI
 
@@ -43,6 +44,7 @@ class KPIForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
+        self.fields['objective'].queryset = Objective.objects.active()
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
