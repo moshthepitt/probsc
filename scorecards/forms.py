@@ -1,5 +1,4 @@
 from django import forms
-from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -9,8 +8,6 @@ from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
 
 from customers.models import Customer
-from kpis.forms import KPIForm
-from kpis.models import KPI
 from core.widgets import MiniTextarea
 from core.utils import get_year_choices
 from .models import Scorecard
@@ -61,27 +58,3 @@ class ScorecardForm(forms.ModelForm):
                         reverse('scorecards:scorecards_list'), _("Cancel")))
             )
         )
-
-
-class KPIFormSetHelper(FormHelper):
-
-    def __init__(self, *args, **kwargs):
-        super(KPIFormSetHelper, self).__init__(*args, **kwargs)
-        self.form_tag = False
-        self.form_method = 'post'
-        self.template = 'bootstrap3/table_inline_formset.html'
-
-
-class BaseKPIFormSet(forms.BaseInlineFormSet):
-
-    def __init__(self, *args, **kwargs):
-        super(BaseKPIFormSet, self).__init__(*args, **kwargs)
-        if 'instance' in kwargs:
-            scorecard_instance = kwargs['instance']
-            for form in self.forms:
-                if 'customer' in form.fields:
-                    form.fields['customer'].queryset = Customer.objects.filter(
-                        customer=scorecard_instance.customer)
-
-
-KPIFormSet = inlineformset_factory(Scorecard, KPI, form=KPIForm, formset=BaseKPIFormSet, can_delete=True, extra=5)

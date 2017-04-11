@@ -30,3 +30,19 @@ class KPITable(tables.Table):
         return format_html(
             '<a href="{}">Edit</a> | <a href="{}">Delete</a>', record.get_edit_url(), record.get_delete_url()
         )
+
+
+class ScorecardKPITable(KPITable):
+
+    class Meta:
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+    def render_action(self, record):
+        return format_html(
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', "xx", "yy"
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.scorecard = kwargs.pop('scorecard', None)
+        super(ScorecardKPITable, self).__init__(*args, **kwargs)
