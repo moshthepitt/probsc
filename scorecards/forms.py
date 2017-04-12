@@ -10,11 +10,14 @@ from crispy_forms.bootstrap import Field, FormActions
 from customers.models import Customer
 from core.widgets import MiniTextarea
 from core.utils import get_year_choices
+from users.fields import UserModelChoiceField
 from .models import Scorecard
 
 
 class ScorecardForm(forms.ModelForm):
     year = forms.ChoiceField(label=_("Year"), choices=get_year_choices())
+    user = UserModelChoiceField(label=_("User"), queryset=User.objects.filter(
+        userprofile__active=True), required=True)
 
     class Meta:
         model = Scorecard
@@ -49,7 +52,7 @@ class ScorecardForm(forms.ModelForm):
             Field('year',),
             Field('user',),
             Field('description',),
-            Field('customer'),
+            Field('customer', type="hidden"),
             Field('active',),
             FormActions(
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),

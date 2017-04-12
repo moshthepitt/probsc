@@ -3,6 +3,8 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
 
+from .managers import UserProfileManager
+
 User = settings.AUTH_USER_MODEL
 
 
@@ -28,6 +30,8 @@ class UserProfile(models.Model):
     customer = models.ForeignKey('customers.Customer', verbose_name=_("Customer"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
     role = models.CharField(_("Role"), max_length=1, choices=MEMBER_ROLE_CHOICES, blank=False, default=MEMBER)
     active = models.BooleanField(_("Active"), default=True, help_text="Is the staff member actively employed?")
+
+    objects = UserProfileManager()
 
     def get_name(self):
         if self.user.get_full_name():
