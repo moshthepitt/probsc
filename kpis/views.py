@@ -8,7 +8,7 @@ from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 
 from scorecards.mixins import ScorecardMixin, ScorecardFormMixin, KPICreateMixin
-from scorecards.models import ScorecardKPI
+from scorecards.models import ScorecardKPI, Score
 from .tables import KPITable, ScorecardKPITable
 from .forms import KPIForm
 from .models import KPI
@@ -91,7 +91,9 @@ class DeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
                 )
             )
         else:
-            scorecard_kpi.delete()
+            scorecard_scores = Score.objects.filter(kpi=self.get_object())
+            if not scorecard_scores:
+                scorecard_kpi.delete()
             try:
                 return super(CoreDeleteView, self).delete(request, *args, **kwargs)
             except ProtectedError:
