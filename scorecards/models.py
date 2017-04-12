@@ -147,8 +147,8 @@ class ScorecardKPI(TimeStampedModel):
     A way to group KPIs in a scorecard and have additional information
     that relates to the KPI in the scorecard
     """
-    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
-    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
+    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.CASCADE)
+    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.CASCADE)
     score = models.DecimalField(
         _("Score"), max_digits=64, decimal_places=2, default=0, help_text=_("The KPI BSC score"))
 

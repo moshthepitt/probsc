@@ -81,14 +81,24 @@ class DeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(CoreDeleteView, self).delete(request, *args, **kwargs)
-        except ProtectedError as e:
-            print(e)
-            print(111111111111)
-            info = _("You cannot delete this item, it is referenced by other items.")
+            scorecard_kpi = ScorecardKPI.objects.get(kpi=self.get_object(), scorecard=self.scorecard)
+        except ScorecardKPI.DoesNotExist:
+            info = _("An error occurred.")
             messages.error(request, info, fail_silently=True)
             return redirect(
                 reverse(
-                    'scorecards:scorecards_kpis_delete', args=[self.object.pk, self.scorecard.pk]
+                    'scorecards:scorecards_kpis_list', args=[self.scorecard.pk]
                 )
             )
+        else:
+            scorecard_kpi.delete()
+            try:
+                return super(CoreDeleteView, self).delete(request, *args, **kwargs)
+            except ProtectedError:
+                info = _("You cannot delete this item, it is referenced by other items.")
+                messages.error(request, info, fail_silently=True)
+                return redirect(
+                    reverse(
+                        'scorecards:scorecards_kpis_delete', args=[self.object.pk, self.scorecard.pk]
+                    )
+                )
