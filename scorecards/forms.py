@@ -55,6 +55,6 @@ class ScorecardForm(forms.ModelForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
-                        reverse('scorecards:scorecards_list'), _("Cancel")))
+                        reverse('scorecards:scorecards_list'), _("Back")))
             )
         )

@@ -76,7 +76,7 @@ class KPIForm(forms.ModelForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
-                        cancel_url, _("Cancel")))
+                        cancel_url, _("Back")))
             )
         )
 

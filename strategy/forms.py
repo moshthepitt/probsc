@@ -37,7 +37,7 @@ class StrategicThemeForm(forms.ModelForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
-                        reverse('strategy:strategic_themes_list'), _("Cancel")))
+                        reverse('strategy:strategic_themes_list'), _("Back")))
             )
         )
 
@@ -79,7 +79,7 @@ class ObjectiveForm(forms.ModelForm):
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
-                        reverse('strategy:objectives_list'), _("Cancel")))
+                        reverse('strategy:objectives_list'), _("Back")))
             )
         )
 
