@@ -138,7 +138,7 @@ def import_data():
     strategy_strategictheme_1.modified = dateutil.parser.parse("2017-04-12T06:16:53.484020+00:00")
     strategy_strategictheme_1.name = 'Customer Delight'
     strategy_strategictheme_1.description = ''
-    strategy_strategictheme_1.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_strategictheme_1.customer = Customer.objects.first()
     strategy_strategictheme_1.active = True
     strategy_strategictheme_1 = importer.save_or_locate(strategy_strategictheme_1)
 
@@ -147,7 +147,7 @@ def import_data():
     strategy_strategictheme_2.modified = dateutil.parser.parse("2017-03-31T13:28:19.514759+00:00")
     strategy_strategictheme_2.name = 'Massive Profits'
     strategy_strategictheme_2.description = ''
-    strategy_strategictheme_2.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_strategictheme_2.customer = Customer.objects.first()
     strategy_strategictheme_2.active = True
     strategy_strategictheme_2 = importer.save_or_locate(strategy_strategictheme_2)
 
@@ -156,7 +156,7 @@ def import_data():
     strategy_strategictheme_3.modified = dateutil.parser.parse("2017-04-12T06:18:49.652086+00:00")
     strategy_strategictheme_3.name = 'Product Leadership'
     strategy_strategictheme_3.description = ''
-    strategy_strategictheme_3.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_strategictheme_3.customer = Customer.objects.first()
     strategy_strategictheme_3.active = True
     strategy_strategictheme_3 = importer.save_or_locate(strategy_strategictheme_3)
 
@@ -171,7 +171,7 @@ def import_data():
     strategy_objective_1.description = ''
     strategy_objective_1.strategic_theme = strategy_strategictheme_2
     strategy_objective_1.parent = None
-    strategy_objective_1.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_1.customer = Customer.objects.first()
     strategy_objective_1.active = True
     strategy_objective_1.lft = 1
     strategy_objective_1.rght = 2
@@ -186,7 +186,7 @@ def import_data():
     strategy_objective_2.description = ''
     strategy_objective_2.strategic_theme = strategy_strategictheme_1
     strategy_objective_2.parent = None
-    strategy_objective_2.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_2.customer = Customer.objects.first()
     strategy_objective_2.active = True
     strategy_objective_2.lft = 1
     strategy_objective_2.rght = 2
@@ -201,7 +201,7 @@ def import_data():
     strategy_objective_3.description = ''
     strategy_objective_3.strategic_theme = strategy_strategictheme_1
     strategy_objective_3.parent = None
-    strategy_objective_3.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_3.customer = Customer.objects.first()
     strategy_objective_3.active = True
     strategy_objective_3.lft = 1
     strategy_objective_3.rght = 2
@@ -216,7 +216,7 @@ def import_data():
     strategy_objective_4.description = ''
     strategy_objective_4.strategic_theme = strategy_strategictheme_3
     strategy_objective_4.parent = None
-    strategy_objective_4.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_4.customer = Customer.objects.first()
     strategy_objective_4.active = True
     strategy_objective_4.lft = 1
     strategy_objective_4.rght = 2
@@ -231,7 +231,7 @@ def import_data():
     strategy_objective_5.description = ''
     strategy_objective_5.strategic_theme = strategy_strategictheme_2
     strategy_objective_5.parent = None
-    strategy_objective_5.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_5.customer = Customer.objects.first()
     strategy_objective_5.active = True
     strategy_objective_5.lft = 1
     strategy_objective_5.rght = 2
@@ -246,7 +246,7 @@ def import_data():
     strategy_objective_6.description = ''
     strategy_objective_6.strategic_theme = strategy_strategictheme_2
     strategy_objective_6.parent = None
-    strategy_objective_6.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'email': '', 'id': 1, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'financial_year_end_month': 12, 'financial_year_end_day': 31, 'description': '', 'review_rounds': 2, 'name': 'Nickel Pro', 'active': True, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    strategy_objective_6.customer = Customer.objects.first()
     strategy_objective_6.active = True
     strategy_objective_6.lft = 1
     strategy_objective_6.rght = 2

@@ -43,7 +43,7 @@ class BasicImportHelper(object):
     def locate_similar(self, current_object, search_data):
         # You will probably want to call this method from save_or_locate()
         # Example:
-        #   new_obj = self.locate_similar(the_obj, {"national_id": the_obj.national_id } )
+        #   new_obj = self.locate_similar(the_obj, {"national_id": the_obj.national_id })
 
         the_obj = current_object.__class__.objects.get(**search_data)
         return the_obj
@@ -102,7 +102,7 @@ try:
     import import_helper
     # We need this so ImportHelper can extend BasicImportHelper, although import_helper.py
     # has no knowlodge of this class
-    importer = type("DynamicImportHelper", (import_helper.ImportHelper, BasicImportHelper ) , {} )()
+    importer = type("DynamicImportHelper", (import_helper.ImportHelper, BasicImportHelper) , {})()
 except ImportError as e:
     # From Python 3.3 we can check e.name - string match is for backward compatibility.
     if 'import_helper' in str(e):
@@ -137,7 +137,7 @@ def import_data():
     kpis_kpi_1 = KPI()
     kpis_kpi_1.created = dateutil.parser.parse("2017-03-31T13:31:39.721746+00:00")
     kpis_kpi_1.modified = dateutil.parser.parse("2017-04-11T14:27:17.340798+00:00")
-    kpis_kpi_1.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_1.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_1.name = 'Descrease costs'
     kpis_kpi_1.measure = 'Operating costs'
     kpis_kpi_1.description = ''
@@ -150,14 +150,14 @@ def import_data():
     kpis_kpi_1.reporting_period = '4'
     kpis_kpi_1.calculation = '1'
     kpis_kpi_1.reporting_method = '1'
-    kpis_kpi_1.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_1.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_1.active = True
     kpis_kpi_1 = importer.save_or_locate(kpis_kpi_1)
 
     kpis_kpi_2 = KPI()
     kpis_kpi_2.created = dateutil.parser.parse("2017-03-31T13:29:22.462839+00:00")
     kpis_kpi_2.modified = dateutil.parser.parse("2017-03-31T13:29:22.462899+00:00")
-    kpis_kpi_2.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_2.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_2.name = 'Increase Revenue'
     kpis_kpi_2.measure = 'Sales'
     kpis_kpi_2.description = ''
@@ -170,14 +170,14 @@ def import_data():
     kpis_kpi_2.reporting_period = '5'
     kpis_kpi_2.calculation = '1'
     kpis_kpi_2.reporting_method = '1'
-    kpis_kpi_2.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_2.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_2.active = True
     kpis_kpi_2 = importer.save_or_locate(kpis_kpi_2)
 
     kpis_kpi_3 = KPI()
     kpis_kpi_3.created = dateutil.parser.parse("2017-04-12T06:30:16.112211+00:00")
     kpis_kpi_3.modified = dateutil.parser.parse("2017-04-12T06:30:16.112272+00:00")
-    kpis_kpi_3.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_3.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_3.name = 'Increase net profit'
     kpis_kpi_3.measure = 'Net profit'
     kpis_kpi_3.description = ''
@@ -190,14 +190,14 @@ def import_data():
     kpis_kpi_3.reporting_period = '3'
     kpis_kpi_3.calculation = '2'
     kpis_kpi_3.reporting_method = '1'
-    kpis_kpi_3.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_3.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_3.active = True
     kpis_kpi_3 = importer.save_or_locate(kpis_kpi_3)
 
     kpis_kpi_4 = KPI()
     kpis_kpi_4.created = dateutil.parser.parse("2017-03-31T13:30:45.516806+00:00")
     kpis_kpi_4.modified = dateutil.parser.parse("2017-03-31T13:30:45.516904+00:00")
-    kpis_kpi_4.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_4.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_4.name = 'Maintain salaries'
     kpis_kpi_4.measure = 'Total payroll'
     kpis_kpi_4.description = ''
@@ -210,14 +210,14 @@ def import_data():
     kpis_kpi_4.reporting_period = '5'
     kpis_kpi_4.calculation = '2'
     kpis_kpi_4.reporting_method = '1'
-    kpis_kpi_4.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_4.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_4.active = True
     kpis_kpi_4 = importer.save_or_locate(kpis_kpi_4)
 
     kpis_kpi_5 = KPI()
     kpis_kpi_5.created = dateutil.parser.parse("2017-04-12T06:31:08.547417+00:00")
     kpis_kpi_5.modified = dateutil.parser.parse("2017-04-12T06:43:12.330551+00:00")
-    kpis_kpi_5.objective =  importer.locate_object(Objective, "id", Objective, "id", 5, {'_mptt_cached_fields': "{'name': 'Decrease Operating Costs', 'parent': None}", 'created': datetime.datetime(2017, 4, 12, 6, 10, 44, 121788, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Decrease Operating Costs', 'id': 5, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 1, 'lft': 1, 'modified': datetime.datetime(2017, 4, 12, 6, 10, 44, 121911, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_5.objective = importer.locate_object(Objective, "id", Objective, "id", 5, {'_mptt_cached_fields': "{'name': 'Decrease Operating Costs', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Decrease Operating Costs', 'id': 5, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 1, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_5.name = 'Reduce operating costs'
     kpis_kpi_5.measure = 'Operating costs'
     kpis_kpi_5.description = ''
@@ -230,14 +230,14 @@ def import_data():
     kpis_kpi_5.reporting_period = '5'
     kpis_kpi_5.calculation = '1'
     kpis_kpi_5.reporting_method = '1'
-    kpis_kpi_5.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_5.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_5.active = True
     kpis_kpi_5 = importer.save_or_locate(kpis_kpi_5)
 
     kpis_kpi_6 = KPI()
     kpis_kpi_6.created = dateutil.parser.parse("2017-04-12T06:32:14.328666+00:00")
     kpis_kpi_6.modified = dateutil.parser.parse("2017-04-12T06:32:14.328748+00:00")
-    kpis_kpi_6.objective =  importer.locate_object(Objective, "id", Objective, "id", 6, {'_mptt_cached_fields': "{'name': 'Improve End User Experience', 'parent': None}", 'created': datetime.datetime(2017, 4, 12, 6, 17, 18, 415746, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Improve End User Experience', 'id': 6, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 2, 'lft': 1, 'modified': datetime.datetime(2017, 4, 12, 6, 17, 18, 415804, tzinfo=<UTC>), 'strategic_theme_id': 9} ) 
+    kpis_kpi_6.objective = importer.locate_object(Objective, "id", Objective, "id", 6, {'_mptt_cached_fields': "{'name': 'Improve End User Experience', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Improve End User Experience', 'id': 6, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 2, 'lft': 1, 'strategic_theme_id': 9})
     kpis_kpi_6.name = 'Customer satisfaction'
     kpis_kpi_6.measure = 'Customer satisfaction index'
     kpis_kpi_6.description = ''
@@ -250,14 +250,14 @@ def import_data():
     kpis_kpi_6.reporting_period = '4'
     kpis_kpi_6.calculation = '2'
     kpis_kpi_6.reporting_method = '1'
-    kpis_kpi_6.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_6.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_6.active = True
     kpis_kpi_6 = importer.save_or_locate(kpis_kpi_6)
 
     kpis_kpi_7 = KPI()
     kpis_kpi_7.created = dateutil.parser.parse("2017-04-09T09:12:19.851575+00:00")
     kpis_kpi_7.modified = dateutil.parser.parse("2017-04-09T09:12:19.851663+00:00")
-    kpis_kpi_7.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_7.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_7.name = 'Improve external customer satisfaction'
     kpis_kpi_7.measure = 'Customer satisfaction index'
     kpis_kpi_7.description = 'Accrued leave days at end year'
@@ -270,14 +270,14 @@ def import_data():
     kpis_kpi_7.reporting_period = '5'
     kpis_kpi_7.calculation = '1'
     kpis_kpi_7.reporting_method = '1'
-    kpis_kpi_7.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_7.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_7.active = True
     kpis_kpi_7 = importer.save_or_locate(kpis_kpi_7)
 
     kpis_kpi_8 = KPI()
     kpis_kpi_8.created = dateutil.parser.parse("2017-04-12T06:33:50.309875+00:00")
     kpis_kpi_8.modified = dateutil.parser.parse("2017-04-12T06:44:34.865653+00:00")
-    kpis_kpi_8.objective =  importer.locate_object(Objective, "id", Objective, "id", 6, {'_mptt_cached_fields': "{'name': 'Improve End User Experience', 'parent': None}", 'created': datetime.datetime(2017, 4, 12, 6, 17, 18, 415746, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Improve End User Experience', 'id': 6, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 2, 'lft': 1, 'modified': datetime.datetime(2017, 4, 12, 6, 17, 18, 415804, tzinfo=<UTC>), 'strategic_theme_id': 9} ) 
+    kpis_kpi_8.objective = importer.locate_object(Objective, "id", Objective, "id", 6, {'_mptt_cached_fields': "{'name': 'Improve End User Experience', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Improve End User Experience', 'id': 6, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 2, 'lft': 1, 'strategic_theme_id': 9})
     kpis_kpi_8.name = 'Market share'
     kpis_kpi_8.measure = 'Market share index'
     kpis_kpi_8.description = ''
@@ -290,14 +290,14 @@ def import_data():
     kpis_kpi_8.reporting_period = '5'
     kpis_kpi_8.calculation = '1'
     kpis_kpi_8.reporting_method = '1'
-    kpis_kpi_8.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_8.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_8.active = True
     kpis_kpi_8 = importer.save_or_locate(kpis_kpi_8)
 
     kpis_kpi_9 = KPI()
     kpis_kpi_9.created = dateutil.parser.parse("2017-04-11T13:47:43.001071+00:00")
     kpis_kpi_9.modified = dateutil.parser.parse("2017-04-11T13:47:43.001156+00:00")
-    kpis_kpi_9.objective =  importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'created': datetime.datetime(2017, 3, 31, 13, 28, 27, 242602, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'modified': datetime.datetime(2017, 3, 31, 13, 28, 27, 242681, tzinfo=<UTC>), 'strategic_theme_id': 1} ) 
+    kpis_kpi_9.objective = importer.locate_object(Objective, "id", Objective, "id", 1, {'_mptt_cached_fields': "{'name': 'Increase Profit', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Increase Profit', 'id': 1, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 5, 'lft': 1, 'strategic_theme_id': 1})
     kpis_kpi_9.name = 'Another'
     kpis_kpi_9.measure = 'Another'
     kpis_kpi_9.description = ''
@@ -310,14 +310,14 @@ def import_data():
     kpis_kpi_9.reporting_period = '5'
     kpis_kpi_9.calculation = '1'
     kpis_kpi_9.reporting_method = '1'
-    kpis_kpi_9.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_9.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_9.active = True
     kpis_kpi_9 = importer.save_or_locate(kpis_kpi_9)
 
     kpis_kpi_10 = KPI()
     kpis_kpi_10.created = dateutil.parser.parse("2017-04-12T06:35:23.839035+00:00")
     kpis_kpi_10.modified = dateutil.parser.parse("2017-04-12T06:35:23.839125+00:00")
-    kpis_kpi_10.objective =  importer.locate_object(Objective, "id", Objective, "id", 7, {'_mptt_cached_fields': "{'name': 'Improve offering selection', 'parent': None}", 'created': datetime.datetime(2017, 4, 12, 6, 18, 6, 140250, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Improve offering selection', 'id': 7, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 3, 'lft': 1, 'modified': datetime.datetime(2017, 4, 12, 6, 18, 6, 140472, tzinfo=<UTC>), 'strategic_theme_id': 9} ) 
+    kpis_kpi_10.objective = importer.locate_object(Objective, "id", Objective, "id", 5, {'_mptt_cached_fields': "{'name': 'Improve offering selection', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Improve offering selection', 'id': 7, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 3, 'lft': 1, 'strategic_theme_id': 2})
     kpis_kpi_10.name = 'New products'
     kpis_kpi_10.measure = 'New products as a % of sales'
     kpis_kpi_10.description = ''
@@ -330,14 +330,14 @@ def import_data():
     kpis_kpi_10.reporting_period = '5'
     kpis_kpi_10.calculation = '1'
     kpis_kpi_10.reporting_method = '1'
-    kpis_kpi_10.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_10.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_10.active = True
     kpis_kpi_10 = importer.save_or_locate(kpis_kpi_10)
 
     kpis_kpi_11 = KPI()
     kpis_kpi_11.created = dateutil.parser.parse("2017-04-12T06:42:54.109498+00:00")
     kpis_kpi_11.modified = dateutil.parser.parse("2017-04-12T06:42:54.109600+00:00")
-    kpis_kpi_11.objective =  importer.locate_object(Objective, "id", Objective, "id", 8, {'_mptt_cached_fields': "{'name': 'Improve technology', 'parent': None}", 'created': datetime.datetime(2017, 4, 12, 6, 19, 29, 347814, tzinfo=<UTC>), 'level': 0, 'rght': 2, 'name': 'Improve technology', 'id': 8, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 4, 'lft': 1, 'modified': datetime.datetime(2017, 4, 12, 6, 19, 29, 347905, tzinfo=<UTC>), 'strategic_theme_id': 10} ) 
+    kpis_kpi_11.objective = importer.locate_object(Objective, "id", Objective, "id", 6, {'_mptt_cached_fields': "{'name': 'Improve technology', 'parent': None}", 'level': 0, 'rght': 2, 'name': 'Improve technology', 'id': 8, 'customer_id': 1, 'parent_id': None, 'description': '', 'active': True, 'tree_id': 4, 'lft': 1, 'strategic_theme_id': 3})
     kpis_kpi_11.name = 'Adoption of new technologies'
     kpis_kpi_11.measure = 'Technology training index'
     kpis_kpi_11.description = ''
@@ -350,7 +350,7 @@ def import_data():
     kpis_kpi_11.reporting_period = '5'
     kpis_kpi_11.calculation = '1'
     kpis_kpi_11.reporting_method = '1'
-    kpis_kpi_11.customer =  importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'created': datetime.datetime(2017, 3, 31, 13, 27, 37, 470821, tzinfo=<UTC>), 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'modified': datetime.datetime(2017, 3, 31, 13, 27, 37, 470881, tzinfo=<UTC>), 'phone': ''} ) 
+    kpis_kpi_11.customer = importer.locate_object(Customer, "id", Customer, "id", 1, {'financial_year_end_month': 12, 'email': '', 'financial_year_end_day': 31, 'id': 1, 'description': '', 'name': 'Nickel Pro', 'active': True, 'review_rounds': 2, 'phone': ''})
     kpis_kpi_11.active = True
     kpis_kpi_11 = importer.save_or_locate(kpis_kpi_11)
 
