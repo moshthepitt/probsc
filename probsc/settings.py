@@ -63,7 +63,6 @@ INSTALLED_APPS = [
     'compressor',
     'crispy_forms',
     'debug_toolbar',
-    'suit_redactor',
     'django_extensions',
     'django_tables2',
     'mptt',
