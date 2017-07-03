@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 
 import django_tables2 as tables
 
-from .models import Department, Position
+from .models import Department, Position, UserProfile
 
 
 class DepartmentTable(tables.Table):
@@ -60,3 +60,30 @@ class PositionTable(tables.Table):
 
     def render_supervisor(self, record):
         return record.supervisor.userprofile.get_name()
+
+
+class UserProfileTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    active = tables.BooleanColumn(
+        attrs={
+            'td': {'class': "not-active"},
+            'th': {'class': "not-active"}
+        }
+    )
+
+    class Meta:
+        model = UserProfile
+        exclude = ['customer', 'created_on', 'updated_on', 'id']
+        sequence = ('user', 'position', 'role', 'active', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+        # per_page = 1
+        # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
+
+    def render_action(self, record):
+        return format_html(
+            '<a href="{}">Edit</a>', record.get_edit_url()
+        )
+
+    def render_user(self, record):
+        return record.get_name()

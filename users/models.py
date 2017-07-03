@@ -151,13 +151,13 @@ class UserProfile(models.Model):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('users:userprofiles_edit', args=[self.pk])
 
     def get_delete_url(self):
         return "#"
 
     def get_list_url(self):
-        return "#"
+        return reverse('users:userprofiles_list')
 
     def __str__(self):
-        return _("{user}'s profile").format(user=self.user)
+        return _("{user}").format(user=self.get_name())
