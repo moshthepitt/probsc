@@ -11,6 +11,7 @@ from .models import Department, Position
 class DepartmentListview(CoreListView):
     model = Department
     table_class = DepartmentTable
+    search_fields = ['name', 'description', 'parent__name']
 
     def get_context_data(self, **kwargs):
         context = super(DepartmentListview, self).get_context_data(**kwargs)
@@ -37,6 +38,7 @@ class DeleteDepartment(CoreDeleteView):
 class PositionListview(CoreListView):
     model = Position
     table_class = PositionTable
+    search_fields = ['name', 'description', 'department__name', 'parent__name']
 
     def get_context_data(self, **kwargs):
         context = super(PositionListview, self).get_context_data(**kwargs)
