@@ -57,7 +57,7 @@ class Position(MPTTModel, TimeStampedModel):
     """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
-    department = models.ForeignKey(Department, verbose_name=_("Customer"), on_delete=models.PROTECT)
+    department = models.ForeignKey(Department, verbose_name=_("Department"), on_delete=models.PROTECT)
     parent = TreeForeignKey('self', verbose_name=_(
         "Reports To"), null=True, blank=True, related_name='children', db_index=True, on_delete=models.PROTECT)
     supervisor = models.ForeignKey(
@@ -77,13 +77,13 @@ class Position(MPTTModel, TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return reverse('users:departments_edit', args=[self.pk])
+        return reverse('users:positions_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return reverse('users:departments_delete', args=[self.pk])
+        return reverse('users:positions_delete', args=[self.pk])
 
     def get_list_url(self):
-        return reverse('users:departments_list')
+        return reverse('users:positions_list')
 
     def __str__(self):
         return "{} - {}".format(self.department.name, self.name)
