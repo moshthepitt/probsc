@@ -1,6 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext as _
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
@@ -8,6 +9,7 @@ from crispy_forms.bootstrap import Field, FormActions
 
 from customers.models import Customer
 from .models import Department, Position
+from .utils import UserModelChoiceField
 
 
 class DepartmentForm(forms.ModelForm):
@@ -22,12 +24,17 @@ class DepartmentForm(forms.ModelForm):
             'customer',
             'active'
         ]
+        field_classes = {
+            'manager': UserModelChoiceField
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(DepartmentForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
+                id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['manager'].queryset = User.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
@@ -70,6 +77,8 @@ class PositionForm(forms.ModelForm):
         super(PositionForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
+                id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['supervisor'].queryset = User.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
