@@ -61,7 +61,10 @@ class ObjectiveForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-        self.fields['strategic_theme'].queryset = StrategicTheme.objects.active()
+            self.fields['strategic_theme'].queryset = StrategicTheme.objects.active().filter(
+                customer__id=self.request.user.userprofile.customer.pk)
+            self.fields['parent'].queryset = Objective.objects.active().filter(
+                customer__id=self.request.user.userprofile.customer.pk)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True

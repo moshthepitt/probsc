@@ -45,11 +45,12 @@ class KPIForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['objective'].queryset = Objective.objects.active().filter(
+                customer__id=self.request.user.userprofile.customer.pk)
         if self.scorecard:
             cancel_url = reverse('scorecards:scorecards_kpis_list', args=[self.scorecard.pk])
         else:
             cancel_url = reverse('kpis:kpis_list')
-        self.fields['objective'].queryset = Objective.objects.active()
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True

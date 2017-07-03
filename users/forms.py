@@ -9,7 +9,7 @@ from crispy_forms.bootstrap import Field, FormActions
 
 from customers.models import Customer
 from .models import Department, Position
-from .utils import UserModelChoiceField
+from .fields import UserModelChoiceField
 
 
 class DepartmentForm(forms.ModelForm):
@@ -34,7 +34,7 @@ class DepartmentForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['parent'].queryset = Department.objects.filter(
+            self.fields['parent'].queryset = Department.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
             self.fields['manager'].queryset = User.objects.filter(
                 userprofile__customer__id=self.request.user.userprofile.customer.pk)
@@ -80,9 +80,9 @@ class PositionForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['parent'].queryset = Position.objects.filter(
+            self.fields['parent'].queryset = Position.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
-            self.fields['department'].queryset = Department.objects.filter(
+            self.fields['department'].queryset = Department.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
             self.fields['supervisor'].queryset = User.objects.filter(
                 userprofile__customer__id=self.request.user.userprofile.customer.pk)

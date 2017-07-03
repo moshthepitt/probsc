@@ -16,8 +16,6 @@ from .models import Scorecard
 
 class ScorecardForm(forms.ModelForm):
     year = forms.ChoiceField(label=_("Year"), choices=get_year_choices())
-    user = UserModelChoiceField(label=_("User"), queryset=User.objects.filter(
-        userprofile__active=True), required=True)
 
     class Meta:
         model = Scorecard
@@ -32,6 +30,9 @@ class ScorecardForm(forms.ModelForm):
         widgets = {
             'name': MiniTextarea(),
         }
+        field_classes = {
+            'user': UserModelChoiceField
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -39,7 +40,7 @@ class ScorecardForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['user'].queryset = User.objects.filter(
+            self.fields['user'].queryset = User.objects.filter(userprofile__active=True).filter(
                 userprofile__customer__id__in=[self.request.user.userprofile.customer.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
