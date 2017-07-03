@@ -63,7 +63,7 @@
                   {% if request.user.userprofile.is_admin %}
                     <li class="submenu">
                       <a href="#">
-                        <i class="glyphicon glyphicon-list"></i> {% trans "Admin" %}
+                        <i class="glyphicon glyphicon-list"></i> {% trans "Scorecards" %}
                         <span class="caret pull-right"></span>
                       </a>
                       <!-- Sub menu -->
@@ -71,6 +71,15 @@
                         <li><a href="{% url 'strategy:strategic_themes_list' %}">{% trans "Strategic Themes" %}</a></li>
                         <li><a href="{% url 'strategy:objectives_list' %}">{% trans "Objectives" %}</a></li>
                         <li><a href="{% url 'scorecards:scorecards_list' %}">{% trans "Scorecards" %}</a></li>
+                      </ul>
+                    </li>
+                    <li class="submenu">
+                      <a href="#">
+                        <i class="glyphicon glyphicon-user"></i> {% trans "Staff" %}
+                        <span class="caret pull-right"></span>
+                      </a>
+                      <!-- Sub menu -->
+                      <ul>
                         <li><a href="{% url 'users:departments_list' %}">{% trans "Departments" %}</a></li>
                         <li><a href="{% url 'users:positions_list' %}">{% trans "Job Positions" %}</a></li>
                       </ul>
