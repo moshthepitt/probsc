@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^$', HomePageView.as_view(), name='home'),
     url(r'^kpis/', include('kpis.urls', namespace='kpis')),
     url(r'^scorecards/', include('scorecards.urls', namespace='scorecards')),
+    url(r'^staff/', include('users.urls', namespace='users')),
     url(r'^strategy/', include('strategy.urls', namespace='strategy')),
 
     # third party

@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
 
 from django_extensions.db.models import TimeStampedModel
 from mptt.models import MPTTModel, TreeForeignKey
@@ -19,7 +20,7 @@ class Department(MPTTModel, TimeStampedModel):
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
     parent = TreeForeignKey('self', verbose_name=_(
-        "Parent"), null=True, blank=True, related_name='children', db_index=True)
+        "Parent"), null=True, blank=True, related_name='children', db_index=True, on_delete=models.PROTECT)
     customer = models.ForeignKey(
         'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     manager = models.ForeignKey(
@@ -37,13 +38,13 @@ class Department(MPTTModel, TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('users:departments_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('users:departments_delete', args=[self.pk])
 
     def get_list_url(self):
-        return "#"
+        return reverse('users:departments_list')
 
     def __str__(self):
         return self.name
@@ -58,7 +59,7 @@ class Position(MPTTModel, TimeStampedModel):
     description = models.TextField(_("Description"), blank=True, default="")
     department = models.ForeignKey(Department, verbose_name=_("Customer"), on_delete=models.PROTECT)
     parent = TreeForeignKey('self', verbose_name=_(
-        "Reports To"), null=True, blank=True, related_name='children', db_index=True)
+        "Reports To"), null=True, blank=True, related_name='children', db_index=True, on_delete=models.PROTECT)
     supervisor = models.ForeignKey(
         User, verbose_name=_("Supervisor"), on_delete=models.PROTECT, blank=True, null=True)
     customer = models.ForeignKey(
@@ -76,13 +77,13 @@ class Position(MPTTModel, TimeStampedModel):
         return "#"
 
     def get_edit_url(self):
-        return "#"
+        return reverse('users:departments_edit', args=[self.pk])
 
     def get_delete_url(self):
-        return "#"
+        return reverse('users:departments_delete', args=[self.pk])
 
     def get_list_url(self):
-        return "#"
+        return reverse('users:departments_list')
 
     def __str__(self):
         return "{} - {}".format(self.department.name, self.name)
