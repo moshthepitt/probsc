@@ -108,6 +108,8 @@ class UserProfile(models.Model):
     created_on = models.DateTimeField(_("Created on"), auto_now_add=True)
     updated_on = models.DateTimeField(_("Updated on"), auto_now=True)
     user = models.OneToOneField(User, verbose_name=_("User"))
+    position = models.ForeignKey(Position, verbose_name=_(
+        "job Position"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
     customer = models.ForeignKey('customers.Customer', verbose_name=_(
         "Customer"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
     role = models.CharField(
