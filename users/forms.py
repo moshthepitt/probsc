@@ -34,8 +34,10 @@ class DepartmentForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['parent'].queryset = Department.objects.filter(
+                customer__id=self.request.user.userprofile.customer.pk)
             self.fields['manager'].queryset = User.objects.filter(
-                id__in=[self.request.user.userprofile.customer.pk])
+                userprofile__customer__id=self.request.user.userprofile.customer.pk)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -78,8 +80,12 @@ class PositionForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['parent'].queryset = Position.objects.filter(
+                customer__id=self.request.user.userprofile.customer.pk)
+            self.fields['department'].queryset = Department.objects.filter(
+                customer__id=self.request.user.userprofile.customer.pk)
             self.fields['supervisor'].queryset = User.objects.filter(
-                id__in=[self.request.user.userprofile.customer.pk])
+                userprofile__customer__id=self.request.user.userprofile.customer.pk)
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
