@@ -9,6 +9,7 @@ from .managers import ObjectiveManager, StrategicThemeManager
 
 
 class StrategicTheme(TimeStampedModel):
+
     """
     A way to categorise business objectives
     """
@@ -42,6 +43,7 @@ class StrategicTheme(TimeStampedModel):
 
 
 class Objective(MPTTModel, TimeStampedModel):
+
     """
     Strategic objectives of the organisation
     """
@@ -49,8 +51,9 @@ class Objective(MPTTModel, TimeStampedModel):
     description = models.TextField(_("Description"), blank=True, default="")
     strategic_theme = models.ForeignKey(
         StrategicTheme, verbose_name=_("Strategic Theme"), on_delete=models.PROTECT)
-    parent = TreeForeignKey('self', verbose_name=_(
-        "Contributes to"), null=True, blank=True, related_name='children', db_index=True)
+    parent = TreeForeignKey('self', verbose_name=_("Contributes to"), null=True,
+                            blank=True, related_name='children', db_index=True,
+                            on_delete=models.PROTECT)
     customer = models.ForeignKey(
         'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
@@ -79,5 +82,3 @@ class Objective(MPTTModel, TimeStampedModel):
 
     def __str__(self):
         return self.name
-
-
