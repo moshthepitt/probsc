@@ -19,8 +19,9 @@ class Department(MPTTModel, TimeStampedModel):
     """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
-    parent = TreeForeignKey('self', verbose_name=_(
-        "Parent"), null=True, blank=True, related_name='children', db_index=True, on_delete=models.PROTECT)
+    parent = TreeForeignKey('self', verbose_name=_("Parent"), null=True, blank=True,
+                            related_name='children', db_index=True, on_delete=models.PROTECT,
+                            help_text=_("The parent department"))
     customer = models.ForeignKey(
         'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
     manager = models.ForeignKey(
@@ -57,9 +58,11 @@ class Position(MPTTModel, TimeStampedModel):
     """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
-    department = models.ForeignKey(Department, verbose_name=_("Department"), on_delete=models.PROTECT)
-    parent = TreeForeignKey('self', verbose_name=_(
-        "Reports To"), null=True, blank=True, related_name='children', db_index=True, on_delete=models.PROTECT)
+    department = models.ForeignKey(
+        Department, verbose_name=_("Department"), on_delete=models.PROTECT)
+    parent = TreeForeignKey('self', verbose_name=_("Reports To"), null=True, blank=True,
+                            related_name='children', db_index=True, on_delete=models.PROTECT,
+                            help_text=_("The parent Job Position"))
     supervisor = models.ForeignKey(
         User, verbose_name=_("Supervisor"), on_delete=models.PROTECT, blank=True, null=True)
     customer = models.ForeignKey(
@@ -70,7 +73,7 @@ class Position(MPTTModel, TimeStampedModel):
 
     class Meta:
         verbose_name = _("Job Positions")
-        verbose_name_plural = _("Job Positionss")
+        verbose_name_plural = _("Job Positions")
         ordering = ['name']
 
     def get_absolute_url(self):
@@ -119,6 +122,11 @@ class UserProfile(models.Model):
         _("Active"), default=True, help_text="Is the staff member actively employed?")
 
     objects = UserProfileManager()
+
+    class Meta:
+        verbose_name = _("Staff Member")
+        verbose_name_plural = _("Staff Members")
+        ordering = ['user__first_name', 'user__last_name', 'user__email']
 
     def get_name(self):
         if self.user.get_full_name():
