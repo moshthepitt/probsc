@@ -64,6 +64,7 @@ class PositionTable(tables.Table):
 
 class UserProfileTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    email = tables.EmailColumn(verbose_name=_("Email"), accessor='user.email', orderable=True)
     active = tables.BooleanColumn(
         attrs={
             'td': {'class': "not-active"},
@@ -74,7 +75,7 @@ class UserProfileTable(tables.Table):
     class Meta:
         model = UserProfile
         exclude = ['customer', 'created_on', 'updated_on', 'id']
-        sequence = ('user', 'position', 'role', 'active', '...')
+        sequence = ('user', 'email', 'position', 'role', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1
@@ -87,3 +88,6 @@ class UserProfileTable(tables.Table):
 
     def render_user(self, record):
         return record.get_name()
+
+    def render_email(self, record):
+        return record.user.email

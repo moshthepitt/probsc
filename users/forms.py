@@ -8,6 +8,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
 from allauth.account.adapter import get_adapter
+from allauth.account import app_settings
 
 from customers.models import Customer
 from .models import Department, Position, UserProfile
@@ -226,6 +227,16 @@ class AddUserProfileForm(BaseUserProfileForm):
                         reverse('users:userprofiles_list'), _("Back")))
             )
         )
+
+    def clean_email(self):
+        value = self.cleaned_data['email']
+        value = get_adapter().clean_email(value)
+        if value and app_settings.UNIQUE_EMAIL:
+            value = self.validate_unique_email(value)
+        return value
+
+    def validate_unique_email(self, value):
+        return get_adapter().validate_unique_email(value)
 
     def save(self, commit=True):
         unique_username = get_adapter().generate_unique_username([
