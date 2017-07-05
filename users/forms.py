@@ -169,6 +169,13 @@ class UserProfileForm(BaseUserProfileForm):
             )
         )
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email:
+            if UserProfile.objects.exclude(id=self.request.user.userprofile.id).filter(user__email=email).count() > 0:
+                raise forms.ValidationError(_('This email address if already in use.'))
+        return email
+
     def save(self, commit=True):
         user_profile = super(UserProfileForm, self).save(commit)
         # do custom stuff
