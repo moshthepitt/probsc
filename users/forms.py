@@ -195,7 +195,7 @@ class AddUserProfileForm(BaseUserProfileForm):
         label=_("Password"),
         strip=False,
         widget=forms.PasswordInput,
-        help_text=password_validation.password_validators_help_text_html(),
+        help_text=password_validation.password_validators_help_text_html()
     )
 
     class Meta:
@@ -241,6 +241,18 @@ class AddUserProfileForm(BaseUserProfileForm):
         if value and app_settings.UNIQUE_EMAIL:
             value = self.validate_unique_email(value)
         return value
+
+    def clean_password(self):
+        data = self.cleaned_data['password']
+        user = User()
+        if self.cleaned_data.get('first_name'):
+            user.first_name = self.cleaned_data['first_name']
+        if self.cleaned_data.get('last_name'):
+            user.last_name = self.cleaned_data['last_name']
+        if self.cleaned_data.get('email'):
+            user.email = self.cleaned_data['email']
+        password_validation.validate_password(password=data, user=user)
+        return data
 
     def validate_unique_email(self, value):
         return get_adapter().validate_unique_email(value)
