@@ -171,8 +171,8 @@ class UserProfileForm(BaseUserProfileForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if email:
-            if UserProfile.objects.exclude(id=self.request.user.userprofile.id).filter(user__email=email).count() > 0:
+        if email and self.instance:
+            if UserProfile.objects.exclude(id=self.instance.id).filter(user__email=email).count() > 0:
                 raise forms.ValidationError(_('This email address if already in use.'))
         return email
 
