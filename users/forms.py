@@ -76,6 +76,9 @@ class PositionForm(forms.ModelForm):
             'customer',
             'active'
         ]
+        field_classes = {
+            'supervisor': UserModelChoiceField
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
