@@ -9,6 +9,7 @@ from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
 from allauth.account.adapter import get_adapter
 from allauth.account import app_settings
+from easy_select2.widgets import Select2
 
 from customers.models import Customer
 from .models import Department, Position, UserProfile
@@ -30,6 +31,10 @@ class DepartmentForm(forms.ModelForm):
         field_classes = {
             'manager': UserModelChoiceField
         }
+        widgets = {
+            'manager': Select2({'width': "100%"}),
+            'parent': Select2({'width': "100%"})
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -46,6 +51,7 @@ class DepartmentForm(forms.ModelForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
+        self.helper.include_media = False
         self.helper.form_id = 'department-form'
         self.helper.layout = Layout(
             Field('name'),
@@ -79,6 +85,11 @@ class PositionForm(forms.ModelForm):
         field_classes = {
             'supervisor': UserModelChoiceField
         }
+        widgets = {
+            'department': Select2({'width': "100%"}),
+            'supervisor': Select2({'width': "100%"}),
+            'parent': Select2({'width': "100%"})
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -97,6 +108,7 @@ class PositionForm(forms.ModelForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
+        self.helper.include_media = False
         self.helper.form_id = 'position-form'
         self.helper.layout = Layout(
             Field('name'),
@@ -140,6 +152,9 @@ class UserProfileForm(BaseUserProfileForm):
             'role',
             'active'
         ]
+        widgets = {
+            'position': Select2({'width': "100%"})
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -155,6 +170,7 @@ class UserProfileForm(BaseUserProfileForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
+        self.helper.include_media = False
         self.helper.form_id = 'profile-form'
         self.helper.layout = Layout(
             Field('first_name'),
@@ -208,6 +224,9 @@ class AddUserProfileForm(BaseUserProfileForm):
             'role',
             'active'
         ]
+        widgets = {
+            'position': Select2({'width': "100%"})
+        }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -221,7 +240,8 @@ class AddUserProfileForm(BaseUserProfileForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
-        self.helper.form_id = 'profile-form'
+        self.helper.include_media = False
+        self.helper.form_id = 'add-profile-form'
         self.helper.layout = Layout(
             Field('email'),
             Field('password'),

@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
+from easy_select2.widgets import Select2
 
 from customers.models import Customer
 from core.widgets import MiniTextarea
@@ -29,6 +30,7 @@ class ScorecardForm(forms.ModelForm):
         ]
         widgets = {
             'name': MiniTextarea(),
+            'user': Select2({'width': "100%"})
         }
         field_classes = {
             'user': UserModelChoiceField
@@ -47,6 +49,7 @@ class ScorecardForm(forms.ModelForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
+        self.helper.include_media = False
         self.helper.form_id = 'scorecard-form'
         self.helper.layout = Layout(
             Field('name',),

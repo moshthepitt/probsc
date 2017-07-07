@@ -5,6 +5,7 @@ from django.urls import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
 from crispy_forms.bootstrap import Field, FormActions
+from easy_select2.widgets import Select2
 
 from customers.models import Customer
 from strategy.models import Objective
@@ -35,7 +36,8 @@ class KPIForm(forms.ModelForm):
         ]
         widgets = {
             'name': MiniTextarea(),
-            'measure': MiniTextarea()
+            'measure': MiniTextarea(),
+            'objective': Select2({'width': "100%"})
         }
 
     def __init__(self, *args, **kwargs):
@@ -56,6 +58,7 @@ class KPIForm(forms.ModelForm):
         self.helper.render_required_fields = True
         self.helper.form_show_labels = True
         self.helper.html5_required = True
+        self.helper.include_media = False
         self.helper.form_id = 'kpi-form'
         self.helper.layout = Layout(
             Field('name',),
