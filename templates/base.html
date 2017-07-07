@@ -60,6 +60,18 @@
           <div class="sidebar content-box" style="display: block;">
             <ul class="nav">
                 {% if request.user.is_authenticated %}
+                  {% if request.user.userprofile.has_subordinates %}
+                    <li class="submenu">
+                      <a href="#">
+                        <i class="glyphicon glyphicon-list-alt"></i> {% trans "Manage" %}
+                        <span class="caret pull-right"></span>
+                      </a>
+                      <!-- Sub menu -->
+                      <ul>
+                        <li><a href="{% url 'users:my_staff_list' %}">{% trans "My Staff" %}</a></li>
+                      </ul>
+                    </li>
+                  {% endif %}
                   {% if request.user.userprofile.is_admin %}
                     <li class="submenu">
                       <a href="#">

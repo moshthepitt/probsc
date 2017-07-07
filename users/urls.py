@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import DepartmentListview, AddDepartment, EditDepartment
 from .views import DeleteDepartment, PositionListview, AddPosition
 from .views import EditPosition, DeletePosition, UserProfileListview
-from .views import AddUserProfile, EditUserProfile
+from .views import AddUserProfile, EditUserProfile, SubordinatesListview
 
 urlpatterns = [
     url(r'^departments/add/$', AddDepartment.as_view(), name='departments_add'),
@@ -17,4 +17,5 @@ urlpatterns = [
     url(r'^members/add/$', AddUserProfile.as_view(), name='userprofiles_add'),
     url(r'^members/edit/(?P<pk>\d+)/$', EditUserProfile.as_view(), name='userprofiles_edit'),
     url(r'^members/$', UserProfileListview.as_view(), name='userprofiles_list'),
+    url(r'^my-staff-members/$', SubordinatesListview.as_view(), name='my_staff_list'),
 ]

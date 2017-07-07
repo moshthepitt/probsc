@@ -147,6 +147,20 @@ class UserProfile(models.Model):
     def is_admin(self):
         return self.role == self.ADMIN
 
+    def get_subordinates(self):
+        """
+        Returns a queryset of UserProfile objects which report to this userprofile
+        """
+        queryset = UserProfile.objects.active().exclude(
+            id=self.id).filter(
+            models.Q(
+                position__supervisor=self.user) | models.Q(
+                position__department__manager=self.user))
+        return queryset
+
+    def has_subordinates(self):
+        return self.get_subordinates().exists()
+
     def get_absolute_url(self):
         return "#"
 

@@ -4,6 +4,7 @@ from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 
 from .tables import DepartmentTable, PositionTable, UserProfileTable
+from .tables import SubordinatesTable
 from .forms import DepartmentForm, PositionForm, UserProfileForm
 from .forms import AddUserProfileForm
 from .models import Department, Position, UserProfile
@@ -73,6 +74,13 @@ class UserProfileListview(CoreListView):
         context['create_view_url'] = reverse_lazy('users:userprofiles_add')
         context['list_view_url'] = reverse_lazy('users:userprofiles_list')
         return context
+
+
+class SubordinatesListview(UserProfileListview):
+    table_class = SubordinatesTable
+
+    def get_queryset(self):
+        return self.request.user.userprofile.get_subordinates()
 
 
 class AddUserProfile(CoreCreateView):
