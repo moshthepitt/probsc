@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django_tables2',
     'mptt',
     'phonenumber_field',
+    'easy_select2',
 ]
 
 MIDDLEWARE = [
@@ -243,6 +244,9 @@ BSC_RATING = {
     'poor': 4,
     'very_poor': 5
 }
+
+# Easy Seelect2
+SELECT2_USE_BUNDLED_JQUERY = False
 
 
 try:

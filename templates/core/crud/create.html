@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n crispy_forms_tags %}
 
+{% block extracss %}
+	{{form.media.css}}
+{% endblock %}
+
 {% block title %} {% trans "Add" %} {{verbose_name}} {% endblock %}
 
 {% block page_content %} 
@@ -14,4 +18,8 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block extrajs %}
+	{{form.media.js}}
 {% endblock %}
