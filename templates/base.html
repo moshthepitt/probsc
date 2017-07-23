@@ -60,6 +60,7 @@
           <div class="sidebar content-box" style="display: block;">
             <ul class="nav">
                 {% if request.user.is_authenticated %}
+                  <li><a href="{% url 'scorecards:user_scorecards' %}">{% trans "My Scorecards" %}</a></li>
                   {% if request.user.userprofile.has_subordinates %}
                     <li class="submenu">
                       <a href="#">
@@ -67,7 +68,7 @@
                         <span class="caret pull-right"></span>
                       </a>
                       <!-- Sub menu -->
-                      <ul>
+                      <ul>                        
                         <li><a href="{% url 'users:my_staff_list' %}">{% trans "My Staff" %}</a></li>
                       </ul>
                     </li>

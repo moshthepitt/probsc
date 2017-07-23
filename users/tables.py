@@ -1,5 +1,6 @@
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
+from django.urls import reverse
 
 import django_tables2 as tables
 
@@ -113,7 +114,10 @@ class SubordinatesTable(tables.Table):
         # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
 
     def render_action(self, record):
-        return ""
+        return format_html(
+            "<a href='{}'>Scorecards</a>",
+            reverse('scorecards:staff_scorecards', args=[record.user.pk])
+        )
 
     def render_user(self, record):
         return record.get_name()
