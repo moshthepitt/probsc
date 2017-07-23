@@ -62,3 +62,31 @@ class UserScorecardTable(tables.Table):
 
     def render_action(self, record):
         return ""
+
+
+class StaffScorecardTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    active = tables.BooleanColumn(
+        attrs={
+            'td': {'class': "not-active"},
+            'th': {'class': "not-active"}
+        }
+    )
+
+    class Meta:
+        model = Scorecard
+        exclude = ['created', 'modified', 'description', 'id', 'customer', 'kpis', 'user']
+        sequence = ('name', 'year', 'active', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+        # per_page = 1
+        # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
+
+    def render_name(self, record):
+        return format_html(
+            "<a href='#'>{}</a>",
+            record.name
+        )
+
+    def render_action(self, record):
+        return ""

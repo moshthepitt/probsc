@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
-from .tables import ScorecardTable, UserScorecardTable
+from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .forms import ScorecardForm
 from .models import Scorecard
 
@@ -47,7 +47,7 @@ class ScorecardListview(CoreListView):
 
 class StaffScorecards(CoreListView):
     model = Scorecard
-    table_class = UserScorecardTable
+    table_class = StaffScorecardTable
     template_name = "scorecards/staff_scorecards.html"
 
     def get_context_data(self, **kwargs):
