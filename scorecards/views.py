@@ -6,24 +6,30 @@ from django.http import Http404
 from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
 
+from django_tables2 import SingleTableMixin
+
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
+from .tables import UserScorecardKPITable
 from .forms import ScorecardForm
 from .models import Scorecard, ScorecardKPI
 
 
-class UserScorecard(VerboseNameMixin, BelongsToUserMixin, DetailView):
+class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
     """the user viwwing his/her own scoreccard"""
     model = Scorecard
+    table_class = UserScorecardKPITable
     template_name = "scorecards/user_scorecard.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(UserScorecard, self).get_context_data(**kwargs)
-        context['kpis'] = ScorecardKPI.objects.filter(scorecard=self.object)
-        return context
+    def get_kpis(self):
+        kpis = ScorecardKPI.objects.filter(scorecard=self.object)
+        return kpis
+
+    def get_table_data(self):
+        return self.get_kpis()
 
 
 class UserScorecards(CoreListView):

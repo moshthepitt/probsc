@@ -4,7 +4,21 @@ from django.urls import reverse
 
 import django_tables2 as tables
 
-from .models import Scorecard
+from .models import Scorecard, ScorecardKPI
+
+
+class UserScorecardKPITable(tables.Table):
+    perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
+
+    class Meta:
+        model = ScorecardKPI
+        exclude = ['created', 'modified', 'id', 'scorecard', 'score']
+        sequence = ('kpi', 'perspective', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+    def render_perspective(self, record):
+        return record.kpi.get_perspective_display()
 
 
 class ScorecardTable(tables.Table):
@@ -52,8 +66,6 @@ class UserScorecardTable(tables.Table):
         sequence = ('name', 'year', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
-        # per_page = 1
-        # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
 
     def render_name(self, record):
         return format_html(
@@ -81,8 +93,6 @@ class StaffScorecardTable(tables.Table):
         sequence = ('name', 'year', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
-        # per_page = 1
-        # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
 
     def render_name(self, record):
         return format_html(

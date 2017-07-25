@@ -11,7 +11,7 @@ from django.urls import reverse
 from django_extensions.db.models import TimeStampedModel
 
 from core.utils import PathAndRename
-from .managers import ScorecardManager
+from .managers import ScorecardManager, ScorecardKPIManager
 from .utils import bsc_rating
 
 User = settings.AUTH_USER_MODEL
@@ -151,6 +151,8 @@ class ScorecardKPI(TimeStampedModel):
     kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.CASCADE)
     score = models.DecimalField(
         _("Score"), max_digits=64, decimal_places=2, default=0, help_text=_("The KPI BSC score"))
+
+    objects = ScorecardKPIManager()
 
     def get_score(self, this_round=1, do_save=True):
         records_no = self.kpi.get_number_of_scores()
