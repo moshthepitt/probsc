@@ -1,5 +1,6 @@
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
+from django.urls import reverse
 
 import django_tables2 as tables
 
@@ -56,7 +57,8 @@ class UserScorecardTable(tables.Table):
 
     def render_name(self, record):
         return format_html(
-            "<a href='#'>{}</a>",
+            "<a href='{}'>{}</a>",
+            reverse('scorecards:user_scorecard', args=[record.pk]),
             record.name
         )
 

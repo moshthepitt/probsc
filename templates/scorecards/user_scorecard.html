@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n django_tables2 crispy_forms_tags %}
+
+{% block page_title %} {{object.user.userprofile.get_name}} | {{object.name}} {{verbose_name}} {% endblock %}
+
+{% block page_content %} 
+	<div class="row">
+		<div class="col-md-12 content-box-info">
+			<div class="content-box-header">
+				{{object.user.userprofile.get_name}} - {{object.name}} {{verbose_name}}
+			</div>
+			<div class="content-box-large box-with-header">
+			</div>
+		</div>
+	</div>
+{% endblock %}

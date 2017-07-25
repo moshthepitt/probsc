@@ -4,12 +4,26 @@ from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth.models import User
+from django.views.generic.detail import DetailView
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
+from core.mixins import VerboseNameMixin
+from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .forms import ScorecardForm
-from .models import Scorecard
+from .models import Scorecard, ScorecardKPI
+
+
+class UserScorecard(VerboseNameMixin, BelongsToUserMixin, DetailView):
+    """the user viwwing his/her own scoreccard"""
+    model = Scorecard
+    template_name = "scorecards/user_scorecard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(UserScorecard, self).get_context_data(**kwargs)
+        context['kpis'] = ScorecardKPI.objects.filter(scorecard=self.object)
+        return context
 
 
 class UserScorecards(CoreListView):
@@ -33,18 +47,6 @@ class UserScorecards(CoreListView):
     def dispatch(self, request, *args, **kwargs):
         self.object = request.user
         return super(UserScorecards, self).dispatch(request, *args, **kwargs)
-
-
-class ScorecardListview(CoreListView):
-    """ generic (admin) list of scorecards"""
-    model = Scorecard
-    table_class = ScorecardTable
-
-    def get_context_data(self, **kwargs):
-        context = super(ScorecardListview, self).get_context_data(**kwargs)
-        context['create_view_url'] = reverse_lazy('scorecards:scorecards_add')
-        context['list_view_url'] = reverse_lazy('scorecards:scorecards_list')
-        return context
 
 
 class StaffScorecards(CoreListView):
@@ -72,6 +74,18 @@ class StaffScorecards(CoreListView):
         if self.object.userprofile not in subordinates:
             raise Http404
         return super(StaffScorecards, self).dispatch(*args, **kwargs)
+
+
+class ScorecardListview(CoreListView):
+    """ generic (admin) list of scorecards"""
+    model = Scorecard
+    table_class = ScorecardTable
+
+    def get_context_data(self, **kwargs):
+        context = super(ScorecardListview, self).get_context_data(**kwargs)
+        context['create_view_url'] = reverse_lazy('scorecards:scorecards_add')
+        context['list_view_url'] = reverse_lazy('scorecards:scorecards_list')
+        return context
 
 
 class AddScorecard(CoreCreateView):

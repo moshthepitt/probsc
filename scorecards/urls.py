@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
+from .views import UserScorecard
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
 
@@ -18,6 +19,7 @@ urlpatterns = [
     url(r'^kpis/(?P<scorecard_pk>\d+)/$',
         ScorecardKPIListview.as_view(), name='scorecards_kpis_list'),
     url(r'^staff-scorecards/(?P<pk>\d+)/$', StaffScorecards.as_view(), name='staff_scorecards'),
+    url(r'^my-scorecard/(?P<pk>\d+)/$', UserScorecard.as_view(), name='user_scorecard'),
     url(r'^my-scorecards/$', UserScorecards.as_view(), name='user_scorecards'),
     url(r'^list/$', ScorecardListview.as_view(), name='scorecards_list'),
 ]
