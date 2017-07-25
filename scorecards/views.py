@@ -13,6 +13,7 @@ from .models import Scorecard
 
 
 class UserScorecards(CoreListView):
+    """the user viewing his own scorecards"""
     model = Scorecard
     table_class = UserScorecardTable
     template_name = "scorecards/user_scorecards.html"
@@ -35,6 +36,7 @@ class UserScorecards(CoreListView):
 
 
 class ScorecardListview(CoreListView):
+    """ generic (admin) list of scorecards"""
     model = Scorecard
     table_class = ScorecardTable
 
@@ -46,6 +48,7 @@ class ScorecardListview(CoreListView):
 
 
 class StaffScorecards(CoreListView):
+    """ manager/supervisor viewing his people's scorecards"""
     model = Scorecard
     table_class = StaffScorecardTable
     template_name = "scorecards/staff_scorecards.html"
