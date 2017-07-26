@@ -1,12 +1,16 @@
 from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
 
 from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
+from .ajax import process_initiative_form
 
 urlpatterns = [
+    # ajax
+    url(r'^ajax/add-initiative/$', login_required(process_initiative_form), name='process_initiative_form'),
     # scorecards
     url(r'^add/$', AddScorecard.as_view(), name='scorecards_add'),
     url(r'^edit/(?P<pk>\d+)/$', EditScorecard.as_view(), name='scorecards_edit'),

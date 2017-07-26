@@ -1,7 +1,11 @@
 {% extends "base.html" %}
-{% load i18n django_tables2 crispy_forms_tags %}
+{% load i18n django_tables2 crispy_forms_tags staticfiles %}
 
 {% block page_title %} {{object.user.userprofile.get_name}} | {{object.name}} {{verbose_name}} {% endblock %}
+
+{% block extracss %}
+	<link rel="stylesheet" href="{% static 'jquery.growl/stylesheets/jquery.growl.css' %}" type="text/css" />
+{% endblock %}
 
 {% block page_content %} 
 	<div class="row">
@@ -47,6 +51,8 @@
 {% endblock %}
 
 {% block extrajs %}
+	<script src="{% static 'js/js.cookie.js' %}"></script>
+	<script src="{% static 'jquery.growl/javascripts/jquery.growl.js' %}"></script>
 	<script>
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -80,5 +86,32 @@
 		$('#scoreModal').on('hide.bs.modal', function (e) {
 			$("#scoreModal-body" ).html();
 		});
+
+		$(document).on('submit','#initiative-form',function(event){
+ 			event.preventDefault();
+ 			var initiative_form = '#initiative-form';
+ 			var url = '{% url "scorecards:process_initiative_form" %}';
+ 			$.ajax({
+ 				url: url,
+ 				type: "POST",
+ 				data: $(initiative_form).serialize(),
+ 				dataType: 'json',
+ 				success: function(data) {				    	
+ 					if (!(data['success'])) {
+ 						$(initiative_form).replaceWith(data['form_html']);
+ 					}
+ 					else { 
+ 						$('#inititativeModal').modal('hide');
+ 						$.growl.notice({ 
+ 							location: 'tr',
+ 							message: '{% trans "Successfully added initiative" %}' 
+ 						});
+ 					}
+ 				},
+ 				error: function () {
+ 					$(initiative_form).find('.error-message').show();
+ 				}
+ 			});
+ 		});
 	</script>
 {% endblock %}
