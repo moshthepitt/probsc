@@ -14,12 +14,71 @@
 			</div>
 		</div>
 	</div>
+	<!-- Initiatives Modal -->
+	<div class="modal fade" id="inititativeModal" tabindex="-1" role="dialog" aria-labelledby="inititativeModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="inititativeModalLabel">{% trans "Initiatives" %}</h4>
+	      </div>
+	      <div class="modal-body" id="inititativeModal-body"></div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Scores Modal -->
+	<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="scoreModalLabel">{% trans "Scores" %}</h4>
+	      </div>
+	      <div class="modal-body" id="scoreModal-body"></div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
 {% endblock %}
 
 {% block extrajs %}
 	<script>
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+{% endblock %}
+{% block footerjs %}
+	<script>
+		$(document).on('click', '.add-initiative-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var initiativeSnippetURL = '{% url "scorecards:snippet_add_initiative" 0 %}'.replace (0, thisID);
+			$("#inititativeModal-body" ).load(initiativeSnippetURL, function(){
+				$('#inititativeModal').modal();
+			});
+		});
+
+		$(document).on('click', '.add-score-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var scoreSnippetURL = '{% url "scorecards:snippet_add_score" 0 %}'.replace (0, thisID);
+			$("#scoreModal-body" ).load(scoreSnippetURL, function(){
+				$('#scoreModal').modal();
+			});
+		});
+
+		$('#inititativeModal').on('hide.bs.modal', function (e) {
+			$("#inititativeModal-body" ).html();
+		});
+
+		$('#scoreModal').on('hide.bs.modal', function (e) {
+			$("#scoreModal-body" ).html();
 		});
 	</script>
 {% endblock %}

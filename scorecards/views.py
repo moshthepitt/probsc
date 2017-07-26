@@ -18,6 +18,16 @@ from .forms import ScorecardForm
 from .models import Scorecard, ScorecardKPI
 
 
+class AddInitiativeSnippet(DetailView):
+    model = ScorecardKPI
+    template_name = "scorecards/snippets/add_initiative.html"
+
+
+class AddScoreSnippet(DetailView):
+    model = ScorecardKPI
+    template_name = "scorecards/snippets/add_score.html"
+
+
 class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
     """the user viwwing his/her own scoreccard"""
     model = Scorecard

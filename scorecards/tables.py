@@ -39,15 +39,16 @@ class UserScorecardKPITable(tables.Table):
     def render_action(self, record):
         return format_html(
             """
-            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
+            <button type="button" class="btn btn-default btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
+            <button type="button" class="btn btn-default btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             """,
             a=_("Add Initiatives"),
-            b=_("Report Scores")
+            b=_("Report Scores"),
+            pk=record.id
         )
 
 
