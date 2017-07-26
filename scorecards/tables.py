@@ -4,7 +4,7 @@ from django.urls import reverse
 
 import django_tables2 as tables
 
-from .models import Scorecard, ScorecardKPI
+from .models import Scorecard, ScorecardKPI, Initiative
 
 
 class UserScorecardKPITable(tables.Table):
@@ -39,6 +39,9 @@ class UserScorecardKPITable(tables.Table):
     def render_action(self, record):
         return format_html(
             """
+            <button type="button" class="btn btn-default btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
+              <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            </button>
             <button type="button" class="btn btn-default btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
@@ -46,8 +49,9 @@ class UserScorecardKPITable(tables.Table):
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             """,
-            a=_("Add Initiatives"),
+            a=_("Add Initiative"),
             b=_("Report Scores"),
+            c=_("View Initiatives"),
             pk=record.id
         )
 
@@ -133,3 +137,13 @@ class StaffScorecardTable(tables.Table):
 
     def render_action(self, record):
         return ""
+
+
+class InitiativeTable(tables.Table):
+
+    class Meta:
+        model = Initiative
+        exclude = ['created', 'modified', 'scorecard', 'kpi', 'id']
+        sequence = ('date', 'name', 'description', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"

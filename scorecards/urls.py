@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
+from .views import InitiativeListSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
 from .ajax import process_initiative_form
@@ -31,5 +32,7 @@ urlpatterns = [
     # snippets
     url(r'^snippets/add-initiative/(?P<pk>\d+)/$', AddInitiativeSnippet.as_view(),
         name='snippet_add_initiative'),
+    url(r'^snippets/list-initiatives/(?P<pk>\d+)/$', InitiativeListSnippet.as_view(),
+        name='snippet_list_initiatives'),
     url(r'^snippets/add-score/(?P<pk>\d+)/$', AddScoreSnippet.as_view(), name='snippet_add_score'),
 ]

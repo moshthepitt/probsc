@@ -61,6 +61,15 @@
 {% endblock %}
 {% block footerjs %}
 	<script>
+		$(document).on('click', '.list-initiative-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var listInitiativeSnippetURL = '{% url "scorecards:snippet_list_initiatives" 0 %}'.replace (0, thisID);
+			$("#inititativeModal-body" ).load(listInitiativeSnippetURL, function(){
+				$('#inititativeModal').modal();
+			});
+		});
+
 		$(document).on('click', '.add-initiative-button', function(event) {
 			event.preventDefault();
 			var thisID = $(this).data("pk");

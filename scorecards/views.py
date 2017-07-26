@@ -14,10 +14,19 @@ from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
-from .tables import UserScorecardKPITable
+from .tables import UserScorecardKPITable, InitiativeTable
 from .forms import ScorecardForm, InitiativeModalForm
 from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
-from .models import Scorecard, ScorecardKPI
+from .models import Scorecard, ScorecardKPI, Initiative
+
+
+class InitiativeListSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, DetailView):
+    model = ScorecardKPI
+    table_class = InitiativeTable
+    template_name = "scorecards/snippets/list_initiative.html"
+
+    def get_table_data(self):
+        return Initiative.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
 class AddInitiativeSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
@@ -33,7 +42,7 @@ class AddScoreSnippet(ScorecardBelongsToUserMixin, DetailView):
 
 
 class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
-    """the user viwwing his/her own scoreccard"""
+    """the user viewing his/her own scorecard"""
     model = Scorecard
     table_class = UserScorecardKPITable
     template_name = "scorecards/user_scorecard.html"
