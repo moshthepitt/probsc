@@ -8,17 +8,47 @@ from .models import Scorecard, ScorecardKPI
 
 
 class UserScorecardKPITable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    measure = tables.Column(verbose_name=_("Measure"), accessor='kpi', orderable=True)
     perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
+    target = tables.Column(verbose_name=_("Target"), accessor='kpi', orderable=True)
+    weight = tables.Column(verbose_name=_("Weight"), accessor='kpi', orderable=True)
 
     class Meta:
         model = ScorecardKPI
         exclude = ['created', 'modified', 'id', 'scorecard', 'score']
-        sequence = ('kpi', 'perspective', '...')
+        sequence = ('kpi', 'measure', 'perspective', '...', 'action')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
+    def render_kpi(self, record):
+        return record.kpi.name
+
+    def render_measure(self, record):
+        return record.kpi.measure
+
+    def render_target(self, record):
+        return record.kpi.target
+
+    def render_weight(self, record):
+        return record.kpi.weight
+
     def render_perspective(self, record):
         return record.kpi.get_perspective_display()
+
+    def render_action(self, record):
+        return format_html(
+            """
+            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <button type="button" class="btn btn-default btn-xs" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+            """,
+            a=_("Add Initiatives"),
+            b=_("Report Scores")
+        )
 
 
 class ScorecardTable(tables.Table):
