@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
 
 from django_tables2 import SingleTableMixin
 
@@ -14,16 +15,19 @@ from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable
-from .forms import ScorecardForm
+from .forms import ScorecardForm, InitiativeModalForm
+from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
 from .models import Scorecard, ScorecardKPI
 
 
-class AddInitiativeSnippet(DetailView):
+class AddInitiativeSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_initiative.html"
+    success_url = "#"
+    form_class = InitiativeModalForm
 
 
-class AddScoreSnippet(DetailView):
+class AddScoreSnippet(ScorecardBelongsToUserMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_score.html"
 

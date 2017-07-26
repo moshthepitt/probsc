@@ -45,15 +45,21 @@ class StaffmemberRequiredMixin(object):
         return super(StaffmemberRequiredMixin, self).dispatch(request, *args, **kwargs)
 
 
-class CoreFormMixin(object):
+class CoreFormKwargsMixin(object):
     """
-    Adds some nice stuff to formviews used in create/update/delete views
+    Adds form kwargs
     """
 
     def get_form_kwargs(self):
-        kwargs = super(CoreFormMixin, self).get_form_kwargs()
+        kwargs = super(CoreFormKwargsMixin, self).get_form_kwargs()
         kwargs['request'] = self.request
         return kwargs
+
+
+class CoreFormMixin(CoreFormKwargsMixin):
+    """
+    Adds some nice stuff to formviews used in create/update/delete views
+    """
 
     def get_success_url(self):
         return self.object.get_edit_url()
