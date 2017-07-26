@@ -4,6 +4,7 @@
 {% block page_title %} {{object.user.userprofile.get_name}} | {{object.name}} {{verbose_name}} {% endblock %}
 
 {% block extracss %}
+	<link rel="stylesheet" href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" />
 	<link rel="stylesheet" href="{% static 'jquery.growl/stylesheets/jquery.growl.css' %}" type="text/css" />
 {% endblock %}
 
@@ -51,6 +52,7 @@
 {% endblock %}
 
 {% block extrajs %}
+	<script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
 	<script src="{% static 'js/js.cookie.js' %}"></script>
 	<script src="{% static 'jquery.growl/javascripts/jquery.growl.js' %}"></script>
 	<script>
@@ -75,6 +77,12 @@
 			var thisID = $(this).data("pk");
 			var initiativeSnippetURL = '{% url "scorecards:snippet_add_initiative" 0 %}'.replace (0, thisID);
 			$("#inititativeModal-body" ).load(initiativeSnippetURL, function(){
+				$('#id-date').datepicker({
+					'format': 'yyyy-mm-dd',
+					'autoclose': true,
+					'todayBtn': true,
+					'todayHighlight': true
+				});
 				$('#inititativeModal').modal();
 			});
 		});
