@@ -7,11 +7,12 @@ from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
 from .views import InitiativeListSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
-from .ajax import process_initiative_form
+from .ajax import process_initiative_form, process_score_form
 
 urlpatterns = [
     # ajax
     url(r'^ajax/add-initiative/$', login_required(process_initiative_form), name='process_initiative_form'),
+    url(r'^ajax/add-score/$', login_required(process_score_form), name='process_score_form'),
     # scorecards
     url(r'^add/$', AddScorecard.as_view(), name='scorecards_add'),
     url(r'^edit/(?P<pk>\d+)/$', EditScorecard.as_view(), name='scorecards_edit'),

@@ -77,7 +77,7 @@
 			var thisID = $(this).data("pk");
 			var initiativeSnippetURL = '{% url "scorecards:snippet_add_initiative" 0 %}'.replace (0, thisID);
 			$("#inititativeModal-body" ).load(initiativeSnippetURL, function(){
-				$('#id-date').datepicker({
+				$('#id-initiative-date').datepicker({
 					'format': 'yyyy-mm-dd',
 					'autoclose': true,
 					'todayBtn': true,
@@ -92,6 +92,12 @@
 			var thisID = $(this).data("pk");
 			var scoreSnippetURL = '{% url "scorecards:snippet_add_score" 0 %}'.replace (0, thisID);
 			$("#scoreModal-body" ).load(scoreSnippetURL, function(){
+				$('#id-score-date').datepicker({
+					'format': 'yyyy-mm-dd',
+					'autoclose': true,
+					'todayBtn': true,
+					'todayHighlight': true
+				});
 				$('#scoreModal').modal();
 			});
 		});
@@ -122,6 +128,33 @@
  						$.growl.notice({ 
  							location: 'tr',
  							message: '{% trans "Successfully added initiative" %}' 
+ 						});
+ 					}
+ 				},
+ 				error: function () {
+ 					$(initiative_form).find('.error-message').show();
+ 				}
+ 			});
+ 		});
+
+ 		$(document).on('submit','#add-score-form',function(event){
+ 			event.preventDefault();
+ 			var score_form = '#add-score-form';
+ 			var url = '{% url "scorecards:process_score_form" %}';
+ 			$.ajax({
+ 				url: url,
+ 				type: "POST",
+ 				data: $(score_form).serialize(),
+ 				dataType: 'json',
+ 				success: function(data) {				    	
+ 					if (!(data['success'])) {
+ 						$(score_form).replaceWith(data['form_html']);
+ 					}
+ 					else { 
+ 						$('#scoreModal').modal('hide');
+ 						$.growl.notice({ 
+ 							location: 'tr',
+ 							message: '{% trans "Successfully added score" %}' 
  						});
  					}
  				},

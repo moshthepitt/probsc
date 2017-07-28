@@ -1,1 +1,5 @@
-add score  {{object.kpi}}
+{% load i18n crispy_forms_tags %}
+
+<h4>{% trans "Add Score" %}</h4>
+
+{% crispy form %}

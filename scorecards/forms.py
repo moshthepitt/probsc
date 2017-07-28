@@ -13,7 +13,49 @@ from core.widgets import MiniTextarea
 from core.utils import get_year_choices
 from users.fields import UserModelChoiceField
 from kpis.models import KPI
-from .models import Scorecard, Initiative
+from .models import Scorecard, Initiative, Score
+
+
+class ScoreModalForm(forms.ModelForm):
+
+    class Meta:
+        model = Score
+        fields = [
+            'date',
+            'value',
+            'notes',
+            'scorecard',
+            'kpi',
+        ]
+        widgets = {
+            'notes': MiniTextarea()
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.scorecard_kpi = kwargs.pop('scorecard_kpi', None)
+        super(ScoreModalForm, self).__init__(*args, **kwargs)
+        if self.scorecard_kpi:
+            self.fields['scorecard'].queryset = Scorecard.objects.filter(
+                id__in=[self.scorecard_kpi.scorecard.pk])
+            self.fields['kpi'].queryset = KPI.objects.filter(id__in=[self.scorecard_kpi.kpi.pk])
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = True
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'add-score-form'
+        self.helper.layout = Layout(
+            Field('date', id="id-score-date"),
+            Field('value',),
+            Field('notes',),
+            Field('scorecard', type="hidden"),
+            Field('kpi', type="hidden"),
+            FormActions(
+                Submit('submitBtn', _('Submit'), css_class='btn-success btn-block'),
+            )
+        )
 
 
 class InitiativeModalForm(forms.ModelForm):
@@ -47,7 +89,7 @@ class InitiativeModalForm(forms.ModelForm):
         self.helper.include_media = False
         self.helper.form_id = 'initiative-form'
         self.helper.layout = Layout(
-            Field('date', id="id-date"),
+            Field('date', id="id-initiative-date"),
             Field('name',),
             Field('description',),
             Field('scorecard', type="hidden"),

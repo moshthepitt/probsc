@@ -15,7 +15,7 @@ from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable, InitiativeTable
-from .forms import ScorecardForm, InitiativeModalForm
+from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
 from .models import Scorecard, ScorecardKPI, Initiative
 
@@ -36,9 +36,11 @@ class AddInitiativeSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMix
     form_class = InitiativeModalForm
 
 
-class AddScoreSnippet(ScorecardBelongsToUserMixin, DetailView):
+class AddScoreSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_score.html"
+    success_url = "#"
+    form_class = ScoreModalForm
 
 
 class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
