@@ -4,7 +4,7 @@ from django.urls import reverse
 
 import django_tables2 as tables
 
-from .models import Scorecard, ScorecardKPI, Initiative
+from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
 class UserScorecardKPITable(tables.Table):
@@ -145,5 +145,15 @@ class InitiativeTable(tables.Table):
         model = Initiative
         exclude = ['created', 'modified', 'scorecard', 'kpi', 'id']
         sequence = ('date', 'name', 'description', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+
+class ScoreTable(tables.Table):
+
+    class Meta:
+        model = Score
+        exclude = ['created', 'modified', 'scorecard', 'kpi', 'id']
+        sequence = ('date', 'value', 'notes', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"

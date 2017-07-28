@@ -14,10 +14,10 @@ from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
-from .tables import UserScorecardKPITable, InitiativeTable
+from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
-from .models import Scorecard, ScorecardKPI, Initiative
+from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
 class InitiativeListSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, DetailView):
@@ -36,14 +36,19 @@ class AddInitiativeSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMix
     form_class = InitiativeModalForm
 
 
-class AddScoreSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
+class AddScoreSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_score.html"
     success_url = "#"
     form_class = ScoreModalForm
+    table_class = ScoreTable
+
+    def get_table_data(self):
+        return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
 class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
+
     """the user viewing his/her own scorecard"""
     model = Scorecard
     table_class = UserScorecardKPITable
@@ -58,6 +63,7 @@ class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, Deta
 
 
 class UserScorecards(CoreListView):
+
     """the user viewing his own scorecards"""
     model = Scorecard
     table_class = UserScorecardTable
@@ -81,6 +87,7 @@ class UserScorecards(CoreListView):
 
 
 class StaffScorecards(CoreListView):
+
     """ manager/supervisor viewing his people's scorecards"""
     model = Scorecard
     table_class = StaffScorecardTable
@@ -89,7 +96,8 @@ class StaffScorecards(CoreListView):
     def get_context_data(self, **kwargs):
         context = super(StaffScorecards, self).get_context_data(**kwargs)
         context['create_view_url'] = "#"
-        context['list_view_url'] = reverse_lazy('scorecards:staff_scorecards', args=[self.object.pk])
+        context['list_view_url'] = reverse_lazy(
+            'scorecards:staff_scorecards', args=[self.object.pk])
         context['this_object'] = self.object
         return context
 
@@ -108,6 +116,7 @@ class StaffScorecards(CoreListView):
 
 
 class ScorecardListview(CoreListView):
+
     """ generic (admin) list of scorecards"""
     model = Scorecard
     table_class = ScorecardTable

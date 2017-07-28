@@ -1,5 +1,9 @@
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags django_tables2 %}
 
-<h4>{% trans "Add Score" %}</h4>
+{% render_table table %}
+
+<hr>
+
+<h4>{% trans "Add New Score" %}</h4>
 
 {% crispy form %}
