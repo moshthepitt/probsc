@@ -31,6 +31,20 @@ class ScoreModalForm(forms.ModelForm):
             'notes': MiniTextarea()
         }
 
+    def clean(self):
+        cleaned_data = super(ScoreModalForm, self).clean()
+        scorecard = cleaned_data.get("scorecard")
+        kpi = cleaned_data.get("kpi")
+        if kpi:
+            max_scores = kpi.get_number_of_scores()
+            num_scores = Score.objects.filter(scorecard=scorecard, kpi=kpi).count()
+            if num_scores + 1 > max_scores:
+                msg = _("Cannot add more scores.".format())
+                self.add_error('date', msg)
+                self.add_error('value', msg)
+                self.add_error('notes', msg)
+        return cleaned_data
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         self.scorecard_kpi = kwargs.pop('scorecard_kpi', None)
