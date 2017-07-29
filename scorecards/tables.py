@@ -8,7 +8,6 @@ from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
 class UserScorecardKPITable(tables.Table):
-    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
     measure = tables.Column(verbose_name=_("Measure"), accessor='kpi', orderable=True)
     perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
     target = tables.Column(verbose_name=_("Target"), accessor='kpi', orderable=True)
@@ -17,6 +16,7 @@ class UserScorecardKPITable(tables.Table):
     reporting_period = tables.Column(
         verbose_name=_("Reporting Period"), accessor='kpi', orderable=True)
     initiatives = tables.Column(verbose_name=_("Initiatives"), accessor='pk', orderable=False)
+    action = tables.Column(verbose_name=_("Scores"), accessor='pk', orderable=False)
 
     class Meta:
         model = ScorecardKPI
