@@ -13,11 +13,16 @@ class UserScorecardKPITable(tables.Table):
     perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
     target = tables.Column(verbose_name=_("Target"), accessor='kpi', orderable=True)
     weight = tables.Column(verbose_name=_("Weight"), accessor='kpi', orderable=True)
+    direction = tables.Column(verbose_name=_("Direction"), accessor='kpi', orderable=True)
+    reporting_period = tables.Column(
+        verbose_name=_("Reporting Period"), accessor='kpi', orderable=True)
+    initiatives = tables.Column(verbose_name=_("Initiatives"), accessor='pk', orderable=False)
 
     class Meta:
         model = ScorecardKPI
         exclude = ['created', 'modified', 'id', 'scorecard', 'score']
-        sequence = ('kpi', 'measure', 'perspective', '...', 'action')
+        sequence = ('kpi', 'measure', 'perspective', 'target', 'direction',
+                    'reporting_period', '...', 'weight', 'initiatives', 'action')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -31,12 +36,18 @@ class UserScorecardKPITable(tables.Table):
         return record.kpi.target
 
     def render_weight(self, record):
-        return record.kpi.weight
+        return "{}%".format(record.kpi.weight)
+
+    def render_direction(self, record):
+        return record.kpi.get_direction_display()
+
+    def render_reporting_period(self, record):
+        return record.kpi.get_reporting_period_display()
 
     def render_perspective(self, record):
         return record.kpi.get_perspective_display()
 
-    def render_action(self, record):
+    def render_initiatives(self, record):
         return format_html(
             """
             <button type="button" class="btn btn-default btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
@@ -45,13 +56,20 @@ class UserScorecardKPITable(tables.Table):
             <button type="button" class="btn btn-default btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
+            """,
+            a=_("Add Initiative"),
+            c=_("View Initiatives"),
+            pk=record.id
+        )
+
+    def render_action(self, record):
+        return format_html(
+            """
             <button type="button" class="btn btn-default btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             """,
-            a=_("Add Initiative"),
             b=_("Report Scores"),
-            c=_("View Initiatives"),
             pk=record.id
         )
 
@@ -153,7 +171,7 @@ class ScoreTable(tables.Table):
 
     class Meta:
         model = Score
-        exclude = ['created', 'modified', 'scorecard', 'kpi', 'id']
+        exclude = ['created', 'modified', 'scorecard', 'kpi', 'id', 'review_round']
         sequence = ('date', 'value', 'notes', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
