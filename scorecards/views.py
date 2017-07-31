@@ -18,11 +18,11 @@ from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
 from .tables import ScorecardReportKPITable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
-from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
+from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
-class InitiativeListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
+class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin, DetailView):
     model = ScorecardKPI
     table_class = InitiativeTable
     template_name = "scorecards/snippets/list_initiatives.html"
@@ -31,7 +31,7 @@ class InitiativeListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
         return Initiative.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
-class ScoreListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
+class ScoreListSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin, DetailView):
     model = ScorecardKPI
     table_class = ScoreTable
     template_name = "scorecards/snippets/list_scores.html"
@@ -40,14 +40,14 @@ class ScoreListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
         return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
-class AddInitiativeSnippet(LoginRequiredMixin, ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
+class AddInitiativeSnippet(LoginRequiredMixin, AccessScorecard, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_initiative.html"
     success_url = "#"
     form_class = InitiativeModalForm
 
 
-class AddScoreSnippet(LoginRequiredMixin, ScorecardBelongsToUserMixin, SingleTableMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
+class AddScoreSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_score.html"
     success_url = "#"
@@ -58,7 +58,7 @@ class AddScoreSnippet(LoginRequiredMixin, ScorecardBelongsToUserMixin, SingleTab
         return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
-class ScorecardReport(LoginRequiredMixin, VerboseNameMixin, SingleTableMixin, DetailView):
+class ScorecardReport(LoginRequiredMixin, AccessScorecard, VerboseNameMixin, SingleTableMixin, DetailView):
 
     """the scorecard report """
     model = Scorecard

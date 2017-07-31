@@ -35,6 +35,30 @@ class ScorecardBelongsToUserMixin(object):
         return super(ScorecardBelongsToUserMixin, self).dispatch(*args, **kwargs)
 
 
+class AccessScorecard(object):
+    """
+    Used for scorecard objects or objects with a scorecard field
+    Ensures the scorecard belongs to the current user
+    Or is being viewed by a supervisor or admin
+    """
+
+    def dispatch(self, *args, **kwargs):
+        subordinates = self.request.user.userprofile.get_subordinates()
+        can_access = False
+        if (self.request.user.userprofile.is_admin) or (self.get_object().userprofile in subordinates):
+            can_access = True
+        else:
+            if isinstance(self.get_object(), Scorecard):
+                if self.get_object().user == self.request.user:
+                    can_access = True
+            else:
+                if self.get_object().scorecard.user == self.request.user:
+                    can_access = True
+        if not can_access:
+            raise Http404
+        return super(AccessScorecard, self).dispatch(*args, **kwargs)
+
+
 class ScorecardMixin(object):
     """
     Adds scorecard to context
