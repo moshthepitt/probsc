@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
-from .views import InitiativeListSnippet
+from .views import InitiativeListSnippet, ScorecardReport, ScoreListSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
 from .ajax import process_initiative_form, process_score_form
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^delete/(?P<pk>\d+)/$', DeleteScorecard.as_view(), name='scorecards_delete'),
     url(r'^staff-scorecards/(?P<pk>\d+)/$', StaffScorecards.as_view(), name='staff_scorecards'),
     url(r'^my-scorecard/(?P<pk>\d+)/$', UserScorecard.as_view(), name='user_scorecard'),
+    url(r'^report/(?P<pk>\d+)/$', ScorecardReport.as_view(), name='scorecard_report'),
     url(r'^my-scorecards/$', UserScorecards.as_view(), name='user_scorecards'),
     url(r'^list/$', ScorecardListview.as_view(), name='scorecards_list'),
     # kpis
@@ -35,5 +36,7 @@ urlpatterns = [
         name='snippet_add_initiative'),
     url(r'^snippets/list-initiatives/(?P<pk>\d+)/$', InitiativeListSnippet.as_view(),
         name='snippet_list_initiatives'),
+    url(r'^snippets/list-scores/(?P<pk>\d+)/$', ScoreListSnippet.as_view(),
+        name='snippet_list_scores'),
     url(r'^snippets/add-score/(?P<pk>\d+)/$', AddScoreSnippet.as_view(), name='snippet_add_score'),
 ]

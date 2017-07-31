@@ -7,6 +7,75 @@ import django_tables2 as tables
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
+class ScorecardReportKPITable(tables.Table):
+    measure = tables.Column(verbose_name=_("Measure"), accessor='kpi', orderable=True)
+    perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
+    target = tables.Column(verbose_name=_("Target"), accessor='kpi', orderable=True)
+    weight = tables.Column(verbose_name=_("Weight"), accessor='kpi', orderable=True)
+    direction = tables.Column(verbose_name=_("Direction"), accessor='kpi', orderable=True)
+    reporting_period = tables.Column(
+        verbose_name=_("Reporting Period"), accessor='kpi', orderable=True)
+    initiatives = tables.Column(verbose_name=_("Initiatives"), accessor='pk', orderable=False)
+    rating = tables.Column(verbose_name=_("Rating"), accessor='pk', orderable=True)
+    scores = tables.Column(verbose_name=_("Scores"), accessor='pk', orderable=False)
+
+    class Meta:
+        model = ScorecardKPI
+        exclude = ['created', 'modified', 'id', 'scorecard', 'score']
+        sequence = ('kpi', 'measure', 'perspective', 'target', 'direction',
+                    'reporting_period', '...', 'weight', 'rating', 'initiatives', 'scores')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+    def render_kpi(self, record):
+        return record.kpi.name
+
+    def render_measure(self, record):
+        return record.kpi.measure
+
+    def render_target(self, record):
+        return record.kpi.target
+
+    def render_weight(self, record):
+        return "{}%".format(record.kpi.weight)
+
+    def render_direction(self, record):
+        return record.kpi.get_direction_display()
+
+    def render_reporting_period(self, record):
+        return record.kpi.get_reporting_period_display()
+
+    def render_perspective(self, record):
+        return record.kpi.get_perspective_display()
+
+    def render_rating(self, record):
+        return record.get_actual_rating_from_score()
+
+    def render_initiatives(self, record):
+        return format_html(
+            """
+            <button type="button" class="btn btn-{contextual_rating} btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
+              <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            </button>
+            """,
+            c=_("View Initiatives"),
+            pk=record.id,
+            contextual_rating=record.contextual_rating()
+        )
+
+    def render_scores(self, record):
+        return format_html(
+            """
+            <button type="button" class="btn btn-{contextual_rating} btn-xs list-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+            """,
+            c=_("View Scores"),
+            pk=record.id,
+            contextual_rating=record.contextual_rating()
+        )
+
+
 class UserScorecardKPITable(tables.Table):
     measure = tables.Column(verbose_name=_("Measure"), accessor='kpi', orderable=True)
     perspective = tables.Column(verbose_name=_("Perspective"), accessor='kpi', orderable=True)
@@ -131,7 +200,13 @@ class UserScorecardTable(tables.Table):
         )
 
     def render_action(self, record):
-        return ""
+        return format_html(
+            "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
+            a=reverse('scorecards:user_scorecard', args=[record.pk]),
+            b=_("Record Scores"),
+            c=reverse('scorecards:scorecard_report', args=[record.pk]),
+            d=_("View Report")
+        )
 
 
 class StaffScorecardTable(tables.Table):
@@ -157,7 +232,11 @@ class StaffScorecardTable(tables.Table):
         )
 
     def render_action(self, record):
-        return ""
+        return format_html(
+            "<a href='{c}'>{d}</a>",
+            c=reverse('scorecards:scorecard_report', args=[record.pk]),
+            d=_("View Report")
+        )
 
 
 class InitiativeTable(tables.Table):

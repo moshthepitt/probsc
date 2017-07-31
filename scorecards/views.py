@@ -1,4 +1,4 @@
-# from datetime import datetime
+from datetime import datetime
 
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
 
 from django_tables2 import SingleTableMixin
+from braces.views import LoginRequiredMixin
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
@@ -15,28 +16,38 @@ from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
+from .tables import ScorecardReportKPITable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .mixins import ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
-class InitiativeListSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, DetailView):
+class InitiativeListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
     model = ScorecardKPI
     table_class = InitiativeTable
-    template_name = "scorecards/snippets/list_initiative.html"
+    template_name = "scorecards/snippets/list_initiatives.html"
 
     def get_table_data(self):
         return Initiative.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
-class AddInitiativeSnippet(ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
+class ScoreListSnippet(LoginRequiredMixin, SingleTableMixin, DetailView):
+    model = ScorecardKPI
+    table_class = ScoreTable
+    template_name = "scorecards/snippets/list_scores.html"
+
+    def get_table_data(self):
+        return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
+
+
+class AddInitiativeSnippet(LoginRequiredMixin, ScorecardBelongsToUserMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_initiative.html"
     success_url = "#"
     form_class = InitiativeModalForm
 
 
-class AddScoreSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
+class AddScoreSnippet(LoginRequiredMixin, ScorecardBelongsToUserMixin, SingleTableMixin, ScorecardKPIModalFormMixin, FormMixin, DetailView):
     model = ScorecardKPI
     template_name = "scorecards/snippets/add_score.html"
     success_url = "#"
@@ -47,7 +58,22 @@ class AddScoreSnippet(ScorecardBelongsToUserMixin, SingleTableMixin, ScorecardKP
         return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
 
 
-class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
+class ScorecardReport(LoginRequiredMixin, VerboseNameMixin, SingleTableMixin, DetailView):
+
+    """the scorecard report """
+    model = Scorecard
+    table_class = ScorecardReportKPITable
+    template_name = "scorecards/report.html"
+
+    def get_kpis(self):
+        kpis = self.object.get_report()['kpis']
+        return kpis
+
+    def get_table_data(self):
+        return self.get_kpis()
+
+
+class UserScorecard(LoginRequiredMixin, VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, DetailView):
 
     """the user viewing his/her own scorecard"""
     model = Scorecard
@@ -55,7 +81,6 @@ class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, Deta
     template_name = "scorecards/user_scorecard.html"
 
     def get_kpis(self):
-        # kpis = ScorecardKPI.objects.filter(scorecard=self.object)
         kpis = self.object.get_report()['kpis']
         return kpis
 

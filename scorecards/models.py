@@ -54,8 +54,10 @@ class Scorecard(TimeStampedModel):
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.LEARNING:
                 learning = learning + scorecard_kpi.score
             total = total + scorecard_kpi.score
+        contextual_rating = get_inverse_contextual_rating(total)
         return {'kpis': scorecard_kpis, 'total': total, 'financial': financial,
-                'customer': customer, 'process': process, 'learning': learning}
+                'customer': customer, 'process': process, 'learning': learning,
+                'contextual_rating': contextual_rating}
 
     class Meta:
         verbose_name = _("Scorecard")
@@ -206,7 +208,10 @@ class ScorecardKPI(TimeStampedModel):
         return score
 
     def get_actual_rating_from_score(self):
-        return self.get_score() / (self.kpi.weight / Decimal(100))
+        actual = self.get_score() / (self.kpi.weight / Decimal(100))
+        if actual > Decimal(5.0):
+            return Decimal(5.0)
+        return actual
 
     def contextual_rating(self):
         return get_inverse_contextual_rating(self.get_actual_rating_from_score())

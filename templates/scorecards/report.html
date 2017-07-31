@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load i18n django_tables2 crispy_forms_tags staticfiles %}
+
+{% block page_title %} {{object.user.userprofile.get_name}} | {{object.name}} {{verbose_name}} {% trans 'Report' %} {% endblock %}
+
+{% block extracss %}
+	<link rel="stylesheet" href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker3.standalone.min.css' %}" type="text/css" />
+	<link rel="stylesheet" href="{% static 'jquery.growl/stylesheets/jquery.growl.css' %}" type="text/css" />
+{% endblock %}
+
+{% block page_content %} 
+	<div class="row">
+		<div class="col-md-12 content-box-info">
+			<div class="content-box-header">
+				{{object.user.userprofile.get_name}} - {{object.name}} {{verbose_name}} {% trans 'Report' %}
+			</div>
+			<div class="content-box-large box-with-header">
+				<div class="panel panel-default">
+				    <div class="panel-heading">{% trans "Report" %}</div>
+				    <ul class="list-group">				        
+				        <li class="list-group-item list-group-item-{{object.get_report.contextual_rating}}">{% trans "Overall Rating" %}: {{object.get_report.total}} {% trans "out of 5" %}</li>				        
+				    </ul>
+				</div>
+				{% render_table table %}				
+			</div>
+		</div>
+	</div>
+	<!-- Initiatives Modal -->
+	<div class="modal fade" id="inititativeModal" tabindex="-1" role="dialog" aria-labelledby="inititativeModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="inititativeModalLabel">{% trans "Initiatives" %}</h4>
+	      </div>
+	      <div class="modal-body" id="inititativeModal-body"></div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<!-- Scores Modal -->
+	<div class="modal fade" id="scoreModal" tabindex="-1" role="dialog" aria-labelledby="scoreModalLabel">
+	  <div class="modal-dialog" role="document">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        <h4 class="modal-title" id="scoreModalLabel">{% trans "Scores" %}</h4>
+	      </div>
+	      <div class="modal-body" id="scoreModal-body"></div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Close' %}</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+{% endblock %}
+
+{% block extrajs %}
+	<script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
+	<script src="{% static 'js/js.cookie.js' %}"></script>
+	<script src="{% static 'jquery.growl/javascripts/jquery.growl.js' %}"></script>
+	<script>
+		$(function () {
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+{% endblock %}
+{% block footerjs %}
+	<script>
+		$(document).on('click', '.list-initiative-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var listInitiativeSnippetURL = '{% url "scorecards:snippet_list_initiatives" 0 %}'.replace (0, thisID);
+			$("#inititativeModal-body" ).load(listInitiativeSnippetURL, function(){
+				$('#inititativeModal').modal();
+			});
+		});
+
+		$(document).on('click', '.list-score-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var listScoreSnippetURL = '{% url "scorecards:snippet_list_scores" 0 %}'.replace (0, thisID);
+			$("#scoreModal-body" ).load(listScoreSnippetURL, function(){
+				$('#scoreModal').modal();
+			});
+		});
+
+		$('#inititativeModal').on('hide.bs.modal', function (e) {
+			$("#inititativeModal-body" ).html();
+		});
+
+		$('#scoreModal').on('hide.bs.modal', function (e) {
+			$("#scoreModal-body" ).html();
+		});;
+	</script>
+{% endblock %}
