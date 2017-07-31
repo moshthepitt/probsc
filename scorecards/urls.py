@@ -5,6 +5,7 @@ from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
 from .views import InitiativeListSnippet, ScorecardReport, ScoreListSnippet
+from .views import ScorecardReportsListview
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
 from .ajax import process_initiative_form, process_score_form
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'^my-scorecard/(?P<pk>\d+)/$', UserScorecard.as_view(), name='user_scorecard'),
     url(r'^report/(?P<pk>\d+)/$', ScorecardReport.as_view(), name='scorecard_report'),
     url(r'^my-scorecards/$', UserScorecards.as_view(), name='user_scorecards'),
+    url(r'^reports/$', ScorecardReportsListview.as_view(), name='scorecards_reports'),
     url(r'^list/$', ScorecardListview.as_view(), name='scorecards_list'),
     # kpis
     url(r'^kpis/add/(?P<scorecard_pk>\d+)/$',

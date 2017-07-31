@@ -176,6 +176,44 @@ class ScorecardTable(tables.Table):
         )
 
 
+class ScorecardReportTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    score = tables.Column(verbose_name=_("Score"), accessor='pk', orderable=False)
+    active = tables.BooleanColumn(
+        attrs={
+            'td': {'class': "not-active"},
+            'th': {'class': "not-active"}
+        }
+    )
+
+    class Meta:
+        model = Scorecard
+        exclude = ['created', 'modified', 'description', 'id', 'customer', 'kpis']
+        sequence = ('name', 'user', 'year', 'active', 'score', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+        # per_page = 1
+        # attrs = {'class': 'paleblue'}  # add class="paleblue" to <table> tag
+
+    def render_user(self, record):
+        return record.user.userprofile.get_name()
+
+    def render_score(self, record):
+        report = record.get_report()
+        return format_html(
+            '<span class="text text-{b}"><strong>{a}</strong></span>',
+            a=report['total'],
+            b=report['contextual_rating'],
+        )
+
+    def render_action(self, record):
+        return format_html(
+            "<a href='{c}'>{d}</a>",
+            c=reverse('scorecards:scorecard_report', args=[record.pk]),
+            d=_("View Report")
+        )
+
+
 class UserScorecardTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
     score = tables.Column(verbose_name=_("Score"), accessor='pk', orderable=False)
@@ -203,7 +241,7 @@ class UserScorecardTable(tables.Table):
     def render_score(self, record):
         report = record.get_report()
         return format_html(
-            '<span class="text text-{b}">{a}</span>',
+            '<span class="text text-{b}"><strong>{a}</strong></span>',
             a=report['total'],
             b=report['contextual_rating'],
         )
@@ -244,7 +282,7 @@ class StaffScorecardTable(tables.Table):
     def render_score(self, record):
         report = record.get_report()
         return format_html(
-            '<span class="text text-{b}">{a}</span>',
+            '<span class="text text-{b}"><strong>{a}</strong></span>',
             a=report['total'],
             b=report['contextual_rating'],
         )

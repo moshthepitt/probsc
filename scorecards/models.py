@@ -40,8 +40,8 @@ class Scorecard(TimeStampedModel):
     objects = ScorecardManager()
 
     def get_report(self, this_round=1):
-        total, financial, customer = Decimal(0), Decimal(0), Decimal(0)
-        process, learning = Decimal(0), Decimal(0)
+        total, financial, customer = Decimal(0.00), Decimal(0.00), Decimal(0.00)
+        process, learning = Decimal(0.00), Decimal(0.00)
         scorecard_kpis = ScorecardKPI.objects.filter(scorecard=self)
         for scorecard_kpi in scorecard_kpis:
             scorecard_kpi.score = scorecard_kpi.get_score(this_round=this_round)

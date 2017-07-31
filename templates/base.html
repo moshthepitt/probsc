@@ -78,6 +78,16 @@
                   {% if request.user.userprofile.is_admin %}
                     <li class="submenu">
                       <a href="#">
+                        <i class="glyphicon glyphicon-list"></i> {% trans "Reports" %}
+                        <span class="caret pull-right"></span>
+                      </a>
+                      <!-- Sub menu -->
+                      <ul>
+                        <li><a href="{% url 'scorecards:scorecards_reports' %}">{% trans "Scorecards" %}</a></li>
+                      </ul>
+                    </li>
+                    <li class="submenu">
+                      <a href="#">
                         <i class="glyphicon glyphicon-list"></i> {% trans "Scorecards" %}
                         <span class="caret pull-right"></span>
                       </a>

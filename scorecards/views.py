@@ -16,7 +16,7 @@ from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
-from .tables import ScorecardReportKPITable
+from .tables import ScorecardReportKPITable, ScorecardReportTable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from .models import Scorecard, ScorecardKPI, Initiative, Score
@@ -139,6 +139,14 @@ class StaffScorecards(CoreListView):
         if self.object.userprofile not in subordinates:
             raise Http404
         return super(StaffScorecards, self).dispatch(*args, **kwargs)
+
+
+class ScorecardReportsListview(CoreListView):
+
+    """ generic (admin) list of scorecards"""
+    model = Scorecard
+    table_class = ScorecardReportTable
+    template_name = "scorecards/reports.html"
 
 
 class ScorecardListview(CoreListView):
