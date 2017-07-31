@@ -1,4 +1,4 @@
-from datetime import datetime
+# from datetime import datetime
 
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
@@ -55,7 +55,8 @@ class UserScorecard(VerboseNameMixin, BelongsToUserMixin, SingleTableMixin, Deta
     template_name = "scorecards/user_scorecard.html"
 
     def get_kpis(self):
-        kpis = ScorecardKPI.objects.filter(scorecard=self.object)
+        # kpis = ScorecardKPI.objects.filter(scorecard=self.object)
+        kpis = self.object.get_report()['kpis']
         return kpis
 
     def get_table_data(self):

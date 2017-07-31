@@ -193,14 +193,16 @@ class ScorecardKPI(TimeStampedModel):
         actual = self.get_actual(this_round)
         return bsc_rating(actual)
 
-    def get_score(self, this_round=1, do_save=True):
+    def get_score(self, this_round=1, do_save=False):
 
         # get the score == weighted rating
+        if not do_save:
+            return self.score
+        # else calculate and save it
         actual_rating = self.get_actual_rating(this_round)
         score = (self.kpi.weight / Decimal(100)) * actual_rating
-        if do_save:
-            self.score = score
-            self.save()
+        self.score = score
+        self.save()
         return score
 
     class Meta:

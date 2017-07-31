@@ -71,8 +71,7 @@ class UserScorecardKPITable(tables.Table):
             """,
             b=_("Report Scores"),
             pk=record.id,
-            dd=record.get_actual(),
-            cc=record.get_actual_rating()
+            score=record.score,
         )
 
 
