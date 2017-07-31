@@ -59,7 +59,7 @@ class UserScorecardKPITable(tables.Table):
             """,
             a=_("Add Initiative"),
             c=_("View Initiatives"),
-            pk=record.id
+            pk=record.id,
         )
 
     def render_action(self, record):
@@ -70,7 +70,9 @@ class UserScorecardKPITable(tables.Table):
             </button>
             """,
             b=_("Report Scores"),
-            pk=record.id
+            pk=record.id,
+            dd=record.get_actual(),
+            cc=record.get_actual_rating()
         )
 
 

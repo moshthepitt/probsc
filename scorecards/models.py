@@ -154,7 +154,10 @@ class ScorecardKPI(TimeStampedModel):
 
     objects = ScorecardKPIManager()
 
-    def get_score(self, this_round=1, do_save=True):
+    def get_actual(self, this_round=1):
+        """
+        Get the score as a percentage of the target
+        """
         records_no = self.kpi.get_number_of_scores()
         records = Score.objects.filter(
             scorecard=self.scorecard, kpi=self.kpi, review_round=this_round)[:records_no]
@@ -182,8 +185,17 @@ class ScorecardKPI(TimeStampedModel):
                 actual = (value / Decimal(0.0000001)) * Decimal(100)
             else:
                 actual = (value / self.kpi.target) * Decimal(100)
-        # get the score
-        score = (self.kpi.weight / Decimal(100)) * bsc_rating(actual)
+        return actual
+
+    def get_actual_rating(self, this_round=1):
+        actual = self.get_actual(this_round)
+        return bsc_rating(actual)
+
+    def get_score(self, this_round=1, do_save=True):
+
+        # get the score == weighted rating
+        actual_rating = self.get_actual_rating(this_round)
+        score = (self.kpi.weight / Decimal(100)) * actual_rating
         if do_save:
             self.score = score
             self.save()
