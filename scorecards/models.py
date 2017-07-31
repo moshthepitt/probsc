@@ -201,8 +201,10 @@ class ScorecardKPI(TimeStampedModel):
         if not do_save:
             return self.score
         # else calculate and save it
-        actual_rating = self.get_actual_rating(this_round)
-        score = (self.kpi.weight / Decimal(100)) * actual_rating
+        score = Decimal(0.00)
+        if Score.objects.filter(scorecard=self.scorecard, kpi=self.kpi, review_round=this_round).exists():
+            actual_rating = self.get_actual_rating(this_round)
+            score = (self.kpi.weight / Decimal(100)) * actual_rating
         self.score = score
         self.save()
         return score

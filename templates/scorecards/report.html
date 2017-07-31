@@ -18,7 +18,7 @@
 				<div class="panel panel-default">
 				    <div class="panel-heading">{% trans "Report" %}</div>
 				    <ul class="list-group">				        
-				        <li class="list-group-item list-group-item-{{object.get_report.contextual_rating}}">{% trans "Overall Rating" %}: {{object.get_report.total}} {% trans "out of 5" %}</li>				        
+				        <li class="list-group-item list-group-item-{{object.get_report.contextual_rating}}">{% trans "Overall Rating" %}: {{object.get_report.total|floatformat:2}} {% trans "out of 5" %}</li>				        
 				    </ul>
 				</div>
 				{% render_table table %}				

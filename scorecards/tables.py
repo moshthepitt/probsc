@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.utils.html import format_html
 from django.utils.translation import ugettext as _
 from django.urls import reverse
@@ -5,6 +7,8 @@ from django.urls import reverse
 import django_tables2 as tables
 
 from .models import Scorecard, ScorecardKPI, Initiative, Score
+
+TWOPLACES = Decimal(10) ** -2
 
 
 class ScorecardReportKPITable(tables.Table):
@@ -49,7 +53,7 @@ class ScorecardReportKPITable(tables.Table):
         return record.kpi.get_perspective_display()
 
     def render_rating(self, record):
-        return record.get_actual_rating_from_score()
+        return record.get_actual_rating_from_score().quantize(TWOPLACES)
 
     def render_initiatives(self, record):
         return format_html(
@@ -141,7 +145,7 @@ class UserScorecardKPITable(tables.Table):
             """,
             b=_("Report Scores"),
             pk=record.id,
-            actual=record.get_actual_rating_from_score(),
+            actual=record.get_actual_rating_from_score().quantize(TWOPLACES),
             contextual_rating=record.contextual_rating()
         )
 
@@ -202,7 +206,7 @@ class ScorecardReportTable(tables.Table):
         report = record.get_report()
         return format_html(
             '<span class="text text-{b}"><strong>{a}</strong></span>',
-            a=report['total'],
+            a=report['total'].quantize(TWOPLACES),
             b=report['contextual_rating'],
         )
 
@@ -242,7 +246,7 @@ class UserScorecardTable(tables.Table):
         report = record.get_report()
         return format_html(
             '<span class="text text-{b}"><strong>{a}</strong></span>',
-            a=report['total'],
+            a=report['total'].quantize(TWOPLACES),
             b=report['contextual_rating'],
         )
 
@@ -283,7 +287,7 @@ class StaffScorecardTable(tables.Table):
         report = record.get_report()
         return format_html(
             '<span class="text text-{b}"><strong>{a}</strong></span>',
-            a=report['total'],
+            a=report['total'].quantize(TWOPLACES),
             b=report['contextual_rating'],
         )
 
