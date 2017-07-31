@@ -14,3 +14,11 @@ class ScorecardKPIManager(Manager):
         queryset = super(ScorecardKPIManager, self).get_queryset()
         queryset = queryset.select_related('kpi', 'scorecard')
         return queryset
+
+
+class ScoreKPIManager(Manager):
+
+    def get_queryset(self):
+        queryset = super(ScoreKPIManager, self).get_queryset()
+        queryset = queryset.select_related('kpi', 'scorecard')
+        return queryset

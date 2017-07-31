@@ -11,7 +11,7 @@ from django.urls import reverse
 from django_extensions.db.models import TimeStampedModel
 
 from core.utils import PathAndRename
-from .managers import ScorecardManager, ScorecardKPIManager
+from .managers import ScorecardManager, ScorecardKPIManager, ScoreKPIManager
 from .utils import bsc_rating
 
 User = settings.AUTH_USER_MODEL
@@ -125,6 +125,8 @@ class Score(TimeStampedModel):
     review_round = models.PositiveIntegerField(
         _("Review Round"), default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
     notes = models.TextField(_("Notes"), blank=True, default="")
+
+    objects = ScoreKPIManager()
 
     def get_score(self):
         if self.kpi.direction == self.kpi.UP:
