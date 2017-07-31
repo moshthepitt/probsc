@@ -50,28 +50,30 @@ class UserScorecardKPITable(tables.Table):
     def render_initiatives(self, record):
         return format_html(
             """
-            <button type="button" class="btn btn-default btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
+            <button type="button" class="btn btn-{contextual_rating} btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
               <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-default btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
+            <button type="button" class="btn btn-{contextual_rating} btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
             """,
             a=_("Add Initiative"),
             c=_("View Initiatives"),
             pk=record.id,
+            contextual_rating=record.contextual_rating()
         )
 
     def render_action(self, record):
         return format_html(
             """
-            <button type="button" class="btn btn-default btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
+            <button type="button" class="btn btn-{contextual_rating} btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             """,
             b=_("Report Scores"),
             pk=record.id,
-            score=record.score,
+            actual=record.get_actual_rating_from_score(),
+            contextual_rating=record.contextual_rating()
         )
 
 

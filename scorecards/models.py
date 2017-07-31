@@ -12,7 +12,7 @@ from django_extensions.db.models import TimeStampedModel
 
 from core.utils import PathAndRename
 from .managers import ScorecardManager, ScorecardKPIManager, ScoreKPIManager
-from .utils import bsc_rating
+from .utils import bsc_rating, get_inverse_contextual_rating
 
 User = settings.AUTH_USER_MODEL
 
@@ -204,6 +204,12 @@ class ScorecardKPI(TimeStampedModel):
         self.score = score
         self.save()
         return score
+
+    def get_actual_rating_from_score(self):
+        return self.get_score() / (self.kpi.weight / Decimal(100))
+
+    def contextual_rating(self):
+        return get_inverse_contextual_rating(self.get_actual_rating_from_score())
 
     class Meta:
         verbose_name = _("Scorecard KPI")
