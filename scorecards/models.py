@@ -46,14 +46,14 @@ class Scorecard(TimeStampedModel):
         for scorecard_kpi in scorecard_kpis:
             scorecard_kpi.score = scorecard_kpi.get_score(this_round=this_round)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.FINANCIAL:
-                financial = financial + scorecard_kpi.score
+                financial = financial + Decimal(scorecard_kpi.score)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.CUSTOMER:
-                customer = customer + scorecard_kpi.score
+                customer = customer + Decimal(scorecard_kpi.score)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.PROCESS:
-                process = process + scorecard_kpi.score
+                process = process + Decimal(scorecard_kpi.score)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.LEARNING:
-                learning = learning + scorecard_kpi.score
-            total = total + scorecard_kpi.score
+                learning = learning + Decimal(scorecard_kpi.score)
+            total = total + Decimal(scorecard_kpi.score)
         contextual_rating = get_inverse_contextual_rating(total)
         return {'kpis': scorecard_kpis, 'total': total, 'financial': financial,
                 'customer': customer, 'process': process, 'learning': learning,

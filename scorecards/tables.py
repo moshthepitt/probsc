@@ -178,6 +178,7 @@ class ScorecardTable(tables.Table):
 
 class UserScorecardTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    score = tables.Column(verbose_name=_("Score"), accessor='pk', orderable=False)
     active = tables.BooleanColumn(
         attrs={
             'td': {'class': "not-active"},
@@ -188,7 +189,7 @@ class UserScorecardTable(tables.Table):
     class Meta:
         model = Scorecard
         exclude = ['created', 'modified', 'description', 'id', 'customer', 'kpis', 'user']
-        sequence = ('name', 'year', 'active', '...')
+        sequence = ('name', 'year', 'active', 'score', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -197,6 +198,14 @@ class UserScorecardTable(tables.Table):
             "<a href='{}'>{}</a>",
             reverse('scorecards:user_scorecard', args=[record.pk]),
             record.name
+        )
+
+    def render_score(self, record):
+        report = record.get_report()
+        return format_html(
+            '<span class="text text-{b}">{a}</span>',
+            a=report['total'],
+            b=report['contextual_rating'],
         )
 
     def render_action(self, record):
@@ -211,6 +220,7 @@ class UserScorecardTable(tables.Table):
 
 class StaffScorecardTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    score = tables.Column(verbose_name=_("Score"), accessor='pk', orderable=False)
     active = tables.BooleanColumn(
         attrs={
             'td': {'class': "not-active"},
@@ -221,7 +231,7 @@ class StaffScorecardTable(tables.Table):
     class Meta:
         model = Scorecard
         exclude = ['created', 'modified', 'description', 'id', 'customer', 'kpis', 'user']
-        sequence = ('name', 'year', 'active', '...')
+        sequence = ('name', 'year', 'active', 'score', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -229,6 +239,14 @@ class StaffScorecardTable(tables.Table):
         return format_html(
             "<a href='#'>{}</a>",
             record.name
+        )
+
+    def render_score(self, record):
+        report = record.get_report()
+        return format_html(
+            '<span class="text text-{b}">{a}</span>',
+            a=report['total'],
+            b=report['contextual_rating'],
         )
 
     def render_action(self, record):
