@@ -12,7 +12,7 @@ from django_extensions.db.models import TimeStampedModel
 
 from core.utils import PathAndRename
 from .managers import ScorecardManager, ScorecardKPIManager, ScoreKPIManager
-from .utils import bsc_rating, get_inverse_contextual_rating
+from .utils import bsc_rating, get_contextual_rating, get_inverse_contextual_rating
 
 User = settings.AUTH_USER_MODEL
 
@@ -54,7 +54,10 @@ class Scorecard(TimeStampedModel):
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.LEARNING:
                 learning = learning + Decimal(scorecard_kpi.score)
             total = total + Decimal(scorecard_kpi.score)
-        contextual_rating = get_inverse_contextual_rating(total)
+        if self.customer.best == self.customer.FIVE:
+            contextual_rating = get_contextual_rating(total)
+        else:
+            contextual_rating = get_inverse_contextual_rating(total)
         return {'kpis': scorecard_kpis, 'total': total, 'financial': financial,
                 'customer': customer, 'process': process, 'learning': learning,
                 'contextual_rating': contextual_rating}
@@ -193,7 +196,7 @@ class ScorecardKPI(TimeStampedModel):
 
     def get_actual_rating(self, this_round=1):
         actual = self.get_actual(this_round)
-        return bsc_rating(actual)
+        return bsc_rating(actual, customer=self.scorecard.customer)
 
     def get_score(self, this_round=1, do_save=False):
 
@@ -216,7 +219,10 @@ class ScorecardKPI(TimeStampedModel):
         return actual
 
     def contextual_rating(self):
-        return get_inverse_contextual_rating(self.get_actual_rating_from_score())
+        if self.scorecard.customer.best == self.scorecard.customer.FIVE:
+            return get_contextual_rating(self.get_actual_rating_from_score())
+        else:
+            return get_inverse_contextual_rating(self.get_actual_rating_from_score())
 
     class Meta:
         verbose_name = _("Scorecard KPI")

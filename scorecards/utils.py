@@ -4,18 +4,21 @@ from decimal import Decimal
 from django.conf import settings
 
 
-def bsc_rating(value):
+def bsc_rating(value, customer=None):
+    bsc_rating_dict = settings.BSC_RATING
+    if customer:
+        bsc_rating_dict = customer.get_bsc_rating_dict()
     if value <= 80:
-        return settings.BSC_RATING['very_poor']
+        return Decimal(bsc_rating_dict['very_poor'])
     elif 80 < value < 100:
-        return settings.BSC_RATING['poor']
+        return Decimal(bsc_rating_dict['poor'])
     elif value == 100:
-        return settings.BSC_RATING['average']
+        return Decimal(bsc_rating_dict['average'])
     elif 100 < value <= 120:
-        return settings.BSC_RATING['good']
+        return Decimal(bsc_rating_dict['good'])
     elif value > 120:
-        return settings.BSC_RATING['best']
-    return 0
+        return Decimal(bsc_rating_dict['best'])
+    return Decimal(0)
 
 
 def get_bounds():

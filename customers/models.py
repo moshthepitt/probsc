@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.conf import settings
 
 from django_extensions.db.models import TimeStampedModel
 from phonenumber_field.modelfields import PhoneNumberField
@@ -56,3 +57,8 @@ class Customer(TimeStampedModel):
 
     def __str__(self):
         return self.name
+
+    def get_bsc_rating_dict(self):
+        if self.best == self.FIVE:
+            return settings.BSC_RATING
+        return settings.BSC_INVERSE_RATING
