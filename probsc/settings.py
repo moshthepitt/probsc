@@ -104,6 +104,7 @@ TEMPLATES = [
                 # custom
                 "core.context_processors.site_processor",
                 "core.context_processors.debug_processor",
+                "customers.context_processors.customer_processor",
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',

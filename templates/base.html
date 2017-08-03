@@ -30,7 +30,7 @@
              <div class="col-md-5 pull-left">
                 <!-- Logo -->
                 <div class="logo">
-                   <h1><a href="{% url 'home' %}">{{site.name}}</a></h1>
+                   <h1><a href="{% url 'home' %}">{% if current_customer %}{{current_customer.name}}{% else %}{{site.name}}{% endif %}</a></h1>
                 </div>
              </div>
              <div class="col-sm-6 col-md-2 pull-right">
