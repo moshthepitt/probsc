@@ -179,17 +179,19 @@ class ScorecardKPI(TimeStampedModel):
             value = sum(values_list)
         # calculate actual as a percentage of target
         value = Decimal(value)
-        if self.kpi.direction == self.kpi.DOWN:
+        if value == self.kpi.target:
+            actual = 1 * Decimal(100)
+        elif self.kpi.direction == self.kpi.DOWN:
             if value == Decimal(0):
                 # dirty hack to avoid division by zero
-                actual = (self.kpi.target / Decimal(0.0000001)) * Decimal(100)
+                actual = (self.kpi.target / Decimal(0.0000000001)) * Decimal(100)
             else:
                 actual = (self.kpi.target / value) * Decimal(100)
         else:
             # direction is UP
             if self.kpi.target == Decimal(0):
                 # dirty hack to avoid division by zero
-                actual = (value / Decimal(0.0000001)) * Decimal(100)
+                actual = (value / Decimal(0.0000000001)) * Decimal(100)
             else:
                 actual = (value / self.kpi.target) * Decimal(100)
         return actual
