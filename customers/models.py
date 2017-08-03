@@ -13,6 +13,15 @@ class Customer(TimeStampedModel):
     """
     Represents a person/organization that uses ProBSC
     """
+
+    ONE = 1
+    FIVE = 5
+
+    BEST_RATING_CHOICES = (
+        (ONE, _('1')),
+        (FIVE, _('5')),
+    )
+
     name = models.CharField(_("Name"), max_length=255)
     email = models.EmailField(_('Email Address'), blank=True)
     phone = PhoneNumberField(_('Phone Number'), max_length=255, blank=True)
@@ -21,8 +30,21 @@ class Customer(TimeStampedModel):
         _("Financial Year End Day"), default=31, validators=[MinValueValidator(1), MaxValueValidator(31)])
     financial_year_end_month = models.PositiveSmallIntegerField(
         _("Financial Year End Month"), default=12, validators=[MinValueValidator(1), MaxValueValidator(12)])
-    review_rounds = models.PositiveSmallIntegerField(_("Rounds of Review"), default=2, validators=[MinValueValidator(
-        1), MaxValueValidator(5)], help_text=_("How many times is each scorecard reviewed? e.g. self review, supervisor review, etc"))
+    review_rounds = models.PositiveSmallIntegerField(
+        _("Rounds of Review"),
+        default=2,
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(5)],
+        help_text=_("How many times is each scorecard reviewed? e.g. "
+                    "self review, supervisor review, etc"))
+    best = models.IntegerField(
+        _("Best Rating"),
+        help_text=_("Which value represents the best rating"),
+        max_length=1,
+        choices=BEST_RATING_CHOICES,
+        blank=False,
+        default=FIVE)
     active = models.BooleanField(_("Active"), default=True)
 
     objects = CustomerManager()

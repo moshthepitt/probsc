@@ -239,6 +239,14 @@ SITE_ID = 1
 
 # Balanced scorecard
 BSC_RATING = {
+    'best': 5,
+    'good': 4,
+    'average': 3,
+    'poor': 2,
+    'very_poor': 1
+}
+
+BSC_INVERSE_RATING = {
     'best': 1,
     'good': 2,
     'average': 3,
