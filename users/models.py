@@ -147,6 +147,9 @@ class UserProfile(models.Model):
     def is_admin(self):
         return self.role == self.ADMIN
 
+    def is_editor(self):
+        return self.role == self.EDITOR
+
     def get_subordinates(self):
         """
         Returns a queryset of UserProfile objects which report to this userprofile

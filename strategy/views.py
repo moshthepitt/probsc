@@ -2,12 +2,13 @@ from django.urls import reverse_lazy
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
+from core.mixins import EditorAccess
 from .tables import StrategicThemeTable, ObjectiveTable
 from .forms import StrategicThemeForm, ObjectiveForm
 from .models import StrategicTheme, Objective
 
 
-class StrategicThemeListview(CoreListView):
+class StrategicThemeListview(EditorAccess, CoreListView):
     model = StrategicTheme
     table_class = StrategicThemeTable
 
@@ -18,22 +19,22 @@ class StrategicThemeListview(CoreListView):
         return context
 
 
-class AddStrategicTheme(CoreCreateView):
+class AddStrategicTheme(EditorAccess, CoreCreateView):
     model = StrategicTheme
     form_class = StrategicThemeForm
 
 
-class EditStrategicTheme(CoreUpdateView):
+class EditStrategicTheme(EditorAccess, CoreUpdateView):
     model = StrategicTheme
     form_class = StrategicThemeForm
 
 
-class DeleteStrategicTheme(CoreDeleteView):
+class DeleteStrategicTheme(EditorAccess, CoreDeleteView):
     model = StrategicTheme
     success_url = reverse_lazy('strategy:strategic_themes_list')
 
 
-class ObjectiveListview(CoreListView):
+class ObjectiveListview(EditorAccess, CoreListView):
     model = Objective
     table_class = ObjectiveTable
 
@@ -44,16 +45,16 @@ class ObjectiveListview(CoreListView):
         return context
 
 
-class AddObjective(CoreCreateView):
+class AddObjective(EditorAccess, CoreCreateView):
     model = Objective
     form_class = ObjectiveForm
 
 
-class EditObjective(CoreUpdateView):
+class EditObjective(EditorAccess, CoreUpdateView):
     model = Objective
     form_class = ObjectiveForm
 
 
-class DeleteObjective(CoreDeleteView):
+class DeleteObjective(EditorAccess, CoreDeleteView):
     model = Objective
     success_url = reverse_lazy('strategy:objectives_list')

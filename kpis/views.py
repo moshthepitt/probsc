@@ -6,6 +6,7 @@ from django.contrib import messages
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
+from core.mixins import EditorAccess
 
 from scorecards.mixins import ScorecardMixin, ScorecardFormMixin
 from scorecards.mixins import KPICreateMixin
@@ -14,7 +15,7 @@ from .forms import KPIForm, UserKPIForm
 from .models import KPI
 
 
-class KPIListview(CoreListView):
+class KPIListview(EditorAccess, CoreListView):
     model = KPI
     table_class = KPITable
     search_fields = ['name', 'measure', 'description']
@@ -48,17 +49,17 @@ class ScorecardKPIListview(ScorecardMixin, KPIListview):
         return context
 
 
-class AddKPI(CoreCreateView):
+class AddKPI(EditorAccess, CoreCreateView):
     model = KPI
     form_class = KPIForm
 
 
-class EditKPI(CoreUpdateView):
+class EditKPI(EditorAccess, CoreUpdateView):
     model = KPI
     form_class = KPIForm
 
 
-class DeleteKPI(CoreDeleteView):
+class DeleteKPI(EditorAccess, CoreDeleteView):
     model = KPI
     success_url = reverse_lazy('kpis:kpis_list')
 

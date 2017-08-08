@@ -50,7 +50,7 @@ class AccessScorecard(object):
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
         if self.request.user.userprofile.is_admin():
-            return True
+            can_access = True
         elif (hasattr(self.get_object(), 'user')) and\
              (self.get_object().user.userprofile in subordinates):
             can_access = True

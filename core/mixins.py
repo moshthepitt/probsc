@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.views.decorators.csrf import csrf_protect
 from django.db.models import Q
+from django.http import Http404
 
 from .forms import ListViewSearchForm
 from .decorators import cache_page_on_auth, cache_page_for_user
@@ -76,14 +77,11 @@ class ListViewSearchMixin(object):
         queryset = super(ListViewSearchMixin, self).get_queryset()
         form = self.form_class(self.request.GET)
         if form.is_valid() and self.search_fields:
-            if len(self.search_fields) == 1:
-                queryset = queryset.filter(name__icontains=form.cleaned_data['q'])
-            else:
-                search_terms = ["{}__icontains".format(x) for x in self.search_fields]
-                query = Q()
-                for term in search_terms:
-                    query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)
-                queryset = queryset.filter(query)
+            search_terms = ["{}__icontains".format(x) for x in self.search_fields]
+            query = Q()
+            for term in search_terms:
+                query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)
+            queryset = queryset.filter(query)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -106,3 +104,34 @@ class VerboseNameMixin(object):
         context['verbose_name'] = self.model._meta.verbose_name
         context['verbose_name_plural'] = self.model._meta.verbose_name_plural
         return context
+
+
+class AdminAccess(object):
+
+    """
+    Enforces admin access
+    """
+
+    def dispatch(self, *args, **kwargs):
+        can_access = False
+        if self.request.user.userprofile.is_admin():
+            can_access = True
+        if not can_access:
+            raise Http404
+        return super(AdminAccess, self).dispatch(*args, **kwargs)
+
+
+class EditorAccess(object):
+
+    """
+    Enforces admin or editor access
+    """
+
+    def dispatch(self, *args, **kwargs):
+        can_access = False
+        if self.request.user.userprofile.is_admin() or\
+           self.request.user.userprofile.is_editor():
+            can_access = True
+        if not can_access:
+            raise Http404
+        return super(EditorAccess, self).dispatch(*args, **kwargs)
