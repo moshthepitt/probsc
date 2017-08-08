@@ -7,6 +7,7 @@ from scorecards.models import Scorecard, ScorecardKPI
 
 
 class ScorecardKPIModalFormMixin(CoreFormMixin):
+
     """
     Common things for ScorecardKPI forms in modals
     """
@@ -24,6 +25,7 @@ class ScorecardKPIModalFormMixin(CoreFormMixin):
 
 
 class ScorecardBelongsToUserMixin(object):
+
     """
     Used for objects with a scorecard field
     Ensures the scorecard belongs to the current user
@@ -36,8 +38,10 @@ class ScorecardBelongsToUserMixin(object):
 
 
 class AccessScorecard(object):
+
     """
     Used for scorecard objects or objects with a scorecard field
+    or with "self.scorecard"
     Ensures the scorecard belongs to the current user
     Or is being viewed by a supervisor or admin
     """
@@ -45,7 +49,10 @@ class AccessScorecard(object):
     def dispatch(self, *args, **kwargs):
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
-        if (self.request.user.userprofile.is_admin) or (self.get_object().userprofile in subordinates):
+        if self.request.user.userprofile.is_admin():
+            return True
+        elif (hasattr(self.get_object(), 'user')) and\
+             (self.get_object().user.userprofile in subordinates):
             can_access = True
         else:
             if isinstance(self.get_object(), Scorecard):
@@ -60,6 +67,7 @@ class AccessScorecard(object):
 
 
 class ScorecardMixin(object):
+
     """
     Adds scorecard to context
     """
@@ -74,10 +82,20 @@ class ScorecardMixin(object):
 
     def dispatch(self, request, *args, **kwargs):
         self.scorecard = get_object_or_404(Scorecard, pk=kwargs.pop('scorecard_pk', None))
+        subordinates = self.request.user.userprofile.get_subordinates()
+        can_access = False
+        if (self.request.user.userprofile.is_admin()) or\
+           (self.scorecard.user.userprofile in subordinates):
+            can_access = True
+        elif self.scorecard.user == self.request.user:
+                can_access = True
+        if not can_access:
+            raise Http404
         return super(ScorecardMixin, self).dispatch(request, *args, **kwargs)
 
 
 class ScorecardFormMixin(object):
+
     """
     Adds stuff for forms that have scorecard elements
     """
@@ -89,6 +107,7 @@ class ScorecardFormMixin(object):
 
 
 class KPICreateMixin(object):
+
     """
     Adds KPI that was created to scorecard
     """

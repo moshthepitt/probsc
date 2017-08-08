@@ -219,7 +219,8 @@ class ScorecardReportTable(tables.Table):
 
 
 class UserScorecardTable(tables.Table):
-    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    edit = tables.Column(verbose_name=_("Edit"), accessor='pk', orderable=False)
+    action = tables.Column(verbose_name=_("Reporting"), accessor='pk', orderable=False)
     score = tables.Column(verbose_name=_("Score"), accessor='pk', orderable=False)
     active = tables.BooleanColumn(
         attrs={
@@ -231,7 +232,7 @@ class UserScorecardTable(tables.Table):
     class Meta:
         model = Scorecard
         exclude = ['created', 'modified', 'description', 'id', 'customer', 'kpis', 'user']
-        sequence = ('name', 'year', 'active', 'score', '...')
+        sequence = ('name', 'year', 'active', 'score', 'edit', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -257,6 +258,14 @@ class UserScorecardTable(tables.Table):
             b=_("Record Scores"),
             c=reverse('scorecards:scorecard_report', args=[record.pk]),
             d=_("View Report")
+        )
+
+    def render_edit(self, record):
+        return format_html(
+            '<a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            reverse('scorecards:user_scorecards_kpis_list', args=[record.id]),
+            reverse('scorecards:user_scorecards_edit', args=[record.id]),
+            reverse('scorecards:user_scorecards_delete', args=[record.id]),
         )
 
 

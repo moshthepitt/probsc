@@ -84,3 +84,71 @@ class KPIForm(forms.ModelForm):
             )
         )
 
+
+class UserKPIForm(forms.ModelForm):
+
+    class Meta:
+        model = KPI
+        fields = [
+            'objective',
+            'name',
+            'measure',
+            'description',
+            'perspective',
+            'baseline',
+            'target',
+            'unit',
+            'direction',
+            'weight',
+            'reporting_period',
+            'calculation',
+            'reporting_method',
+            'customer',
+            'active',
+        ]
+        widgets = {
+            'name': MiniTextarea(),
+            'measure': MiniTextarea(),
+            'objective': Select2({'width': "100%"})
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.scorecard = kwargs.pop('scorecard', None)
+        super(UserKPIForm, self).__init__(*args, **kwargs)
+        if self.request and self.request.user.userprofile.customer:
+            self.fields['customer'].queryset = Customer.objects.filter(
+                id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['objective'].queryset = Objective.objects.active().filter(
+                customer__id=self.request.user.userprofile.customer.pk)
+        cancel_url = reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.pk])
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = True
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'kpi-form'
+        self.helper.layout = Layout(
+            Field('name',),
+            Field('measure',),
+            Field('perspective',),
+            Field('description',),
+            Field('objective',),
+            Field('baseline',),
+            Field('target',),
+            Field('unit',),
+            Field('direction',),
+            Field('weight',),
+            Field('reporting_period',),
+            Field('calculation',),
+            Field('reporting_method', type="hidden"),
+            Field('customer', type="hidden"),
+            Field('active',),
+            FormActions(
+                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                HTML(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                        cancel_url, _("Back")))
+            )
+        )

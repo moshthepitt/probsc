@@ -13,23 +13,27 @@ from customers.mixins import CustomerFormMixin, CustomerCheckMixin, CustomerExis
 from customers.mixins import CustomerFilterMixin
 
 
-class CoreListView(LoginRequiredMixin, CustomerExistsMixin, CustomerFilterMixin, VerboseNameMixin, ListViewSearchMixin, SingleTableView, ListView):
+class CoreListView(LoginRequiredMixin, CustomerExistsMixin, CustomerFilterMixin,
+                   VerboseNameMixin, ListViewSearchMixin, SingleTableView, ListView):
     template_name = "core/crud/list.html"
 
 
-class CoreCreateView(LoginRequiredMixin, CustomerExistsMixin, FormMessagesMixin, VerboseNameMixin, CoreFormMixin, CustomerFormMixin, CreateView):
+class CoreCreateView(LoginRequiredMixin, CustomerExistsMixin, FormMessagesMixin,
+                     VerboseNameMixin, CoreFormMixin, CustomerFormMixin, CreateView):
     template_name = "core/crud/create.html"
     form_valid_message = _("Saved successfully!")
     form_invalid_message = _("Please correct the errors below.")
 
 
-class CoreUpdateView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin, VerboseNameMixin, CoreFormMixin, UpdateView):
+class CoreUpdateView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin,
+                     VerboseNameMixin, CoreFormMixin, UpdateView):
     template_name = "core/crud/edit.html"
     form_valid_message = _("Saved successfully!")
     form_invalid_message = _("Please correct the errors below.")
 
 
-class CoreDeleteView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin, VerboseNameMixin, DeleteView):
+class CoreDeleteView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin,
+                     VerboseNameMixin, DeleteView):
     template_name = "core/crud/delete.html"
     form_valid_message = _("Deleted successfully!")
     form_invalid_message = _("Please correct the errors below.")

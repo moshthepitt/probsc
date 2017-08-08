@@ -51,3 +51,21 @@ class ScorecardKPITable(KPITable):
     def __init__(self, *args, **kwargs):
         self.scorecard = kwargs.pop('scorecard', None)
         super(ScorecardKPITable, self).__init__(*args, **kwargs)
+
+
+class UserScorecardKPITable(KPITable):
+
+    class Meta:
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+    def render_action(self, record):
+        return format_html(
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            reverse('scorecards:user_scorecards_kpis_edit', args=[record.pk, self.scorecard.pk]),
+            reverse('scorecards:user_scorecards_kpis_delete', args=[record.pk, self.scorecard.pk])
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.scorecard = kwargs.pop('scorecard', None)
+        super(UserScorecardKPITable, self).__init__(*args, **kwargs)
