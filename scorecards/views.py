@@ -6,12 +6,17 @@ from django.http import Http404
 from django.contrib.auth.models import User
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin
+from django.db.models import ProtectedError
+from django.shortcuts import redirect
+from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 from django_tables2 import SingleTableMixin
 from braces.views import LoginRequiredMixin
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
+from core.generic_views import CoreGenericDeleteView
 from core.mixins import VerboseNameMixin
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
@@ -193,10 +198,22 @@ class UserEditScorecard(AccessScorecard, EditScorecard):
         return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
 
 
-class UserDeleteScorecard(AccessScorecard, DeleteScorecard):
+class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
     """ the user deleting his own scorecard """
     model = Scorecard
-    success_url = reverse_lazy('scorecards:user_scorecards')
+    template_name = "scorecards/user_scorecard_delete.html"
+
+    def get_success_url(self):
+        return reverse('scorecards:user_scorecards')
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            return super(UserDeleteScorecard, self).delete(request, *args, **kwargs)
+        except ProtectedError:
+            info = _("You cannot delete this item, it is referenced by other items.")
+            messages.error(request, info, fail_silently=True)
+            return redirect(reverse('scorecards:user_scorecards_delete',
+                                    args=[self.object.id]))
 
 
 class UserScorecards(CoreListView):

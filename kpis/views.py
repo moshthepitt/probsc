@@ -6,6 +6,7 @@ from django.contrib import messages
 
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
+from core.generic_views import CoreGenericDeleteView
 from core.mixins import EditorAccess
 
 from scorecards.mixins import ScorecardMixin, ScorecardFormMixin
@@ -76,7 +77,7 @@ class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
     template_name = "scorecards/kpis_edit.html"
 
 
-class DeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
+class DeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     model = KPI
     template_name = "scorecards/kpis_delete.html"
 
@@ -85,7 +86,7 @@ class DeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(CoreDeleteView, self).delete(request, *args, **kwargs)
+            return super(DeleteScorecardKPI, self).delete(request, *args, **kwargs)
         except ProtectedError:
             info = _("You cannot delete this item, it is referenced by other items.")
             messages.error(request, info, fail_silently=True)
@@ -120,7 +121,7 @@ class UserEditScorecardKPI(EditScorecardKPI):
         return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
 
 
-class UserDeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
+class UserDeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     model = KPI
     template_name = "scorecards/user_kpis_delete.html"
 
@@ -129,7 +130,7 @@ class UserDeleteScorecardKPI(ScorecardMixin, CoreDeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(CoreDeleteView, self).delete(request, *args, **kwargs)
+            return super(UserDeleteScorecardKPI, self).delete(request, *args, **kwargs)
         except ProtectedError:
             info = _("You cannot delete this item, it is referenced by other items.")
             messages.error(request, info, fail_silently=True)

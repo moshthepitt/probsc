@@ -32,11 +32,14 @@ class CoreUpdateView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin,
     form_invalid_message = _("Please correct the errors below.")
 
 
-class CoreDeleteView(LoginRequiredMixin, CustomerCheckMixin, FormMessagesMixin,
-                     VerboseNameMixin, DeleteView):
+class CoreGenericDeleteView(LoginRequiredMixin, CustomerCheckMixin,
+                            FormMessagesMixin, VerboseNameMixin, DeleteView):
     template_name = "core/crud/delete.html"
     form_valid_message = _("Deleted successfully!")
     form_invalid_message = _("Please correct the errors below.")
+
+
+class CoreDeleteView(CoreGenericDeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
