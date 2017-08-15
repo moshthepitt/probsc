@@ -4,8 +4,6 @@ from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.contrib import messages
 
-from braces.views import LoginRequiredMixin
-
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.generic_views import CoreGenericDeleteView
@@ -79,7 +77,7 @@ class EditScorecardKPI(CoreUpdateView, ScorecardFormMixin, ScorecardMixin):
     template_name = "scorecards/kpis_edit.html"
 
 
-class DeleteScorecardKPI(CoreGenericDeleteView, ScorecardMixin):
+class DeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     model = KPI
     template_name = "scorecards/kpis_delete.html"
 
@@ -123,7 +121,7 @@ class UserEditScorecardKPI(EditScorecardKPI):
         return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
 
 
-class UserDeleteScorecardKPI(CoreGenericDeleteView, ScorecardMixin):
+class UserDeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     model = KPI
     template_name = "scorecards/user_kpis_delete.html"
 

@@ -198,7 +198,7 @@ class UserEditScorecard(EditScorecard, AccessScorecard):
         return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
 
 
-class UserDeleteScorecard(CoreGenericDeleteView, AccessScorecard):
+class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
     """ the user deleting his own scorecard """
     model = Scorecard
     template_name = "scorecards/user_scorecard_delete.html"
