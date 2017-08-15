@@ -16,7 +16,7 @@ from .forms import KPIForm, UserKPIForm
 from .models import KPI
 
 
-class KPIListview(EditorAccess, CoreListView):
+class KPIListview(CoreListView, EditorAccess):
     model = KPI
     table_class = KPITable
     search_fields = ['name', 'measure', 'description']
@@ -28,7 +28,7 @@ class KPIListview(EditorAccess, CoreListView):
         return context
 
 
-class ScorecardKPIListview(ScorecardMixin, KPIListview):
+class ScorecardKPIListview(KPIListview, ScorecardMixin):
     template_name = "scorecards/kpis_list.html"
     table_class = ScorecardKPITable
 
@@ -50,34 +50,34 @@ class ScorecardKPIListview(ScorecardMixin, KPIListview):
         return context
 
 
-class AddKPI(EditorAccess, CoreCreateView):
+class AddKPI(CoreCreateView, EditorAccess):
     model = KPI
     form_class = KPIForm
 
 
-class EditKPI(EditorAccess, CoreUpdateView):
+class EditKPI(CoreUpdateView, EditorAccess):
     model = KPI
     form_class = KPIForm
 
 
-class DeleteKPI(EditorAccess, CoreDeleteView):
+class DeleteKPI(CoreDeleteView, EditorAccess):
     model = KPI
     success_url = reverse_lazy('kpis:kpis_list')
 
 
-class AddScorecardKPI(KPICreateMixin, ScorecardFormMixin, ScorecardMixin, CoreCreateView):
+class AddScorecardKPI(CoreCreateView, KPICreateMixin, ScorecardFormMixin, ScorecardMixin):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_create.html"
 
 
-class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
+class EditScorecardKPI(CoreUpdateView, ScorecardFormMixin, ScorecardMixin):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_edit.html"
 
 
-class DeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
+class DeleteScorecardKPI(CoreGenericDeleteView, ScorecardMixin):
     model = KPI
     template_name = "scorecards/kpis_delete.html"
 
@@ -121,7 +121,7 @@ class UserEditScorecardKPI(EditScorecardKPI):
         return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
 
 
-class UserDeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
+class UserDeleteScorecardKPI(CoreGenericDeleteView, ScorecardMixin):
     model = KPI
     template_name = "scorecards/user_kpis_delete.html"
 

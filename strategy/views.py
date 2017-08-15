@@ -8,7 +8,7 @@ from .forms import StrategicThemeForm, ObjectiveForm
 from .models import StrategicTheme, Objective
 
 
-class StrategicThemeListview(EditorAccess, CoreListView):
+class StrategicThemeListview(CoreListView, EditorAccess):
     model = StrategicTheme
     table_class = StrategicThemeTable
 
@@ -19,22 +19,22 @@ class StrategicThemeListview(EditorAccess, CoreListView):
         return context
 
 
-class AddStrategicTheme(EditorAccess, CoreCreateView):
+class AddStrategicTheme(CoreCreateView, EditorAccess):
     model = StrategicTheme
     form_class = StrategicThemeForm
 
 
-class EditStrategicTheme(EditorAccess, CoreUpdateView):
+class EditStrategicTheme(CoreUpdateView, EditorAccess):
     model = StrategicTheme
     form_class = StrategicThemeForm
 
 
-class DeleteStrategicTheme(EditorAccess, CoreDeleteView):
+class DeleteStrategicTheme(CoreDeleteView, EditorAccess):
     model = StrategicTheme
     success_url = reverse_lazy('strategy:strategic_themes_list')
 
 
-class ObjectiveListview(EditorAccess, CoreListView):
+class ObjectiveListview(CoreListView, EditorAccess):
     model = Objective
     table_class = ObjectiveTable
 
@@ -45,16 +45,16 @@ class ObjectiveListview(EditorAccess, CoreListView):
         return context
 
 
-class AddObjective(EditorAccess, CoreCreateView):
+class AddObjective(CoreCreateView, EditorAccess):
     model = Objective
     form_class = ObjectiveForm
 
 
-class EditObjective(EditorAccess, CoreUpdateView):
+class EditObjective(CoreUpdateView, EditorAccess):
     model = Objective
     form_class = ObjectiveForm
 
 
-class DeleteObjective(EditorAccess, CoreDeleteView):
+class DeleteObjective(CoreDeleteView, EditorAccess):
     model = Objective
     success_url = reverse_lazy('strategy:objectives_list')

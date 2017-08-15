@@ -184,7 +184,7 @@ class UserAddScorecard(CoreCreateView):
         return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
 
 
-class UserEditScorecard(AccessScorecard, EditScorecard):
+class UserEditScorecard(EditScorecard, AccessScorecard):
     """ the user editting his own scorecard"""
     model = Scorecard
     form_class = UserScorecardForm
@@ -198,7 +198,7 @@ class UserEditScorecard(AccessScorecard, EditScorecard):
         return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
 
 
-class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
+class UserDeleteScorecard(CoreGenericDeleteView, AccessScorecard):
     """ the user deleting his own scorecard """
     model = Scorecard
     template_name = "scorecards/user_scorecard_delete.html"
