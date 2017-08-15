@@ -112,6 +112,7 @@ class AdminAccess(object):
     Enforces admin access
     """
 
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         can_access = False
         if self.request.user.userprofile.is_admin():
@@ -127,6 +128,7 @@ class EditorAccess(object):
     Enforces admin or editor access
     """
 
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         can_access = False
         if self.request.user.userprofile.is_admin() or\

@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.http import Http404
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from core.mixins import CoreFormMixin
 from scorecards.models import Scorecard, ScorecardKPI
@@ -46,6 +48,7 @@ class AccessScorecard(object):
     Or is being viewed by a supervisor or admin
     """
 
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
@@ -80,6 +83,7 @@ class ScorecardMixin(object):
     def get_success_url(self):
         return reverse('scorecards:scorecards_kpis_list', args=[self.scorecard.pk])
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.scorecard = get_object_or_404(Scorecard, pk=kwargs.pop('scorecard_pk', None))
         subordinates = self.request.user.userprofile.get_subordinates()

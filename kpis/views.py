@@ -4,6 +4,8 @@ from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.contrib import messages
 
+from braces.views import LoginRequiredMixin
+
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.generic_views import CoreGenericDeleteView
@@ -28,7 +30,7 @@ class KPIListview(CoreListView, EditorAccess):
         return context
 
 
-class ScorecardKPIListview(KPIListview, ScorecardMixin):
+class ScorecardKPIListview(ScorecardMixin, KPIListview):
     template_name = "scorecards/kpis_list.html"
     table_class = ScorecardKPITable
 
