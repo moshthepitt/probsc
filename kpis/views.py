@@ -71,7 +71,7 @@ class AddScorecardKPI(KPICreateMixin, ScorecardFormMixin, ScorecardMixin, CoreCr
     template_name = "scorecards/kpis_create.html"
 
 
-class EditScorecardKPI(CoreUpdateView, ScorecardFormMixin, ScorecardMixin):
+class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_edit.html"
