@@ -1,4 +1,4 @@
-from decimal import Decimal
+from decimal import Decimal, DecimalException
 import statistics
 
 from django.db import models
@@ -209,13 +209,23 @@ class ScorecardKPI(TimeStampedModel):
         score = Decimal(0.00)
         if Score.objects.filter(scorecard=self.scorecard, kpi=self.kpi, review_round=this_round).exists():
             actual_rating = self.get_actual_rating(this_round)
-            score = (self.kpi.weight / Decimal(100)) * actual_rating
+            try:
+                weight_percentage = self.kpi.weight / Decimal(100)
+            except DecimalException:
+                score = Decimal(0)
+            else:
+                score = weight_percentage * actual_rating
         self.score = score
         self.save()
         return score
 
     def get_actual_rating_from_score(self):
-        actual = self.get_score() / (self.kpi.weight / Decimal(100))
+        try:
+            weight_percentage = self.kpi.weight / Decimal(100)
+        except DecimalException:
+            actual = Decimal(0)
+        else:
+            actual = self.get_score() / weight_percentage
         if actual > Decimal(5.0):
             return Decimal(5.0)
         return actual
