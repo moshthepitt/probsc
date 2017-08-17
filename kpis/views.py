@@ -65,13 +65,13 @@ class DeleteKPI(CoreDeleteView, EditorAccess):
     success_url = reverse_lazy('kpis:kpis_list')
 
 
-class AddScorecardKPI(CoreCreateView, KPICreateMixin, ScorecardFormMixin, ScorecardMixin):
+class AddScorecardKPI(KPICreateMixin, ScorecardFormMixin, ScorecardMixin, CoreCreateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_create.html"
 
 
-class EditScorecardKPI(CoreUpdateView, ScorecardFormMixin, ScorecardMixin):
+class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_edit.html"
