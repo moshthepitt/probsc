@@ -55,6 +55,7 @@
 	<script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
 	<script src="{% static 'js/js.cookie.js' %}"></script>
 	<script src="{% static 'jquery.growl/javascripts/jquery.growl.js' %}"></script>
+	<script src="{% static 'js/Chart.bundle.min.js' %}"></script>
 	<script>
 		$(function () {
 			$('[data-toggle="tooltip"]').tooltip();
@@ -69,6 +70,15 @@
 			var listInitiativeSnippetURL = '{% url "scorecards:snippet_list_initiatives" 0 %}'.replace (0, thisID);
 			$("#inititativeModal-body" ).load(listInitiativeSnippetURL, function(){
 				$('#inititativeModal').modal();
+			});
+		});
+
+		$(document).on('click', '.score-graph-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var graphScoreSnippetURL = '{% url "scorecards:snippet_graph_scores" 0 %}'.replace (0, thisID);
+			$("#scoreModal-body" ).load(graphScoreSnippetURL, function(){
+				$('#scoreModal').modal();
 			});
 		});
 

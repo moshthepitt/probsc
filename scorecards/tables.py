@@ -135,7 +135,8 @@ class UserScorecardKPITable(tables.Table):
                                 attrs={'th': {'width': '7%'}})
     action = tables.Column(verbose_name=_("Scores"),
                            accessor='pk',
-                           orderable=False)
+                           orderable=False,
+                           attrs={'th': {'width': '7%'}})
 
     class Meta:
         model = ScorecardKPI
@@ -191,13 +192,20 @@ class UserScorecardKPITable(tables.Table):
     def render_action(self, record):
         return format_html(
             """
+            <button type="button" class="btn btn-{contextual_rating} btn-xs
+                score-graph-button" data-pk="{pk}" data-toggle="tooltip"
+                data-placement="left" title="{d}" aria-label="{d}">
+              <span class="glyphicon glyphicon-signal" aria-hidden="true">
+              </span>
+            </button>
             <button type="button" class="btn btn-{contextual_rating}
                 btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip"
                 data-placement="top" title="{b}" aria-label="{b}">
-              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
             """,
             b=_("Report Scores"),
+            d=_("View Graphs"),
             pk=record.id,
             actual=record.get_actual_rating_from_score().quantize(TWOPLACES),
             contextual_rating=record.contextual_rating()
