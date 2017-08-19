@@ -9,7 +9,7 @@ var myChart = new Chart(ctx, {
     data: {
         labels: [{% for score in scores %}"{{score.date|date:'d M Y'}}",{% endfor %}],
         datasets: [{
-            label: '{% trans "Score" %}',
+            label: '{% trans "Value" %}',
             data: [{% for score in scores %}{{score.value}},{% endfor %}],
             backgroundColor: "{{object.contextual_color}}",
             borderWidth: 1
@@ -17,6 +17,9 @@ var myChart = new Chart(ctx, {
     },
     options: {
     	responsive: true,
+    	legend: {
+	        display: false
+	    },
         scales: {
             yAxes: [{
                 ticks: {
