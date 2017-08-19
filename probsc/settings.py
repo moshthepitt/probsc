@@ -256,6 +256,10 @@ BSC_INVERSE_RATING = {
     'very_poor': 5
 }
 
+BSC_COLOR_BAD = "#d9534f"
+BSC_COLOR_GOOD = "#5cb85c"
+BSC_COLOR_WARN = "#f0ad4e"
+
 # Easy Seelect2
 SELECT2_USE_BUNDLED_JQUERY = False
 

@@ -1,0 +1,41 @@
+{% load i18n %}
+<div class="chart-container" style="position: relative; height:auto; width:100%">
+    <canvas id="scorecardkpi-{{object.id}}-Chart"></canvas>
+</div>
+<script>
+var ctx = document.getElementById("scorecardkpi-{{object.id}}-Chart");
+var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [{% for score in scores %}"{{score.date|date:'d M Y'}}",{% endfor %}],
+        datasets: [{
+            label: '{% trans "Score" %}',
+            data: [{% for score in scores %}{{score.value}},{% endfor %}],
+            backgroundColor: "{{object.contextual_color}}",
+            borderWidth: 1
+        }]
+    },
+    options: {
+    	responsive: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '{{object.kpi.measure}}'
+                }
+            }],
+            xAxes: [{
+                display: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: '{% trans "Date" %}'
+                }
+            }]
+        }
+    }
+});
+</script>

@@ -12,7 +12,9 @@ from django_extensions.db.models import TimeStampedModel
 
 from core.utils import PathAndRename
 from .managers import ScorecardManager, ScorecardKPIManager, ScoreKPIManager
-from .utils import bsc_rating, get_contextual_rating, get_inverse_contextual_rating
+from .utils import bsc_rating, get_contextual_rating
+from .utils import get_inverse_contextual_rating, get_contextual_color
+from .utils import get_inverse_contextual_color
 
 User = settings.AUTH_USER_MODEL
 
@@ -26,13 +28,17 @@ class Scorecard(TimeStampedModel):
         2. an appraissal period
     """
     name = models.TextField(_("Name"), max_length=255)
-    year = models.PositiveIntegerField(
-        _("Year"), default=timezone.now().year, validators=[MinValueValidator(2012), MaxValueValidator(3000)])
+    year = models.PositiveIntegerField(_("Year"),
+                                       default=timezone.now().year,
+                                       validators=[MinValueValidator(2012),
+                                                   MaxValueValidator(3000)])
     description = models.TextField(_("Description"), blank=True, default="")
-    user = models.ForeignKey(
-        User, verbose_name=_("User"), on_delete=models.PROTECT, blank=True, null=True)
-    customer = models.ForeignKey(
-        'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
+    user = models.ForeignKey(User,
+                             verbose_name=_("User"),
+                             on_delete=models.PROTECT, blank=True, null=True)
+    customer = models.ForeignKey('customers.Customer',
+                                 verbose_name=_("Customer"),
+                                 on_delete=models.PROTECT)
     kpis = models.ManyToManyField(
         'kpis.KPI', through='ScorecardKPI', verbose_name=_("KPIs"), blank=True)
     active = models.BooleanField(_("Active"), default=True)
@@ -40,11 +46,13 @@ class Scorecard(TimeStampedModel):
     objects = ScorecardManager()
 
     def get_report(self, this_round=1):
-        total, financial, customer = Decimal(0.00), Decimal(0.00), Decimal(0.00)
+        total, financial = Decimal(0.00), Decimal(0.00)
+        customer = Decimal(0.00)
         process, learning = Decimal(0.00), Decimal(0.00)
         scorecard_kpis = ScorecardKPI.objects.filter(scorecard=self)
         for scorecard_kpi in scorecard_kpis:
-            scorecard_kpi.score = scorecard_kpi.get_score(this_round=this_round)
+            scorecard_kpi.score = scorecard_kpi.get_score(
+                this_round=this_round)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.FINANCIAL:
                 financial = financial + Decimal(scorecard_kpi.score)
             if scorecard_kpi.kpi.perspective == scorecard_kpi.kpi.CUSTOMER:
@@ -91,7 +99,9 @@ class Evidence(TimeStampedModel):
     """
     Scorecard evidence that is an uploaded file
     """
-    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
+    scorecard = models.ForeignKey(Scorecard,
+                                  verbose_name=_("Scorecard"),
+                                  on_delete=models.PROTECT)
     name = models.CharField(_("Name"), max_length=255)
     date = models.DateField(_("Date"), default=timezone.now)
     file = models.FileField(_("File"), upload_to=PathAndRename(
@@ -124,20 +134,30 @@ class Score(TimeStampedModel):
     Records the performance score of KPIs for a Scorecard on a partcular date
     """
     date = models.DateField(_("Date"), default=timezone.now)
-    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
-    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
-    value = models.DecimalField(_("Value"), max_digits=64, decimal_places=2, default=0)
+    scorecard = models.ForeignKey(Scorecard,
+                                  verbose_name=_("Scorecard"),
+                                  on_delete=models.PROTECT)
+    kpi = models.ForeignKey('kpis.KPI',
+                            verbose_name=_("KPI"),
+                            on_delete=models.PROTECT)
+    value = models.DecimalField(_("Value"),
+                                max_digits=64,
+                                decimal_places=2,
+                                default=0)
     review_round = models.PositiveIntegerField(
-        _("Review Round"), default=1, validators=[MinValueValidator(1), MaxValueValidator(5)])
+        _("Review Round"), default=1, validators=[MinValueValidator(1),
+                                                  MaxValueValidator(5)])
     notes = models.TextField(_("Notes"), blank=True, default="")
 
     objects = ScoreKPIManager()
 
     def get_score(self):
         if self.kpi.direction == self.kpi.UP:
-            return ((self.value - self.kpi.baseline) / (self.kpi.target - self.kpi.baseline)) * Decimal(0)
+            return ((self.value - self.kpi.baseline) /
+                    (self.kpi.target - self.kpi.baseline)) * Decimal(0)
         elif self.kpi.direction == self.kpi.DOWN:
-            return ((self.kpi.baseline - self.value) / (self.kpi.baseline - self.kpi.target)) * Decimal(0)
+            return ((self.kpi.baseline - self.value) /
+                    (self.kpi.baseline - self.kpi.target)) * Decimal(0)
 
     class Meta:
         verbose_name = _("Score")
@@ -154,10 +174,16 @@ class ScorecardKPI(TimeStampedModel):
     A way to group KPIs in a scorecard and have additional information
     that relates to the KPI in the scorecard
     """
-    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.CASCADE)
-    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.CASCADE)
-    score = models.DecimalField(
-        _("Score"), max_digits=64, decimal_places=2, default=0, help_text=_("The KPI BSC score"))
+    scorecard = models.ForeignKey(Scorecard,
+                                  verbose_name=_("Scorecard"),
+                                  on_delete=models.CASCADE)
+    kpi = models.ForeignKey('kpis.KPI',
+                            verbose_name=_("KPI"), on_delete=models.CASCADE)
+    score = models.DecimalField(_("Score"),
+                                max_digits=64,
+                                decimal_places=2,
+                                default=0,
+                                help_text=_("The KPI BSC score"))
 
     objects = ScorecardKPIManager()
 
@@ -166,8 +192,9 @@ class ScorecardKPI(TimeStampedModel):
         Get the score as a percentage of the target
         """
         records_no = self.kpi.get_number_of_scores()
-        records = Score.objects.filter(
-            scorecard=self.scorecard, kpi=self.kpi, review_round=this_round)[:records_no]
+        records = Score.objects.filter(scorecard=self.scorecard,
+                                       kpi=self.kpi,
+                                       review_round=this_round)[:records_no]
         # return 0 if no records
         if not records:
             return Decimal(0)
@@ -184,7 +211,8 @@ class ScorecardKPI(TimeStampedModel):
         elif self.kpi.direction == self.kpi.DOWN:
             if value == Decimal(0):
                 # dirty hack to avoid division by zero
-                actual = (self.kpi.target / Decimal(0.0000000001)) * Decimal(100)
+                actual = (self.kpi.target / Decimal(0.0000000001)) \
+                    * Decimal(100)
             else:
                 actual = (self.kpi.target / value) * Decimal(100)
         else:
@@ -207,7 +235,9 @@ class ScorecardKPI(TimeStampedModel):
             return self.score
         # else calculate and save it
         score = Decimal(0.00)
-        if Score.objects.filter(scorecard=self.scorecard, kpi=self.kpi, review_round=this_round).exists():
+        if Score.objects.filter(scorecard=self.scorecard,
+                                kpi=self.kpi,
+                                review_round=this_round).exists():
             actual_rating = self.get_actual_rating(this_round)
             try:
                 weight_percentage = self.kpi.weight / Decimal(100)
@@ -232,9 +262,19 @@ class ScorecardKPI(TimeStampedModel):
 
     def contextual_rating(self):
         if self.scorecard.customer.best == self.scorecard.customer.FIVE:
-            return get_contextual_rating(self.get_actual_rating_from_score())
+            return get_contextual_rating(
+                self.get_actual_rating_from_score())
         else:
-            return get_inverse_contextual_rating(self.get_actual_rating_from_score())
+            return get_inverse_contextual_rating(
+                self.get_actual_rating_from_score())
+
+    def contextual_color(self):
+        if self.scorecard.customer.best == self.scorecard.customer.FIVE:
+            return get_contextual_color(
+                self.get_actual_rating_from_score())
+        else:
+            return get_inverse_contextual_color(
+                self.get_actual_rating_from_score())
 
     class Meta:
         verbose_name = _("Scorecard KPI")
@@ -251,8 +291,12 @@ class Initiative(TimeStampedModel):
     Represent specific activities undertaken in the achievment of KPIs
     """
     date = models.DateField(_("Date"), default=timezone.now)
-    scorecard = models.ForeignKey(Scorecard, verbose_name=_("Scorecard"), on_delete=models.PROTECT)
-    kpi = models.ForeignKey('kpis.KPI', verbose_name=_("KPI"), on_delete=models.PROTECT)
+    scorecard = models.ForeignKey(Scorecard,
+                                  verbose_name=_("Scorecard"),
+                                  on_delete=models.PROTECT)
+    kpi = models.ForeignKey('kpis.KPI',
+                            verbose_name=_("KPI"),
+                            on_delete=models.PROTECT)
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
 

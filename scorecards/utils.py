@@ -29,7 +29,8 @@ def get_bounds():
 
 
 def get_inverse_contextual_rating(rating):
-    """Returns context of rating to be used in template, either: success, warning, danger"""
+    """Returns context of rating to be used in template, either: success,
+    warning, danger"""
     bounds = get_bounds()
     if rating:
         if bounds[0] <= rating <= bounds[1]:
@@ -42,7 +43,8 @@ def get_inverse_contextual_rating(rating):
 
 
 def get_contextual_rating(rating):
-    """Returns context of rating to be used in template, either: success, warning, danger"""
+    """Returns context of rating to be used in template, either: success,
+    warning, danger"""
     bounds = get_bounds()
     if rating:
         if bounds[0] <= rating <= bounds[1]:
@@ -54,4 +56,25 @@ def get_contextual_rating(rating):
     return "default"
 
 
+def get_contextual_color(rating):
+    bounds = get_bounds()
+    if rating:
+        if bounds[0] <= rating <= bounds[1]:
+            return settings.BSC_COLOR_WARN
+        elif rating < bounds[0]:
+            return settings.BSC_COLOR_BAD
+        else:
+            return settings.BSC_COLOR_GOOD
+    return "#d9edf7"
 
+
+def get_inverse_contextual_color(rating):
+    bounds = get_bounds()
+    if rating:
+        if bounds[0] <= rating <= bounds[1]:
+            return settings.BSC_COLOR_WARN
+        elif rating > bounds[0]:
+            return settings.BSC_COLOR_BAD
+        else:
+            return settings.BSC_COLOR_GOOD
+    return "#d9edf7"

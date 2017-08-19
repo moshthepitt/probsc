@@ -56,3 +56,7 @@
 .btn.btn-xs {
 	padding: 1px 5px;
 }
+
+td .btn.btn-xs {
+	margin-bottom:5px;
+}

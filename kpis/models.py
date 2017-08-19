@@ -144,6 +144,13 @@ class KPI(TimeStampedModel):
             return self.NO_MONTHLY
         return self.NO_ANNUALLY
 
+    def get_target_per_score(self):
+        """
+        If the target is to be met, this should be the minimum value of each
+        score
+        """
+        pass
+
     def get_absolute_url(self):
         return "#"
 

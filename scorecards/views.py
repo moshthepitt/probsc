@@ -28,23 +28,42 @@ from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
 
-class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin,
-                            DetailView):
+class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard,
+                            SingleTableMixin, DetailView):
     model = ScorecardKPI
     table_class = InitiativeTable
     template_name = "scorecards/snippets/list_initiatives.html"
 
     def get_table_data(self):
-        return Initiative.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
+        return Initiative.objects.filter(kpi=self.object.kpi,
+                                         scorecard=self.object.scorecard)
 
 
-class ScoreListSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin, DetailView):
+class ScoreListSnippet(LoginRequiredMixin, AccessScorecard,
+                       SingleTableMixin, DetailView):
     model = ScorecardKPI
     table_class = ScoreTable
     template_name = "scorecards/snippets/list_scores.html"
 
     def get_table_data(self):
-        return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
+        return Score.objects.filter(kpi=self.object.kpi,
+                                    scorecard=self.object.scorecard)
+
+
+class ScoreGraphSnippet(LoginRequiredMixin, AccessScorecard, DetailView):
+    model = ScorecardKPI
+    template_name = "scorecards/snippets/graph_scores.html"
+
+    def get_table_data(self):
+        return Score.objects.filter(kpi=self.object.kpi,
+                                    scorecard=self.object.scorecard)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScoreGraphSnippet, self).get_context_data(**kwargs)
+        scores = Score.objects.filter(kpi=self.object.kpi,
+                                      scorecard=self.object.scorecard)
+        context['scores'] = scores
+        return context
 
 
 class AddInitiativeSnippet(LoginRequiredMixin, AccessScorecard,
@@ -64,7 +83,8 @@ class AddScoreSnippet(LoginRequiredMixin, AccessScorecard, SingleTableMixin,
     table_class = ScoreTable
 
     def get_table_data(self):
-        return Score.objects.filter(kpi=self.object.kpi, scorecard=self.object.scorecard)
+        return Score.objects.filter(kpi=self.object.kpi,
+                                    scorecard=self.object.scorecard)
 
 
 class ScorecardReport(LoginRequiredMixin, AccessScorecard, VerboseNameMixin,
@@ -170,6 +190,7 @@ class DeleteScorecard(CoreDeleteView):
 
 
 class UserAddScorecard(CoreCreateView):
+
     """ the user adding his own scorecard"""
     model = Scorecard
     form_class = UserScorecardForm
@@ -181,10 +202,12 @@ class UserAddScorecard(CoreCreateView):
         return initial
 
     def get_success_url(self):
-        return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
+        return reverse('scorecards:user_scorecards_edit',
+                       args=[self.object.id])
 
 
 class UserEditScorecard(EditScorecard, AccessScorecard):
+
     """ the user editting his own scorecard"""
     model = Scorecard
     form_class = UserScorecardForm
@@ -195,10 +218,12 @@ class UserEditScorecard(EditScorecard, AccessScorecard):
         return initial
 
     def get_success_url(self):
-        return reverse('scorecards:user_scorecards_edit', args=[self.object.id])
+        return reverse('scorecards:user_scorecards_edit',
+                       args=[self.object.id])
 
 
 class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
+
     """ the user deleting his own scorecard """
     model = Scorecard
     template_name = "scorecards/user_scorecard_delete.html"
@@ -208,9 +233,12 @@ class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(UserDeleteScorecard, self).delete(request, *args, **kwargs)
+            return super(UserDeleteScorecard, self).delete(request,
+                                                           *args,
+                                                           **kwargs)
         except ProtectedError:
-            info = _("You cannot delete this item, it is referenced by other items.")
+            info = _("You cannot delete this item, it is referenced by other "
+                     "items.")
             messages.error(request, info, fail_silently=True)
             return redirect(reverse('scorecards:user_scorecards_delete',
                                     args=[self.object.id]))
