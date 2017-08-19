@@ -123,10 +123,14 @@ class UserScorecardKPITable(tables.Table):
     def render_initiatives(self, record):
         return format_html(
             """
-            <button type="button" class="btn btn-{contextual_rating} btn-xs list-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{c}" aria-label="{c}">
+            <button type="button" class="btn btn-{contextual_rating} btn-xs
+                list-initiative-button" data-pk="{pk}" data-toggle="tooltip"
+                data-placement="left" title="{c}" aria-label="{c}">
               <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
             </button>
-            <button type="button" class="btn btn-{contextual_rating} btn-xs add-initiative-button" data-pk="{pk}" data-toggle="tooltip" data-placement="left" title="{a}" aria-label="{a}">
+            <button type="button" class="btn btn-{contextual_rating} btn-xs
+                add-initiative-button" data-pk="{pk}" data-toggle="tooltip"
+                data-placement="left" title="{a}" aria-label="{a}">
               <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </button>
             """,
@@ -139,7 +143,9 @@ class UserScorecardKPITable(tables.Table):
     def render_action(self, record):
         return format_html(
             """
-            <button type="button" class="btn btn-{contextual_rating} btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}" aria-label="{b}">
+            <button type="button" class="btn btn-{contextual_rating}
+                btn-xs add-score-button" data-pk="{pk}" data-toggle="tooltip"
+                data-placement="top" title="{b}" aria-label="{b}">
               <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
             """,
@@ -309,6 +315,7 @@ class StaffScorecardTable(tables.Table):
 
 
 class InitiativeTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
 
     class Meta:
         model = Initiative
@@ -317,8 +324,22 @@ class InitiativeTable(tables.Table):
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
+    def render_action(self, record):
+        return format_html(
+            """
+            <button type="button" class="btn btn-danger btn-xs delete-initiative-button"
+                data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}"
+                aria-label="{b}">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </button>
+            """,
+            b=_("Delete"),
+            pk=record.id
+        )
+
 
 class ScoreTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
 
     class Meta:
         model = Score
@@ -326,3 +347,16 @@ class ScoreTable(tables.Table):
         sequence = ('date', 'value', 'notes', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
+
+    def render_action(self, record):
+        return format_html(
+            """
+            <button type="button" class="btn btn-danger btn-xs delete-score-button"
+                data-pk="{pk}" data-toggle="tooltip" data-placement="top" title="{b}"
+                aria-label="{b}">
+              <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </button>
+            """,
+            b=_("Delete"),
+            pk=record.id
+        )

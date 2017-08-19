@@ -62,7 +62,8 @@ class AccessScorecard(object):
                 if self.get_object().user == self.request.user:
                     can_access = True
             else:
-                if self.get_object().scorecard.user == self.request.user:
+                if (hasattr(self.get_object(), 'scorecard')) and\
+                   (self.get_object().scorecard.user == self.request.user):
                     can_access = True
         if not can_access:
             raise Http404

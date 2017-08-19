@@ -12,11 +12,14 @@ from kpis.views import EditScorecardKPI, DeleteScorecardKPI
 from kpis.views import UserScorecardKPIListview, UserAddScorecardKPI
 from kpis.views import UserEditScorecardKPI, UserDeleteScorecardKPI
 from .ajax import process_initiative_form, process_score_form
+from .ajax import delete_initiative, delete_score
 
 urlpatterns = [
     # ajax
     url(r'^ajax/add-initiative/$', login_required(process_initiative_form), name='process_initiative_form'),
+    url(r'^ajax/delete-initiative/(?P<pk>\d+)/$', login_required(delete_initiative), name='delete_initiative'),
     url(r'^ajax/add-score/$', login_required(process_score_form), name='process_score_form'),
+    url(r'^ajax/delete-score/(?P<pk>\d+)/$', login_required(delete_score), name='delete_score'),
     # scorecards
     url(r'^add/$', AddScorecard.as_view(), name='scorecards_add'),
     url(r'^edit/(?P<pk>\d+)/$', EditScorecard.as_view(), name='scorecards_edit'),

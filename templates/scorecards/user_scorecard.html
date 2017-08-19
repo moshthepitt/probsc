@@ -102,6 +102,76 @@
 			});
 		});
 
+		$(document).on('click', '.delete-initiative-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var url = '{% url "scorecards:delete_initiative" 0 %}'.replace (0, thisID);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: $({'pk': thisID}),
+				dataType: 'json',
+				success: function(data) {				    	
+					if (!(data['success'])) {
+						$('#inititativeModal').modal('hide');
+						$.growl.error({ 
+							location: 'tr',
+							message: '{% trans "Initiative not deleted.  Try again." %}' 
+						});
+					}
+					else { 
+						$('#inititativeModal').modal('hide');
+						$.growl.notice({ 
+							location: 'tr',
+							message: '{% trans "Successfully deleted initiative." %}' 
+						});
+					}
+				},
+				error: function () {
+					$('#inititativeModal').modal('hide');
+					$.growl.error({ 
+						location: 'tr',
+						message: '{% trans "An error occurred." %}' 
+					});
+				}
+			});
+		});
+
+		$(document).on('click', '.delete-score-button', function(event) {
+			event.preventDefault();
+			var thisID = $(this).data("pk");
+			var url = '{% url "scorecards:delete_score" 0 %}'.replace (0, thisID);
+			$.ajax({
+				url: url,
+				type: "POST",
+				data: $({'pk': thisID}),
+				dataType: 'json',
+				success: function(data) {				    	
+					if (!(data['success'])) {
+						$('#scoreModal').modal('hide');
+						$.growl.error({ 
+							location: 'tr',
+							message: '{% trans "Score not deleted.  Try again." %}' 
+						});
+					}
+					else { 
+						$('#scoreModal').modal('hide');
+						$.growl.notice({ 
+							location: 'tr',
+							message: '{% trans "Successfully deleted score." %}' 
+						});
+					}
+				},
+				error: function () {
+					$('#scoreModal').modal('hide');
+					$.growl.error({ 
+						location: 'tr',
+						message: '{% trans "An error occurred." %}' 
+					});
+				}
+			});
+		});
+
 		$('#inititativeModal').on('hide.bs.modal', function (e) {
 			$("#inititativeModal-body" ).html();
 		});

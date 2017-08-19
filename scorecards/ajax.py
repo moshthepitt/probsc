@@ -1,10 +1,12 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import ProtectedError
 
 from crispy_forms.utils import render_crispy_form
 
-from .models import Scorecard
+from .models import Scorecard, Initiative, Score
 from .forms import InitiativeModalForm, ScoreModalForm
+from .access import can_access_scorecard
 
 
 @csrf_exempt
@@ -45,3 +47,39 @@ def process_initiative_form(request):
                     })
     form_html = render_crispy_form(form)
     return JsonResponse({'success': False, 'form_html': form_html})
+
+
+@csrf_exempt
+def delete_initiative(request, pk):
+    try:
+        initiative = Initiative.objects.get(pk=pk)
+    except Initiative.DoesNotExist:
+        return JsonResponse({'success': False})
+    else:
+        if (request.user.userprofile.customer == initiative.scorecard.customer)\
+           and can_access_scorecard(initiative, request.user):
+            try:
+                initiative.delete()
+            except ProtectedError:
+                return JsonResponse({'success': False})
+            else:
+                return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
+
+
+@csrf_exempt
+def delete_score(request, pk):
+    try:
+        score = Score.objects.get(pk=pk)
+    except Score.DoesNotExist:
+        return JsonResponse({'success': False})
+    else:
+        if (request.user.userprofile.customer == score.scorecard.customer)\
+           and can_access_scorecard(score, request.user):
+            try:
+                score.delete()
+            except ProtectedError:
+                return JsonResponse({'success': False})
+            else:
+                return JsonResponse({'success': True})
+    return JsonResponse({'success': False})
