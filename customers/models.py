@@ -28,9 +28,11 @@ class Customer(TimeStampedModel):
     phone = PhoneNumberField(_('Phone Number'), max_length=255, blank=True)
     description = models.TextField(_("Description"), blank=True, default="")
     financial_year_end_day = models.PositiveSmallIntegerField(
-        _("Financial Year End Day"), default=31, validators=[MinValueValidator(1), MaxValueValidator(31)])
+        _("Financial Year End Day"), default=31, validators=[
+            MinValueValidator(1), MaxValueValidator(31)])
     financial_year_end_month = models.PositiveSmallIntegerField(
-        _("Financial Year End Month"), default=12, validators=[MinValueValidator(1), MaxValueValidator(12)])
+        _("Financial Year End Month"), default=12, validators=[
+            MinValueValidator(1), MaxValueValidator(12)])
     review_rounds = models.PositiveSmallIntegerField(
         _("Rounds of Review"),
         default=2,
@@ -42,7 +44,6 @@ class Customer(TimeStampedModel):
     best = models.IntegerField(
         _("Best Rating"),
         help_text=_("Which value represents the best rating"),
-        max_length=1,
         choices=BEST_RATING_CHOICES,
         blank=False,
         default=FIVE)
