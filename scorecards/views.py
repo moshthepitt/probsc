@@ -197,6 +197,15 @@ class ApproveScorecard(AccessScorecard, CoreUpdateView):
     def get_success_url(self):
         return reverse('scorecards:scorecards_list')
 
+    def dispatch(self, request, *args, **kwargs):
+        # cannot approve your own scorecard
+        if self.get_object().user == request.user:
+            messages.error(request,
+                           _("You cannot approve your own scorecard"),
+                           fail_silently=True)
+            return redirect(reverse('scorecards:user_scorecards'))
+        return super(ApproveScorecard, self).dispatch(request, *args, **kwargs)
+
 
 class DeleteScorecard(EditorAccess, CoreDeleteView):
     model = Scorecard
