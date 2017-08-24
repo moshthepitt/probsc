@@ -433,7 +433,7 @@ class StaffScorecardTable(tables.Table):
     def render_action(self, record):
         return format_html(
             "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
-            a=record.get_approval_url(),
+            a=reverse('scorecards:staff_scorecards_approve', args=[record.pk]),
             b=_("Approve"),
             c=reverse('scorecards:scorecard_report', args=[record.pk]),
             d=_("View Report")

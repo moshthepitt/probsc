@@ -24,6 +24,7 @@ from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
 from .tables import ScorecardReportKPITable, ScorecardReportTable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .forms import UserScorecardForm, ScorecardApprovalForm
+from .forms import StaffScorecardApprovalForm
 from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
@@ -205,6 +206,13 @@ class ApproveScorecard(AccessScorecard, CoreUpdateView):
                            fail_silently=True)
             return redirect(reverse('scorecards:user_scorecards'))
         return super(ApproveScorecard, self).dispatch(request, *args, **kwargs)
+
+
+class StaffApproveScorecard(ApproveScorecard):
+    form_class = StaffScorecardApprovalForm
+
+    def get_success_url(self):
+        return reverse('scorecards:staff_scorecards')
 
 
 class DeleteScorecard(EditorAccess, CoreDeleteView):

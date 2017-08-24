@@ -276,3 +276,52 @@ class ScorecardApprovalForm(forms.ModelForm):
                         reverse('scorecards:scorecards_list'), _("Back")))
             )
         )
+
+
+class StaffScorecardApprovalForm(forms.ModelForm):
+
+    class Meta:
+        model = Scorecard
+        fields = [
+            'approved',
+            'approved_by',
+            'approval_note'
+        ]
+        widgets = {
+            'approval_note': MiniTextarea(),
+            'approved_by': Select2({'width': "100%"})
+        }
+        field_classes = {
+            'approved_by': UserModelChoiceField
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(StaffScorecardApprovalForm, self).__init__(*args, **kwargs)
+        self.instance = kwargs.get('instance', None)
+        if self.request:
+            self.fields['approved_by'].queryset = User.objects.filter(
+                id__in=[self.request.user.pk])
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = True
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'scorecard-approval-form'
+        self.helper.layout = Layout(
+            Field('approved',),
+            Field('approved_by',),
+            Field('approval_note',),
+            FormActions(
+                Submit('submitBtn',
+                       _('Submit'),
+                       css_class='btn-success btn-250'),
+                HTML(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>"
+                    "".format(
+                        reverse('scorecards:staff_scorecards',
+                                args=[self.instance.user.pk]),
+                        _("Back")))
+            )
+        )
