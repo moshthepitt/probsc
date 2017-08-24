@@ -41,6 +41,7 @@ class Scorecard(TimeStampedModel):
                                  on_delete=models.PROTECT)
     kpis = models.ManyToManyField(
         'kpis.KPI', through='ScorecardKPI', verbose_name=_("KPIs"), blank=True)
+    approved = models.BooleanField(_("Approved"), default=False)
     active = models.BooleanField(_("Active"), default=True)
 
     objects = ScorecardManager()
