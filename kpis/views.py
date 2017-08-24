@@ -16,7 +16,7 @@ from .forms import KPIForm, UserKPIForm
 from .models import KPI
 
 
-class KPIListview(CoreListView, EditorAccess):
+class KPIListview(EditorAccess, CoreListView):
     model = KPI
     table_class = KPITable
     search_fields = ['name', 'measure', 'description']
@@ -50,22 +50,25 @@ class ScorecardKPIListview(ScorecardMixin, KPIListview):
         return context
 
 
-class AddKPI(CoreCreateView, EditorAccess):
+class AddKPI(EditorAccess, CoreCreateView):
     model = KPI
     form_class = KPIForm
 
 
-class EditKPI(CoreUpdateView, EditorAccess):
+class EditKPI(EditorAccess, CoreUpdateView):
     model = KPI
     form_class = KPIForm
 
 
-class DeleteKPI(CoreDeleteView, EditorAccess):
+class DeleteKPI(EditorAccess, CoreDeleteView):
     model = KPI
     success_url = reverse_lazy('kpis:kpis_list')
 
 
-class AddScorecardKPI(KPICreateMixin, ScorecardFormMixin, ScorecardMixin, CoreCreateView):
+class AddScorecardKPI(KPICreateMixin,
+                      ScorecardFormMixin,
+                      ScorecardMixin,
+                      CoreCreateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_create.html"
@@ -82,13 +85,16 @@ class DeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     template_name = "scorecards/kpis_delete.html"
 
     def get_success_url(self):
-        return reverse('scorecards:scorecards_kpis_list', args=[self.scorecard.id])
+        return reverse('scorecards:scorecards_kpis_list', args=[
+            self.scorecard.id])
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(DeleteScorecardKPI, self).delete(request, *args, **kwargs)
+            return super(DeleteScorecardKPI, self).delete(
+                request, *args, **kwargs)
         except ProtectedError:
-            info = _("You cannot delete this item, it is referenced by other items.")
+            info = _("You cannot delete this item, it is referenced by other"
+                     " items.")
             messages.error(request, info, fail_silently=True)
             return redirect(reverse('scorecards:scorecards_kpis_delete',
                                     args=[self.object.id, self.scorecard.id]))
@@ -99,7 +105,8 @@ class UserScorecardKPIListview(ScorecardKPIListview):
     table_class = UserScorecardKPITable
 
     def get_context_data(self, **kwargs):
-        context = super(UserScorecardKPIListview, self).get_context_data(**kwargs)
+        context = super(UserScorecardKPIListview, self).get_context_data(
+            **kwargs)
         context['create_view_url'] = reverse_lazy(
             'scorecards:user_scorecards_kpis_add', args=[self.scorecard.pk])
         context['list_view_url'] = reverse_lazy(
@@ -111,14 +118,16 @@ class UserAddScorecardKPI(AddScorecardKPI):
     form_class = UserKPIForm
 
     def get_success_url(self):
-        return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
+        return reverse('scorecards:user_scorecards_kpis_list', args=[
+            self.scorecard.id])
 
 
 class UserEditScorecardKPI(EditScorecardKPI):
     form_class = UserKPIForm
 
     def get_success_url(self):
-        return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
+        return reverse('scorecards:user_scorecards_kpis_list', args=[
+            self.scorecard.id])
 
 
 class UserDeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
@@ -126,13 +135,16 @@ class UserDeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):
     template_name = "scorecards/user_kpis_delete.html"
 
     def get_success_url(self):
-        return reverse('scorecards:user_scorecards_kpis_list', args=[self.scorecard.id])
+        return reverse('scorecards:user_scorecards_kpis_list', args=[
+            self.scorecard.id])
 
     def delete(self, request, *args, **kwargs):
         try:
-            return super(UserDeleteScorecardKPI, self).delete(request, *args, **kwargs)
+            return super(UserDeleteScorecardKPI, self).delete(
+                request, *args, **kwargs)
         except ProtectedError:
-            info = _("You cannot delete this item, it is referenced by other items.")
+            info = _("You cannot delete this item, it is referenced by other"
+                     " items.")
             messages.error(request, info, fail_silently=True)
             return redirect(reverse('scorecards:user_scorecards_kpis_delete',
                                     args=[self.object.id, self.scorecard.id]))

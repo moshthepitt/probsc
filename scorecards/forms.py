@@ -37,7 +37,8 @@ class ScoreModalForm(forms.ModelForm):
         kpi = cleaned_data.get("kpi")
         if kpi:
             max_scores = kpi.get_number_of_scores()
-            num_scores = Score.objects.filter(scorecard=scorecard, kpi=kpi).count()
+            num_scores = Score.objects.filter(
+                scorecard=scorecard, kpi=kpi).count()
             if num_scores + 1 > max_scores:
                 msg = _("Cannot add more scores.".format())
                 self.add_error('date', msg)
@@ -52,7 +53,8 @@ class ScoreModalForm(forms.ModelForm):
         if self.scorecard_kpi:
             self.fields['scorecard'].queryset = Scorecard.objects.filter(
                 id__in=[self.scorecard_kpi.scorecard.pk])
-            self.fields['kpi'].queryset = KPI.objects.filter(id__in=[self.scorecard_kpi.kpi.pk])
+            self.fields['kpi'].queryset = KPI.objects.filter(
+                id__in=[self.scorecard_kpi.kpi.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -67,7 +69,9 @@ class ScoreModalForm(forms.ModelForm):
             Field('scorecard', type="hidden"),
             Field('kpi', type="hidden"),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-block'),
+                Submit('submitBtn',
+                       _('Submit'),
+                       css_class='btn-success btn-block'),
             )
         )
 
@@ -94,7 +98,8 @@ class InitiativeModalForm(forms.ModelForm):
         if self.scorecard_kpi:
             self.fields['scorecard'].queryset = Scorecard.objects.filter(
                 id__in=[self.scorecard_kpi.scorecard.pk])
-            self.fields['kpi'].queryset = KPI.objects.filter(id__in=[self.scorecard_kpi.kpi.pk])
+            self.fields['kpi'].queryset = KPI.objects.filter(
+                id__in=[self.scorecard_kpi.kpi.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -109,7 +114,9 @@ class InitiativeModalForm(forms.ModelForm):
             Field('scorecard', type="hidden"),
             Field('kpi', type="hidden"),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-block'),
+                Submit('submitBtn',
+                       _('Submit'),
+                       css_class='btn-success btn-block'),
             )
         )
 
@@ -141,8 +148,10 @@ class ScorecardForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['user'].queryset = User.objects.filter(userprofile__active=True).filter(
-                userprofile__customer__id__in=[self.request.user.userprofile.customer.pk])
+            self.fields['user'].queryset = User.objects.filter(
+                userprofile__active=True).filter(
+                userprofile__customer__id__in=[
+                    self.request.user.userprofile.customer.pk])
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -160,7 +169,8 @@ class ScorecardForm(forms.ModelForm):
             FormActions(
                 Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>"
+                    "".format(
                         reverse('scorecards:scorecards_list'), _("Back")))
             )
         )
@@ -191,7 +201,8 @@ class UserScorecardForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(UserScorecardForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user:
-            self.fields['user'].queryset = User.objects.filter(id__in=[self.request.user.id])
+            self.fields['user'].queryset = User.objects.filter(
+                id__in=[self.request.user.id])
             if self.request.user.userprofile.customer:
                 self.fields['customer'].queryset = Customer.objects.filter(
                     id__in=[self.request.user.userprofile.customer.pk])
@@ -210,9 +221,58 @@ class UserScorecardForm(forms.ModelForm):
             Field('customer', type="hidden"),
             Field('active',),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn',
+                       _('Submit'),
+                       css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>"
+                    "".format(
                         reverse('scorecards:user_scorecards'), _("Back")))
+            )
+        )
+
+
+class ScorecardApprovalForm(forms.ModelForm):
+
+    class Meta:
+        model = Scorecard
+        fields = [
+            'approved',
+            'approved_by',
+            'approval_note'
+        ]
+        widgets = {
+            'approval_note': MiniTextarea(),
+            'approved_by': Select2({'width': "100%"})
+        }
+        field_classes = {
+            'approved_by': UserModelChoiceField
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ScorecardApprovalForm, self).__init__(*args, **kwargs)
+        if self.request:
+            self.fields['approved_by'].queryset = User.objects.filter(
+                id__in=[self.request.user.pk])
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = True
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'scorecard-approval-form'
+        self.helper.layout = Layout(
+            Field('approved',),
+            Field('approved_by',),
+            Field('approval_note',),
+            FormActions(
+                Submit('submitBtn',
+                       _('Submit'),
+                       css_class='btn-success btn-250'),
+                HTML(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>"
+                    "".format(
+                        reverse('scorecards:scorecards_list'), _("Back")))
             )
         )

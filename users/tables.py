@@ -28,7 +28,9 @@ class DepartmentTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', record.get_edit_url(), record.get_delete_url()
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            record.get_edit_url(),
+            record.get_delete_url()
         )
 
     def render_manager(self, record):
@@ -48,7 +50,12 @@ class PositionTable(tables.Table):
         model = Position
         exclude = ['created', 'modified', 'description', 'id',
                    'customer', 'lft', 'rght', 'tree_id', 'level']
-        sequence = ('name', 'department', 'parent', 'supervisor', 'active', '...')
+        sequence = ('name',
+                    'department',
+                    'parent',
+                    'supervisor',
+                    'active',
+                    '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1
@@ -56,7 +63,9 @@ class PositionTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Edit</a> | <a href="{}">Delete</a>', record.get_edit_url(), record.get_delete_url()
+            '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
+            record.get_edit_url(),
+            record.get_delete_url()
         )
 
     def render_supervisor(self, record):
@@ -65,7 +74,9 @@ class PositionTable(tables.Table):
 
 class UserProfileTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
-    email = tables.EmailColumn(verbose_name=_("Email"), accessor='user.email', orderable=True)
+    email = tables.EmailColumn(verbose_name=_("Email"),
+                               accessor='user.email',
+                               orderable=True)
     active = tables.BooleanColumn(
         attrs={
             'td': {'class': "not-active"},
@@ -96,7 +107,9 @@ class UserProfileTable(tables.Table):
 
 class SubordinatesTable(tables.Table):
     action = tables.Column(verbose_name="", accessor='pk', orderable=False)
-    email = tables.EmailColumn(verbose_name=_("Email"), accessor='user.email', orderable=True)
+    email = tables.EmailColumn(verbose_name=_("Email"),
+                               accessor='user.email',
+                               orderable=True)
     active = tables.BooleanColumn(
         attrs={
             'td': {'class': "not-active"},

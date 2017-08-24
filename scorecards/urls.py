@@ -5,7 +5,7 @@ from .views import ScorecardListview, AddScorecard, EditScorecard
 from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
 from .views import InitiativeListSnippet, ScorecardReport, ScoreListSnippet
-from .views import ScorecardReportsListview, UserAddScorecard
+from .views import ScorecardReportsListview, UserAddScorecard, ApproveScorecard
 from .views import UserEditScorecard, UserDeleteScorecard, ScoreGraphSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^add/$', AddScorecard.as_view(), name='scorecards_add'),
     url(r'^edit/(?P<pk>\d+)/$',
         EditScorecard.as_view(), name='scorecards_edit'),
+    url(r'^approve/(?P<pk>\d+)/$',
+        ApproveScorecard.as_view(), name='scorecards_approve'),
     url(r'^delete/(?P<pk>\d+)/$',
         DeleteScorecard.as_view(), name='scorecards_delete'),
     url(r'^staff-scorecards/(?P<pk>\d+)/$',

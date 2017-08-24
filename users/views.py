@@ -12,7 +12,7 @@ from .forms import AddUserProfileForm
 from .models import Department, Position, UserProfile
 
 
-class DepartmentListview(CoreListView, EditorAccess):
+class DepartmentListview(EditorAccess, CoreListView):
     model = Department
     table_class = DepartmentTable
     search_fields = ['name', 'description', 'parent__name']
@@ -24,22 +24,22 @@ class DepartmentListview(CoreListView, EditorAccess):
         return context
 
 
-class AddDepartment(CoreCreateView, EditorAccess):
+class AddDepartment(EditorAccess, CoreCreateView):
     model = Department
     form_class = DepartmentForm
 
 
-class EditDepartment(CoreUpdateView, EditorAccess):
+class EditDepartment(EditorAccess, CoreUpdateView):
     model = Department
     form_class = DepartmentForm
 
 
-class DeleteDepartment(CoreDeleteView, EditorAccess):
+class DeleteDepartment(EditorAccess, CoreDeleteView):
     model = Department
     success_url = reverse_lazy('users:departments_list')
 
 
-class PositionListview(CoreListView, EditorAccess):
+class PositionListview(EditorAccess, CoreListView):
     model = Position
     table_class = PositionTable
     search_fields = ['name', 'description', 'department__name', 'parent__name']
@@ -51,22 +51,22 @@ class PositionListview(CoreListView, EditorAccess):
         return context
 
 
-class AddPosition(CoreCreateView, EditorAccess):
+class AddPosition(EditorAccess, CoreCreateView):
     model = Position
     form_class = PositionForm
 
 
-class EditPosition(CoreUpdateView, EditorAccess):
+class EditPosition(EditorAccess, CoreUpdateView):
     model = Position
     form_class = PositionForm
 
 
-class DeletePosition(CoreDeleteView, EditorAccess):
+class DeletePosition(EditorAccess, CoreDeleteView):
     model = Position
     success_url = reverse_lazy('users:positions_list')
 
 
-class UserProfileListview(CoreListView, EditorAccess):
+class UserProfileListview(EditorAccess, CoreListView):
     model = UserProfile
     table_class = UserProfileTable
     search_fields = ['user__first_name', 'user__last_name', 'user__email']
@@ -102,12 +102,12 @@ class SubordinatesListview(CoreListView):
         return queryset
 
 
-class AddUserProfile(CoreCreateView, EditorAccess):
+class AddUserProfile(EditorAccess, CoreCreateView):
     model = UserProfile
     form_class = AddUserProfileForm
 
 
-class EditUserProfile(CoreUpdateView, EditorAccess):
+class EditUserProfile(EditorAccess, CoreUpdateView):
     model = UserProfile
     form_class = UserProfileForm
 

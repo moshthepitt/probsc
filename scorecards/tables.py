@@ -228,7 +228,9 @@ class ScorecardTable(tables.Table):
                    'description',
                    'id',
                    'customer',
-                   'kpis']
+                   'kpis',
+                   'approved_by',
+                   'approval_note']
         sequence = ('name', 'user', 'year', 'approved', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
@@ -240,8 +242,9 @@ class ScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> '
+            '<a href="{}">Approve</a> | <a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> '
             '| <a href="{}">Delete</a>',
+            record.get_approval_url(),
             record.get_kpis_list_url(),
             record.get_edit_url(),
             record.get_delete_url()
@@ -267,8 +270,16 @@ class ScorecardReportTable(tables.Table):
                    'description',
                    'id',
                    'customer',
-                   'kpis']
-        sequence = ('name', 'user', 'year', 'approved', 'active', 'score', '...')
+                   'kpis',
+                   'approved_by',
+                   'approval_note']
+        sequence = ('name',
+                    'user',
+                    'year',
+                    'approved',
+                    'active',
+                    'score',
+                    '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1
@@ -318,8 +329,16 @@ class UserScorecardTable(tables.Table):
                    'id',
                    'customer',
                    'kpis',
-                   'user']
-        sequence = ('name', 'year', 'approved', 'active', 'score', 'edit', '...')
+                   'user',
+                   'approval_note']
+        sequence = ('name',
+                    'year',
+                    'approved',
+                    'approved_by',
+                    'active',
+                    'score',
+                    'edit',
+                    '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -329,6 +348,9 @@ class UserScorecardTable(tables.Table):
             reverse('scorecards:user_scorecard', args=[record.pk]),
             record.name
         )
+
+    def render_approved_by(self, record):
+        return record.approved_by.userprofile.get_name()
 
     def render_score(self, record):
         report = record.get_report()
@@ -379,8 +401,15 @@ class StaffScorecardTable(tables.Table):
                    'id',
                    'customer',
                    'kpis',
-                   'user']
-        sequence = ('name', 'year', 'approved', 'active', 'score', '...')
+                   'user',
+                   'approval_note']
+        sequence = ('name',
+                    'year',
+                    'approved',
+                    'approved_by',
+                    'active',
+                    'score',
+                    '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -389,6 +418,9 @@ class StaffScorecardTable(tables.Table):
             "<a href='#'>{}</a>",
             record.name
         )
+
+    def render_approved_by(self, record):
+        return record.approved_by.userprofile.get_name()
 
     def render_score(self, record):
         report = record.get_report()
@@ -400,7 +432,9 @@ class StaffScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            "<a href='{c}'>{d}</a>",
+            "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
+            a=record.get_approval_url(),
+            b=_("Approve"),
             c=reverse('scorecards:scorecard_report', args=[record.pk]),
             d=_("View Report")
         )

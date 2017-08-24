@@ -42,6 +42,15 @@ class Scorecard(TimeStampedModel):
     kpis = models.ManyToManyField(
         'kpis.KPI', through='ScorecardKPI', verbose_name=_("KPIs"), blank=True)
     approved = models.BooleanField(_("Approved"), default=False)
+    approved_by = models.ForeignKey(User,
+                                    verbose_name=_("Approved By"),
+                                    on_delete=models.PROTECT,
+                                    related_name="approvals",
+                                    blank=True,
+                                    null=True)
+    approval_note = models.TextField(_("Approval Note"),
+                                     blank=True,
+                                     default="")
     active = models.BooleanField(_("Active"), default=True)
 
     objects = ScorecardManager()
@@ -81,6 +90,9 @@ class Scorecard(TimeStampedModel):
 
     def get_edit_url(self):
         return reverse('scorecards:scorecards_edit', args=[self.pk])
+
+    def get_approval_url(self):
+        return reverse('scorecards:scorecards_approve', args=[self.pk])
 
     def get_delete_url(self):
         return reverse('scorecards:scorecards_delete', args=[self.pk])

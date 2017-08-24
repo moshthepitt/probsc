@@ -17,13 +17,13 @@ from braces.views import LoginRequiredMixin
 from core.generic_views import CoreListView, CoreCreateView
 from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.generic_views import CoreGenericDeleteView
-from core.mixins import VerboseNameMixin
+from core.mixins import VerboseNameMixin, EditorAccess
 from users.mixins import BelongsToUserMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
 from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
 from .tables import ScorecardReportKPITable, ScorecardReportTable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
-from .forms import UserScorecardForm
+from .forms import UserScorecardForm, ScorecardApprovalForm
 from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from .models import Scorecard, ScorecardKPI, Initiative, Score
 
@@ -148,7 +148,7 @@ class StaffScorecards(CoreListView):
         return super(StaffScorecards, self).dispatch(*args, **kwargs)
 
 
-class ScorecardReportsListview(CoreListView):
+class ScorecardReportsListview(EditorAccess, CoreListView):
 
     """ generic (admin) list of scorecards"""
     model = Scorecard
@@ -156,7 +156,7 @@ class ScorecardReportsListview(CoreListView):
     template_name = "scorecards/reports.html"
 
 
-class ScorecardListview(CoreListView):
+class ScorecardListview(EditorAccess, CoreListView):
 
     """ generic (admin) list of scorecards"""
     model = Scorecard
@@ -169,7 +169,7 @@ class ScorecardListview(CoreListView):
         return context
 
 
-class AddScorecard(CoreCreateView):
+class AddScorecard(EditorAccess, CoreCreateView):
     model = Scorecard
     form_class = ScorecardForm
 
@@ -179,12 +179,26 @@ class AddScorecard(CoreCreateView):
         return initial
 
 
-class EditScorecard(CoreUpdateView):
+class EditScorecard(EditorAccess, CoreUpdateView):
     model = Scorecard
     form_class = ScorecardForm
 
 
-class DeleteScorecard(CoreDeleteView):
+class ApproveScorecard(AccessScorecard, CoreUpdateView):
+    model = Scorecard
+    form_class = ScorecardApprovalForm
+    template_name = "scorecards/approve.html"
+
+    def get_initial(self):
+        initial = super(ApproveScorecard, self).get_initial()
+        initial['approved_by'] = self.request.user
+        return initial
+
+    def get_success_url(self):
+        return reverse('scorecards:scorecards_list')
+
+
+class DeleteScorecard(EditorAccess, CoreDeleteView):
     model = Scorecard
     success_url = reverse_lazy('scorecards:scorecards_list')
 
@@ -206,7 +220,7 @@ class UserAddScorecard(CoreCreateView):
                        args=[self.object.id])
 
 
-class UserEditScorecard(EditScorecard, AccessScorecard):
+class UserEditScorecard(CoreUpdateView):
 
     """ the user editting his own scorecard"""
     model = Scorecard
