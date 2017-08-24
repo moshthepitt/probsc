@@ -229,7 +229,7 @@ class ScorecardTable(tables.Table):
                    'id',
                    'customer',
                    'kpis']
-        sequence = ('name', 'user', 'year', 'active', '...')
+        sequence = ('name', 'user', 'year', 'approved', 'active', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1
@@ -268,7 +268,7 @@ class ScorecardReportTable(tables.Table):
                    'id',
                    'customer',
                    'kpis']
-        sequence = ('name', 'user', 'year', 'active', 'score', '...')
+        sequence = ('name', 'user', 'year', 'approved', 'active', 'score', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
         # per_page = 1
@@ -319,7 +319,7 @@ class UserScorecardTable(tables.Table):
                    'customer',
                    'kpis',
                    'user']
-        sequence = ('name', 'year', 'active', 'score', 'edit', '...')
+        sequence = ('name', 'year', 'approved', 'active', 'score', 'edit', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
@@ -380,7 +380,7 @@ class StaffScorecardTable(tables.Table):
                    'customer',
                    'kpis',
                    'user']
-        sequence = ('name', 'year', 'active', 'score', '...')
+        sequence = ('name', 'year', 'approved', 'active', 'score', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
