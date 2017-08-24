@@ -97,28 +97,54 @@ class KPI(TimeStampedModel):
     NO_SEMI_ANNUALLY = 2
     NO_ANNUALLY = 1
 
-    objective = models.ForeignKey(
-        'strategy.Objective', verbose_name=_("Objective"), on_delete=models.PROTECT)
+    objective = models.ForeignKey('strategy.Objective',
+                                  verbose_name=_("Objective"),
+                                  on_delete=models.PROTECT)
     name = models.TextField(_("Key Performance Indicator"), max_length=255)
     measure = models.TextField(_("Measure"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
-    perspective = models.CharField(
-        _("Perspective"), max_length=1, choices=PERSPECTIVE_CHOICES, blank=False)
-    baseline = models.DecimalField(_("Base Line"), max_digits=64, decimal_places=2, default=0)
-    target = models.DecimalField(_("Target"), max_digits=64, decimal_places=2, default=0)
-    unit = models.CharField(
-        _("Unit"), max_length=2, choices=UNIT_CHOICES, blank=False, default=VALUE)
-    direction = models.CharField(
-        _("Direction"), max_length=1, choices=DIRECTION_CHOICES, blank=False, default=UP)
-    weight = models.DecimalField(_("Weight"), max_digits=5, decimal_places=2)
-    reporting_period = models.CharField(
-        _("Reporting Period"), max_length=1, choices=REPORTING_PERIOD_CHOICES, blank=False, default=ANNUALLY)
-    calculation = models.CharField(
-        _("Calculation"), max_length=1, choices=CALCULATION_CHOICES, blank=False, default=SUM)
-    reporting_method = models.CharField(
-        _("Reporting Method"), max_length=1, choices=REPORTING_METHOD_CHOICES, blank=False, default=MANUAL)
-    customer = models.ForeignKey(
-        'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
+    perspective = models.CharField(_("Perspective"),
+                                   max_length=1,
+                                   choices=PERSPECTIVE_CHOICES,
+                                   blank=False)
+    baseline = models.DecimalField(_("Base Line"),
+                                   max_digits=64,
+                                   decimal_places=2,
+                                   default=0)
+    target = models.DecimalField(_("Target"),
+                                 max_digits=64,
+                                 decimal_places=2,
+                                 default=0)
+    unit = models.CharField(_("Unit"),
+                            max_length=2,
+                            choices=UNIT_CHOICES,
+                            blank=False,
+                            default=VALUE)
+    direction = models.CharField(_("Direction"),
+                                 max_length=1,
+                                 choices=DIRECTION_CHOICES,
+                                 blank=False,
+                                 default=UP)
+    weight = models.DecimalField(_("Weight"),
+                                 max_digits=5, decimal_places=2)
+    reporting_period = models.CharField(_("Reporting Period"),
+                                        max_length=1,
+                                        choices=REPORTING_PERIOD_CHOICES,
+                                        blank=False,
+                                        default=ANNUALLY)
+    calculation = models.CharField(_("Calculation"),
+                                   max_length=1,
+                                   choices=CALCULATION_CHOICES,
+                                   blank=False,
+                                   default=SUM)
+    reporting_method = models.CharField(_("Reporting Method"),
+                                        max_length=1,
+                                        choices=REPORTING_METHOD_CHOICES,
+                                        blank=False,
+                                        default=MANUAL)
+    customer = models.ForeignKey('customers.Customer',
+                                 verbose_name=_("Customer"),
+                                 on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
 
     objects = KPIManager()
