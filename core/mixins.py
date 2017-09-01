@@ -37,13 +37,15 @@ class CachePageForUserMixin(object):
 class LoginRequiredMixin(object):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(LoginRequiredMixin, self).dispatch(request, *args, **kwargs)
+        return super(LoginRequiredMixin, self).dispatch(
+            request, *args, **kwargs)
 
 
 class StaffmemberRequiredMixin(object):
     @method_decorator(staff_member_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(StaffmemberRequiredMixin, self).dispatch(request, *args, **kwargs)
+        return super(StaffmemberRequiredMixin, self).dispatch(
+            request, *args, **kwargs)
 
 
 class CoreFormKwargsMixin(object):
@@ -77,7 +79,8 @@ class ListViewSearchMixin(object):
         queryset = super(ListViewSearchMixin, self).get_queryset()
         form = self.form_class(self.request.GET)
         if form.is_valid() and self.search_fields:
-            search_terms = ["{}__icontains".format(x) for x in self.search_fields]
+            search_terms = [
+                "{}__icontains".format(x) for x in self.search_fields]
             query = Q()
             for term in search_terms:
                 query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)

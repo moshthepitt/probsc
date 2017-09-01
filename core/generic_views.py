@@ -9,17 +9,19 @@ from braces.views import LoginRequiredMixin, FormMessagesMixin
 from django_tables2 import SingleTableView
 
 from core.mixins import CoreFormMixin, ListViewSearchMixin, VerboseNameMixin
-from customers.mixins import CustomerFormMixin, CustomerCheckMixin, CustomerExistsMixin
-from customers.mixins import CustomerFilterMixin
+from customers.mixins import CustomerFormMixin, CustomerCheckMixin
+from customers.mixins import CustomerFilterMixin, CustomerExistsMixin
 
 
-class CoreListView(LoginRequiredMixin, CustomerExistsMixin, CustomerFilterMixin,
-                   VerboseNameMixin, ListViewSearchMixin, SingleTableView, ListView):
+class CoreListView(LoginRequiredMixin, CustomerExistsMixin,
+                   CustomerFilterMixin, VerboseNameMixin, ListViewSearchMixin,
+                   SingleTableView, ListView):
     template_name = "core/crud/list.html"
 
 
-class CoreCreateView(LoginRequiredMixin, CustomerExistsMixin, FormMessagesMixin,
-                     VerboseNameMixin, CoreFormMixin, CustomerFormMixin, CreateView):
+class CoreCreateView(LoginRequiredMixin, CustomerExistsMixin,
+                     FormMessagesMixin, VerboseNameMixin, CoreFormMixin,
+                     CustomerFormMixin, CreateView):
     template_name = "core/crud/create.html"
     form_valid_message = _("Saved successfully!")
     form_invalid_message = _("Please correct the errors below.")
@@ -45,6 +47,7 @@ class CoreDeleteView(CoreGenericDeleteView):
         try:
             return super(CoreDeleteView, self).delete(request, *args, **kwargs)
         except ProtectedError:
-            info = _("You cannot delete this item, it is referenced by other items.")
+            info = _("You cannot delete this item, it is referenced by other "
+                     "items.")
             messages.error(request, info, fail_silently=True)
             return redirect(self.object.get_delete_url())
