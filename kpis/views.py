@@ -73,11 +73,19 @@ class AddScorecardKPI(KPICreateMixin,
     form_class = KPIForm
     template_name = "scorecards/kpis_create.html"
 
+    def get_success_url(self):
+        return reverse('scorecards:scorecards_kpis_list', args=[
+            self.scorecard.pk])
+
 
 class EditScorecardKPI(ScorecardFormMixin, ScorecardMixin, CoreUpdateView):
     model = KPI
     form_class = KPIForm
     template_name = "scorecards/kpis_edit.html"
+
+    def get_success_url(self):
+        return reverse('scorecards:scorecards_kpis_list', args=[
+            self.scorecard.pk])
 
 
 class DeleteScorecardKPI(ScorecardMixin, CoreGenericDeleteView):

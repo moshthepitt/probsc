@@ -19,14 +19,15 @@ from core.generic_views import CoreUpdateView, CoreDeleteView
 from core.generic_views import CoreGenericDeleteView
 from core.mixins import VerboseNameMixin, EditorAccess
 from users.mixins import BelongsToUserMixin
+from scorecards.mixins import ScorecardMixin, ScorecardFormMixin
 from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
-from .tables import UserScorecardKPITable, InitiativeTable, ScoreTable
-from .tables import ScorecardReportKPITable, ScorecardReportTable
+from .tables import UserScorecardKPITable, InitiativeTable, EvidenceTable
+from .tables import ScorecardReportKPITable, ScorecardReportTable, ScoreTable
 from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from .forms import UserScorecardForm, ScorecardApprovalForm
-from .forms import StaffScorecardApprovalForm
+from .forms import StaffScorecardApprovalForm, EvidenceForm
 from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
-from .models import Scorecard, ScorecardKPI, Initiative, Score
+from .models import Scorecard, ScorecardKPI, Initiative, Score, Evidence
 
 
 class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard,
@@ -297,3 +298,55 @@ class UserScorecards(CoreListView):
     def dispatch(self, request, *args, **kwargs):
         self.object = request.user
         return super(UserScorecards, self).dispatch(request, *args, **kwargs)
+
+
+class ScorecardEvidenceListview(EditorAccess, ScorecardMixin, CoreListView):
+    model = Evidence
+    table_class = EvidenceTable
+    search_fields = ['name']
+
+    def get_queryset(self):
+        queryset = super(ScorecardEvidenceListview, self).get_queryset()
+        return queryset.filter(scorecard=self.scorecard)
+
+    def get_context_data(self, **kwargs):
+        context = super(ScorecardEvidenceListview, self).get_context_data(
+            **kwargs)
+        context['create_view_url'] = reverse_lazy(
+            'scorecards:scorecard_evidence_add', args=[self.scorecard.pk])
+        context['list_view_url'] = reverse_lazy(
+            'scorecards:scorecard_evidence_list', args=[self.scorecard.pk])
+        return context
+
+
+class AddScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
+                           CoreCreateView):
+    model = Evidence
+    form_class = EvidenceForm
+
+    def get_initial(self):
+        initial = super(AddScorecardEvidence, self).get_initial()
+        initial['scorecard'] = self.scorecard
+        return initial
+
+    def get_success_url(self):
+        return reverse('scorecards:scorecard_evidence_list',
+                       args=[self.scorecard.pk])
+
+
+class EditScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
+                            CoreUpdateView):
+    model = Evidence
+    form_class = EvidenceForm
+
+    def get_success_url(self):
+        return reverse('scorecards:scorecard_evidence_list',
+                       args=[self.scorecard.pk])
+
+
+class DeleteScorecardEvidence(EditorAccess, ScorecardMixin, CoreDeleteView):
+    model = Evidence
+
+    def get_success_url(self):
+        return reverse('scorecards:scorecard_evidence_list', args=[
+            self.scorecard.id])

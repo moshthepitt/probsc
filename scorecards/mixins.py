@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from django.urls import reverse
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -36,7 +35,8 @@ class ScorecardBelongsToUserMixin(object):
     def dispatch(self, *args, **kwargs):
         if self.get_object().scorecard.user != self.request.user:
             raise Http404
-        return super(ScorecardBelongsToUserMixin, self).dispatch(*args, **kwargs)
+        return super(ScorecardBelongsToUserMixin, self).dispatch(
+            *args, **kwargs)
 
 
 class AccessScorecard(object):
@@ -81,12 +81,11 @@ class ScorecardMixin(object):
         context['scorecard'] = self.scorecard
         return context
 
-    def get_success_url(self):
-        return reverse('scorecards:scorecards_kpis_list', args=[self.scorecard.pk])
-
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        self.scorecard = get_object_or_404(Scorecard, pk=kwargs.pop('scorecard_pk', None))
+        self.scorecard = get_object_or_404(
+            Scorecard,
+            pk=kwargs.pop('scorecard_pk', None))
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
         if (self.request.user.userprofile.is_admin()) or\

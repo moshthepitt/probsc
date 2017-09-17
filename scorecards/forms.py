@@ -13,7 +13,7 @@ from core.widgets import MiniTextarea
 from core.utils import get_year_choices
 from users.fields import UserModelChoiceField
 from kpis.models import KPI
-from .models import Scorecard, Initiative, Score
+from .models import Scorecard, Initiative, Score, Evidence
 
 
 class ScoreModalForm(forms.ModelForm):
@@ -323,5 +323,46 @@ class StaffScorecardApprovalForm(forms.ModelForm):
                         reverse('scorecards:staff_scorecards',
                                 args=[self.instance.user.pk]),
                         _("Back")))
+            )
+        )
+
+
+class EvidenceForm(forms.ModelForm):
+
+    class Meta:
+        model = Evidence
+        fields = [
+            'scorecard',
+            'name',
+            'date',
+            'file'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.scorecard = kwargs.pop('scorecard', None)
+        super(EvidenceForm, self).__init__(*args, **kwargs)
+        cancel_url = reverse('scorecards:scorecard_evidence_list',
+                             args=[self.scorecard.pk])
+        self.fields['scorecard'].queryset = Scorecard.objects.filter(
+            id__in=[self.scorecard.pk])
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = True
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'evidence-form'
+        self.helper.layout = Layout(
+            Field('name',),
+            Field('date',),
+            Field('file',),
+            Field('scorecard', type="hidden"),
+            FormActions(
+                Submit('submitBtn', _('Submit'),
+                       css_class='btn-success btn-250'),
+                HTML(
+                    "<a class='btn btn-default btn-250' href='{}'>{}</a>"
+                    .format(cancel_url, _("Back")))
             )
         )

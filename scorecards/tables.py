@@ -6,7 +6,7 @@ from django.urls import reverse
 
 import django_tables2 as tables
 
-from .models import Scorecard, ScorecardKPI, Initiative, Score
+from .models import Scorecard, ScorecardKPI, Initiative, Score, Evidence
 
 TWOPLACES = Decimal(10) ** -2
 
@@ -495,3 +495,26 @@ class ScoreTable(tables.Table):
         )
 
 
+class EvidenceTable(tables.Table):
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+
+    class Meta:
+        model = Evidence
+        exclude = ['created',
+                   'modified',
+                   'file',
+                   'id']
+        sequence = ('date', 'name', 'scorecard', '...')
+        empty_text = _("Nothing to show")
+        template = "django_tables2/bootstrap.html"
+
+    def render_action(self, record):
+        return format_html(
+            "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
+            a=reverse('scorecards:scorecard_evidence_edit',
+                      args=[record.pk, record.scorecard.pk]),
+            b=_("Edit"),
+            c=reverse('scorecards:scorecard_evidence_delete',
+                      args=[record.pk, record.scorecard.pk]),
+            d=_("Delete")
+        )

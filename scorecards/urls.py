@@ -6,7 +6,9 @@ from .views import DeleteScorecard, UserScorecards, StaffScorecards
 from .views import UserScorecard, AddInitiativeSnippet, AddScoreSnippet
 from .views import InitiativeListSnippet, ScorecardReport, ScoreListSnippet
 from .views import ScorecardReportsListview, UserAddScorecard, ApproveScorecard
-from .views import StaffApproveScorecard
+from .views import StaffApproveScorecard, ScorecardEvidenceListview
+from .views import EditScorecardEvidence, DeleteScorecardEvidence
+from .views import AddScorecardEvidence
 from .views import UserEditScorecard, UserDeleteScorecard, ScoreGraphSnippet
 from kpis.views import ScorecardKPIListview, AddScorecardKPI
 from kpis.views import EditScorecardKPI, DeleteScorecardKPI
@@ -68,6 +70,15 @@ urlpatterns = [
         UserDeleteScorecardKPI.as_view(), name='user_scorecards_kpis_delete'),
     url(r'^my-kpis/(?P<scorecard_pk>\d+)/$',
         UserScorecardKPIListview.as_view(), name='user_scorecards_kpis_list'),
+    # evidence
+    url(r'^evidence/add/(?P<scorecard_pk>\d+)/$',
+        AddScorecardEvidence.as_view(), name='scorecard_evidence_add'),
+    url(r'^evidence/edit/(?P<pk>\d+)/(?P<scorecard_pk>\d+)/$',
+        EditScorecardEvidence.as_view(), name='scorecard_evidence_edit'),
+    url(r'^evidence/delete/(?P<pk>\d+)/(?P<scorecard_pk>\d+)/$',
+        DeleteScorecardEvidence.as_view(), name='scorecard_evidence_delete'),
+    url(r'^evidence/(?P<scorecard_pk>\d+)/$',
+        ScorecardEvidenceListview.as_view(), name='scorecard_evidence_list'),
     # snippets
     url(r'^snippets/add-initiative/(?P<pk>\d+)/$',
         AddInitiativeSnippet.as_view(),

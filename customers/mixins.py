@@ -1,4 +1,5 @@
 from django.http import Http404
+from django.core.exceptions import FieldError
 
 
 class CustomerFormMixin(object):
@@ -14,16 +15,24 @@ class CustomerFormMixin(object):
 
 class CustomerCheckMixin(object):
     """
-    Used in detail and update views to ensure that the user has the right to view the object
+    Used in detail and update views to ensure that the user has the right to
+    view the object
     """
     def dispatch(self, *args, **kwargs):
         if self.request.user.is_authenticated():
             # if current user is not tied to a customer then redirect them away
             if not self.request.user.userprofile.customer:
                 raise Http404
-            # if current user is not tied to a subscription then redirect them away
-            if self.request.user.userprofile.customer != self.get_object().customer:
-                raise Http404
+            # if current user is not tied to a subscription then redirect
+            # them away
+            if hasattr(self.get_object(), 'customer'):
+                if self.request.user.userprofile.customer !=\
+                        self.get_object().customer:
+                    raise Http404
+            elif hasattr(self.get_object(), 'scorecard'):
+                if self.request.user.userprofile.customer !=\
+                        self.get_object().scorecard.customer:
+                    raise Http404
         return super(CustomerCheckMixin, self).dispatch(*args, **kwargs)
 
 
@@ -45,4 +54,8 @@ class CustomerFilterMixin(object):
 
     def get_queryset(self):
         queryset = super(CustomerFilterMixin, self).get_queryset()
-        return queryset.filter(customer=self.request.user.userprofile.customer)
+        try:
+            return queryset.filter(
+                customer=self.request.user.userprofile.customer)
+        except FieldError:
+            return queryset
