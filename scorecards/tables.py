@@ -516,7 +516,7 @@ class EvidenceTable(tables.Table):
         model = Evidence
         exclude = ['created',
                    'modified',
-                   'file',
+                   # 'file',
                    'id']
         sequence = ('date', 'name', 'scorecard', '...')
         empty_text = _("Nothing to show")
