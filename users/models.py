@@ -19,13 +19,16 @@ class Department(MPTTModel, TimeStampedModel):
     """
     name = models.CharField(_("Name"), max_length=255)
     description = models.TextField(_("Description"), blank=True, default="")
-    parent = TreeForeignKey('self', verbose_name=_("Parent"), null=True, blank=True,
-                            related_name='children', db_index=True, on_delete=models.PROTECT,
+    parent = TreeForeignKey('self', verbose_name=_("Parent"), null=True,
+                            blank=True, related_name='children', db_index=True,
+                            on_delete=models.PROTECT,
                             help_text=_("The parent department"))
     customer = models.ForeignKey(
-        'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
+        'customers.Customer', verbose_name=_("Customer"),
+        on_delete=models.PROTECT)
     manager = models.ForeignKey(
-        User, verbose_name=_("Manager"), on_delete=models.PROTECT, blank=True, null=True)
+        User, verbose_name=_("Manager"), on_delete=models.PROTECT,
+        blank=True, null=True)
     active = models.BooleanField(_("Active"), default=True)
 
     objects = DepartmentManager()
@@ -60,13 +63,16 @@ class Position(MPTTModel, TimeStampedModel):
     description = models.TextField(_("Description"), blank=True, default="")
     department = models.ForeignKey(
         Department, verbose_name=_("Department"), on_delete=models.PROTECT)
-    parent = TreeForeignKey('self', verbose_name=_("Reports To"), null=True, blank=True,
-                            related_name='children', db_index=True, on_delete=models.PROTECT,
+    parent = TreeForeignKey('self', verbose_name=_("Reports To"), null=True,
+                            blank=True, related_name='children', db_index=True,
+                            on_delete=models.PROTECT,
                             help_text=_("The parent Job Position"))
     supervisor = models.ForeignKey(
-        User, verbose_name=_("Supervisor"), on_delete=models.PROTECT, blank=True, null=True)
+        User, verbose_name=_("Supervisor"), on_delete=models.PROTECT,
+        blank=True, null=True)
     customer = models.ForeignKey(
-        'customers.Customer', verbose_name=_("Customer"), on_delete=models.PROTECT)
+        'customers.Customer', verbose_name=_("Customer"),
+        on_delete=models.PROTECT)
     active = models.BooleanField(_("Active"), default=True)
 
     objects = PositionManager()
@@ -113,13 +119,17 @@ class UserProfile(models.Model):
     updated_on = models.DateTimeField(_("Updated on"), auto_now=True)
     user = models.OneToOneField(User, verbose_name=_("User"))
     position = models.ForeignKey(Position, verbose_name=_(
-        "job Position"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
+        "job Position"), on_delete=models.SET_NULL, blank=True, null=True,
+        default=None)
     customer = models.ForeignKey('customers.Customer', verbose_name=_(
-        "Customer"), on_delete=models.SET_NULL, blank=True, null=True, default=None)
+        "Customer"), on_delete=models.SET_NULL, blank=True, null=True,
+        default=None)
     role = models.CharField(
-        _("Role"), max_length=1, choices=MEMBER_ROLE_CHOICES, blank=False, default=MEMBER)
+        _("Role"), max_length=1, choices=MEMBER_ROLE_CHOICES, blank=False,
+        default=MEMBER)
     active = models.BooleanField(
-        _("Active"), default=True, help_text="Is the staff member actively employed?")
+        _("Active"), default=True, help_text="Is the staff member actively "
+                                             "employed?")
 
     objects = UserProfileManager()
 
@@ -137,7 +147,8 @@ class UserProfile(models.Model):
 
     def get_initials(self):
         if self.user.first_name and self.user.last_name:
-            return "{}{}".format(self.user.first_name[0], self.user.last_name[0])
+            return "{}{}".format(self.user.first_name[0],
+                                 self.user.last_name[0])
         if self.user.first_name:
             return self.user.first_name[0]
         if self.user.last_name:
@@ -152,13 +163,22 @@ class UserProfile(models.Model):
 
     def get_subordinates(self):
         """
-        Returns a queryset of UserProfile objects which report to this userprofile
+        Returns a queryset of UserProfile objects which report to this
+        userprofile
         """
-        queryset = UserProfile.objects.active().exclude(
-            id=self.id).filter(
-            models.Q(
-                position__supervisor=self.user) | models.Q(
-                position__department__manager=self.user))
+        if self.position:
+            queryset = UserProfile.objects.active().exclude(
+                id=self.id).filter(
+                models.Q(
+                    position__supervisor=self.user) | models.Q(
+                    position__department__manager=self.user) | models.Q(
+                    position__parent=self.position))
+        else:
+            queryset = UserProfile.objects.active().exclude(
+                id=self.id).filter(
+                models.Q(
+                    position__supervisor=self.user) | models.Q(
+                    position__department__manager=self.user))
         return queryset
 
     def has_subordinates(self):
