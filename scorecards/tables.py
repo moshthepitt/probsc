@@ -516,9 +516,8 @@ class EvidenceTable(tables.Table):
         model = Evidence
         exclude = ['created',
                    'modified',
-                   # 'file',
                    'id']
-        sequence = ('date', 'name', 'scorecard', '...')
+        sequence = ('date', 'name', 'scorecard', 'file', '...')
         empty_text = _("Nothing to show")
         template = "django_tables2/bootstrap.html"
 
