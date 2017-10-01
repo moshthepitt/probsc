@@ -242,12 +242,14 @@ class ScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            '<a href="{}">Approve</a> | <a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> '
-            '| <a href="{}">Delete</a>',
-            record.get_approval_url(),
-            record.get_kpis_list_url(),
-            record.get_edit_url(),
-            record.get_delete_url()
+            '<a href="{a}">Approve</a> | <a href="{b}">Manage KPIs</a> | '
+            '<a href="{e}">Evidence</a> | <a href="{c}">Edit</a> '
+            '| <a href="{d}">Delete</a>',
+            a=record.get_approval_url(),
+            b=record.get_kpis_list_url(),
+            c=record.get_edit_url(),
+            d=record.get_delete_url(),
+            e=reverse('scorecards:scorecard_evidence_list', args=[record.id])
         )
 
 
@@ -362,20 +364,29 @@ class UserScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
+            "<a href='{e}'>{f}</a> | <a href='{a}'>{b}</a> | <a href='{c}'>{d}"
+            "</a>",
             a=reverse('scorecards:user_scorecard', args=[record.pk]),
             b=_("Record Scores"),
             c=reverse('scorecards:scorecard_report', args=[record.pk]),
-            d=_("View Report")
+            d=_("View Report"),
+            e="{}?next={}".format(
+                reverse('scorecards:scorecard_evidence_add',
+                        args=[record.pk]),
+                reverse('scorecards:user_scorecards')
+                ),
+            f=_("Add Evidence")
         )
 
     def render_edit(self, record):
         return format_html(
-            '<a href="{}">Manage KPIs</a> | <a href="{}">Edit</a> '
-            '| <a href="{}">Delete</a>',
-            reverse('scorecards:user_scorecards_kpis_list', args=[record.id]),
-            reverse('scorecards:user_scorecards_edit', args=[record.id]),
-            reverse('scorecards:user_scorecards_delete', args=[record.id]),
+            '<a href="{a}">Manage KPIs</a> | <a href="{d}">Evidence</a> | '
+            '<a href="{b}">Edit</a> | <a href="{c}">Delete</a>',
+            a=reverse('scorecards:user_scorecards_kpis_list',
+                      args=[record.id]),
+            b=reverse('scorecards:user_scorecards_edit', args=[record.id]),
+            c=reverse('scorecards:user_scorecards_delete', args=[record.id]),
+            d=reverse('scorecards:scorecard_evidence_list', args=[record.id]),
         )
 
 
@@ -432,11 +443,14 @@ class StaffScorecardTable(tables.Table):
 
     def render_action(self, record):
         return format_html(
-            "<a href='{a}'>{b}</a> | <a href='{c}'>{d}</a>",
+            "<a href='{a}'>{b}</a> | <a href='{e}'>{f}</a> | <a href='{c}'>{d}"
+            "</a>",
             a=reverse('scorecards:staff_scorecards_approve', args=[record.pk]),
             b=_("Approve"),
             c=reverse('scorecards:scorecard_report', args=[record.pk]),
-            d=_("View Report")
+            d=_("View Report"),
+            e=reverse('scorecards:scorecard_evidence_list', args=[record.id]),
+            f=_("Evidence"),
         )
 
 

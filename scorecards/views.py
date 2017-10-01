@@ -330,6 +330,8 @@ class AddScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
         return initial
 
     def get_success_url(self):
+        if self.request.GET.get('next'):
+            return self.request.GET.get('next')
         return reverse('scorecards:scorecard_evidence_list',
                        args=[self.scorecard.pk])
 
