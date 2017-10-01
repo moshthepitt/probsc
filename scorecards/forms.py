@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
@@ -167,7 +168,8 @@ class ScorecardForm(forms.ModelForm):
             Field('customer', type="hidden"),
             Field('active',),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn', _('Submit'), css_class='btn-success '
+                                                           'btn-250'),
                 HTML(
                     "<a class='btn btn-default btn-250' href='{}'>{}</a>"
                     "".format(
@@ -366,3 +368,12 @@ class EvidenceForm(forms.ModelForm):
                     .format(cancel_url, _("Back")))
             )
         )
+
+    def clean_file(self):
+        value = self.cleaned_data['file']
+        if value.content_type not in settings.ALLOWED_UPLOADS:
+            raise forms.ValidationError(_('You can only upload PDF, Word '
+                                          'and/or Excel files.'))
+        if value._size > settings.MAX_UPLOAD_SIZE:
+            raise forms.ValidationError(_('Maximum file upload size is 5MB.'))
+        return value

@@ -134,16 +134,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # NOQA
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # NOQA
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # NOQA
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',  # NOQA
     },
 ]
 
@@ -260,11 +260,19 @@ BSC_COLOR_BAD = "#d9534f"
 BSC_COLOR_GOOD = "#5cb85c"
 BSC_COLOR_WARN = "#f0ad4e"
 
+ALLOWED_UPLOADS = ['application/pdf', 'application/msword',
+                   'application/vnd.openxmlformats-officedocument.wordprocessi'
+                   'ngml.document', 'application/vnd.ms-excel',
+                   'application/vnd.openxmlformats-officedocument.spreadsheetm'
+                   'l.sheet', 'application/vnd.oasis.opendocument.text',
+                   'application/rtf', 'application/vnd.ms-powerpoint']
+MAX_UPLOAD_SIZE = 5242880  # 5MB
+
 # Easy Seelect2
 SELECT2_USE_BUNDLED_JQUERY = False
 
 
 try:
-    from .local_settings import *
+    from .local_settings import *  # NOQA
 except ImportError:
     pass
