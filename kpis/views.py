@@ -16,19 +16,24 @@ from .forms import KPIForm, UserKPIForm
 from .models import KPI
 
 
-class KPIListview(EditorAccess, CoreListView):
+class KPIBaseListview(CoreListView):
     model = KPI
     table_class = KPITable
     search_fields = ['name', 'measure', 'description']
 
     def get_context_data(self, **kwargs):
-        context = super(KPIListview, self).get_context_data(**kwargs)
+        context = super(KPIBaseListview, self).get_context_data(**kwargs)
         context['create_view_url'] = reverse_lazy('kpis:kpis_add')
         context['list_view_url'] = reverse_lazy('kpis:kpis_list')
         return context
 
 
-class ScorecardKPIListview(ScorecardMixin, KPIListview):
+class KPIListview(EditorAccess, KPIBaseListview):
+
+    pass
+
+
+class ScorecardKPIListview(ScorecardMixin, KPIBaseListview):
     template_name = "scorecards/kpis_list.html"
     table_class = ScorecardKPITable
 

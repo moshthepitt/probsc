@@ -161,6 +161,9 @@ class UserProfile(models.Model):
     def is_editor(self):
         return self.role == self.EDITOR
 
+    def can_edit(self):
+        return self.role == self.EDITOR or self.role == self.ADMIN
+
     def get_subordinates(self):
         """
         Returns a queryset of UserProfile objects which report to this

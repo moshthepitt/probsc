@@ -134,8 +134,7 @@ class EditorAccess(object):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         can_access = False
-        if self.request.user.userprofile.is_admin() or\
-           self.request.user.userprofile.is_editor():
+        if self.request.user.userprofile.can_edit():
             can_access = True
         if not can_access:
             raise Http404

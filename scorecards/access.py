@@ -8,7 +8,7 @@ def can_access_scorecard(this_object, user):
     """
     subordinates = user.userprofile.get_subordinates()
     can_access = False
-    if user.userprofile.is_admin():
+    if user.userprofile.can_edit():
         can_access = True
     elif (hasattr(this_object, 'user')) and\
          (this_object.user.userprofile in subordinates):

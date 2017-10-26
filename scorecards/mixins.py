@@ -52,7 +52,7 @@ class AccessScorecard(object):
     def dispatch(self, *args, **kwargs):
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
-        if self.request.user.userprofile.is_admin():
+        if self.request.user.userprofile.can_edit():
             can_access = True
         elif (hasattr(self.get_object(), 'user')) and\
              (self.get_object().user.userprofile in subordinates):
@@ -88,7 +88,7 @@ class ScorecardMixin(object):
             pk=kwargs.pop('scorecard_pk', None))
         subordinates = self.request.user.userprofile.get_subordinates()
         can_access = False
-        if (self.request.user.userprofile.is_admin()) or\
+        if (self.request.user.userprofile.can_edit()) or\
            (self.scorecard.user.userprofile in subordinates):
             can_access = True
         elif self.scorecard.user == self.request.user:
