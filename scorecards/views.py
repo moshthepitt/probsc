@@ -300,7 +300,7 @@ class UserScorecards(CoreListView):
         return super(UserScorecards, self).dispatch(request, *args, **kwargs)
 
 
-class ScorecardEvidenceListview(EditorAccess, ScorecardMixin, CoreListView):
+class ScorecardEvidenceListview(ScorecardMixin, CoreListView):
     model = Evidence
     table_class = EvidenceTable
     search_fields = ['name']
@@ -319,7 +319,7 @@ class ScorecardEvidenceListview(EditorAccess, ScorecardMixin, CoreListView):
         return context
 
 
-class AddScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
+class AddScorecardEvidence(ScorecardFormMixin, ScorecardMixin,
                            CoreCreateView):
     model = Evidence
     form_class = EvidenceForm
@@ -336,7 +336,7 @@ class AddScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
                        args=[self.scorecard.pk])
 
 
-class EditScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
+class EditScorecardEvidence(ScorecardFormMixin, ScorecardMixin,
                             CoreUpdateView):
     model = Evidence
     form_class = EvidenceForm
@@ -346,7 +346,7 @@ class EditScorecardEvidence(EditorAccess, ScorecardFormMixin, ScorecardMixin,
                        args=[self.scorecard.pk])
 
 
-class DeleteScorecardEvidence(EditorAccess, ScorecardMixin, CoreDeleteView):
+class DeleteScorecardEvidence(ScorecardMixin, CoreDeleteView):
     model = Evidence
 
     def get_success_url(self):
