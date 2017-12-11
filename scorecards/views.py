@@ -156,6 +156,15 @@ class ScorecardReportsListview(EditorAccess, CoreListView):
     model = Scorecard
     table_class = ScorecardReportTable
     template_name = "scorecards/reports.html"
+    search_fields = ['name', 'description', 'user__first_name',
+                     'user__last_name', 'user__email']
+
+    def get_context_data(self, **kwargs):
+        context = super(ScorecardReportsListview, self).get_context_data(
+            **kwargs)
+        context['list_view_url'] = reverse_lazy(
+            'scorecards:scorecards_reports')
+        return context
 
 
 class ScorecardListview(EditorAccess, CoreListView):
