@@ -271,6 +271,13 @@ MAX_UPLOAD_SIZE = 5242880  # 5MB
 # Easy Seelect2
 SELECT2_USE_BUNDLED_JQUERY = False
 
+# CELERY
+CELERY_BROKER_URL = 'redis://localhost:6379/4'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/4'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'
 
 try:
     from .local_settings import *  # NOQA
