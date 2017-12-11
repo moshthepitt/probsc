@@ -127,6 +127,8 @@ class StaffScorecards(CoreListView):
     model = Scorecard
     table_class = StaffScorecardTable
     template_name = "scorecards/staff_scorecards.html"
+    search_fields = ['name', 'description', 'user__first_name',
+                     'user__last_name', 'user__email']
 
     def get_context_data(self, **kwargs):
         context = super(StaffScorecards, self).get_context_data(**kwargs)
@@ -172,6 +174,8 @@ class ScorecardListview(EditorAccess, CoreListView):
     """ generic (admin) list of scorecards"""
     model = Scorecard
     table_class = ScorecardTable
+    search_fields = ['name', 'description', 'user__first_name',
+                     'user__last_name', 'user__email']
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardListview, self).get_context_data(**kwargs)
@@ -291,6 +295,8 @@ class UserScorecards(CoreListView):
     model = Scorecard
     table_class = UserScorecardTable
     template_name = "scorecards/user_scorecards.html"
+    search_fields = ['name', 'description', 'user__first_name',
+                     'user__last_name', 'user__email']
 
     def get_context_data(self, **kwargs):
         context = super(UserScorecards, self).get_context_data(**kwargs)
