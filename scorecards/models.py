@@ -227,14 +227,20 @@ class ScorecardKPI(TimeStampedModel):
                 actual = (self.kpi.target / Decimal(0.0000000001)) \
                     * Decimal(100)
             else:
-                actual = (self.kpi.target / value) * Decimal(100)
+                try:
+                    actual = (self.kpi.target / value) * Decimal(100)
+                except DecimalException:
+                    actual = Decimal(0)
         else:
             # direction is UP
             if self.kpi.target == Decimal(0):
                 # dirty hack to avoid division by zero
                 actual = (value / Decimal(0.0000000001)) * Decimal(100)
             else:
-                actual = (value / self.kpi.target) * Decimal(100)
+                try:
+                    actual = (value / self.kpi.target) * Decimal(100)
+                except DecimalException:
+                    actual = Decimal(0)
         return actual
 
     def get_actual_rating(self, this_round=1):
@@ -268,7 +274,10 @@ class ScorecardKPI(TimeStampedModel):
         except DecimalException:
             actual = Decimal(0)
         else:
-            actual = self.get_score() / weight_percentage
+            try:
+                actual = self.get_score() / weight_percentage
+            except DecimalException:
+                actual = Decimal(0)
         if actual > Decimal(5.0):
             return Decimal(5.0)
         return actual
