@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from django import forms
+from django.db.models import Sum
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 
@@ -10,7 +13,8 @@ from easy_select2.widgets import Select2
 from customers.models import Customer
 from strategy.models import Objective
 from core.widgets import MiniTextarea
-from .models import KPI
+from scorecards.models import ScorecardKPI
+from kpis.models import KPI
 
 
 class KPIForm(forms.ModelForm):
@@ -39,6 +43,35 @@ class KPIForm(forms.ModelForm):
             'measure': MiniTextarea(),
             'objective': Select2({'width': "100%"})
         }
+
+    def clean_weight(self):
+        value = self.cleaned_data['weight']
+        # ensure that the total weight values are not more than 100%
+        if self.scorecard:
+            try:
+                scorecard_kpis = ScorecardKPI.objects.filter(
+                    scorecard=self.scorecard)
+            except ScorecardKPI.DoesNotExist:
+                pass
+            else:
+                if self.instance and self.instance.id:
+                    # this kpi already exists
+                    # we remove it from the queryset so that its weight
+                    # is not summed up below
+                    scorecard_kpis = scorecard_kpis.exclude(kpi=self.instance)
+
+                sum_dict = scorecard_kpis.aggregate(
+                                weight_sum=Sum('kpi__weight'))
+                # sum of all weights in the scorecard, excluding the
+                # current one
+                weight_sum = sum_dict['weight_sum']
+                # ensure that the sums does not go above 100%
+                if (value + weight_sum) > Decimal(100):
+                    raise forms.ValidationError(
+                        _('The sum of the weights in a Scorecard cannot exceed'
+                          ' 100%.  Please reduce the value of this weight, or'
+                          ' of other weights in this scorecard.'))
+        return value
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
