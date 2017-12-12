@@ -17,7 +17,39 @@ from scorecards.models import ScorecardKPI
 from kpis.models import KPI
 
 
+def clean_weight_func(value, kpi, scorecard):
+    """
+    ensure that the total weight values are not more than 100%
+    """
+    if scorecard:
+        try:
+            scorecard_kpis = ScorecardKPI.objects.filter(scorecard=scorecard)
+        except ScorecardKPI.DoesNotExist:
+            pass
+        else:
+            if kpi and kpi.id:
+                # this kpi already exists
+                # we remove it from the queryset so that its weight
+                # is not summed up below
+                scorecard_kpis = scorecard_kpis.exclude(kpi=kpi)
+
+            sum_dict = scorecard_kpis.aggregate(
+                            weight_sum=Sum('kpi__weight'))
+            # sum of all weights in the scorecard, excluding the
+            # current one
+            weight_sum = sum_dict['weight_sum']
+            # ensure that the sums does not go above 100%
+            if (value + weight_sum) > Decimal(100):
+                raise forms.ValidationError(
+                    _('The sum of the weights in a Scorecard cannot exceed'
+                      ' 100%.  Please reduce the value of this weight, or'
+                      ' of other weights in this scorecard.'))
+
+
 class KPIForm(forms.ModelForm):
+    """
+    generic scorecard kpi form
+    """
 
     class Meta:
         model = KPI
@@ -46,31 +78,8 @@ class KPIForm(forms.ModelForm):
 
     def clean_weight(self):
         value = self.cleaned_data['weight']
-        # ensure that the total weight values are not more than 100%
-        if self.scorecard:
-            try:
-                scorecard_kpis = ScorecardKPI.objects.filter(
-                    scorecard=self.scorecard)
-            except ScorecardKPI.DoesNotExist:
-                pass
-            else:
-                if self.instance and self.instance.id:
-                    # this kpi already exists
-                    # we remove it from the queryset so that its weight
-                    # is not summed up below
-                    scorecard_kpis = scorecard_kpis.exclude(kpi=self.instance)
-
-                sum_dict = scorecard_kpis.aggregate(
-                                weight_sum=Sum('kpi__weight'))
-                # sum of all weights in the scorecard, excluding the
-                # current one
-                weight_sum = sum_dict['weight_sum']
-                # ensure that the sums does not go above 100%
-                if (value + weight_sum) > Decimal(100):
-                    raise forms.ValidationError(
-                        _('The sum of the weights in a Scorecard cannot exceed'
-                          ' 100%.  Please reduce the value of this weight, or'
-                          ' of other weights in this scorecard.'))
+        # ensure that the sum of weights in a scorecard <= 100
+        clean_weight_func(value, self.instance, self.scorecard)
         return value
 
     def __init__(self, *args, **kwargs):
@@ -122,6 +131,9 @@ class KPIForm(forms.ModelForm):
 
 
 class UserKPIForm(forms.ModelForm):
+    """
+    Used when the user is editting their own scorecard KPIs
+    """
 
     class Meta:
         model = KPI
@@ -147,6 +159,12 @@ class UserKPIForm(forms.ModelForm):
             'measure': MiniTextarea(),
             'objective': Select2({'width': "100%"})
         }
+
+    def clean_weight(self):
+        value = self.cleaned_data['weight']
+        # ensure that the sum of weights in a scorecard <= 100
+        clean_weight_func(value, self.instance, self.scorecard)
+        return value
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
