@@ -226,7 +226,8 @@ class StaffApproveScorecard(ApproveScorecard):
     form_class = StaffScorecardApprovalForm
 
     def get_success_url(self):
-        return reverse('scorecards:staff_scorecards')
+        return reverse('scorecards:staff_scorecards',
+                       args=[self.object.user.id])
 
 
 class DeleteScorecard(EditorAccess, CoreDeleteView):
