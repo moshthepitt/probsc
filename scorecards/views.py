@@ -10,6 +10,8 @@ from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.utils.translation import ugettext as _
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 from django_tables2 import SingleTableMixin
 from braces.views import LoginRequiredMixin
@@ -143,6 +145,7 @@ class StaffScorecards(CoreListView):
         queryset = queryset.filter(user=self.object)
         return queryset
 
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         self.object = get_object_or_404(User, pk=self.kwargs['pk'])
         # if this user is not a subordinate then 404 away
@@ -212,6 +215,7 @@ class ApproveScorecard(AccessScorecard, CoreUpdateView):
     def get_success_url(self):
         return reverse('scorecards:scorecards_list')
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         # cannot approve your own scorecard
         if self.get_object().user == request.user:
@@ -311,6 +315,7 @@ class UserScorecards(CoreListView):
         queryset = queryset.filter(user=self.object)
         return queryset
 
+    @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         self.object = request.user
         return super(UserScorecards, self).dispatch(request, *args, **kwargs)
