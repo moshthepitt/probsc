@@ -94,7 +94,8 @@ class SubordinatesListview(CoreListView):
         queryset = self.request.user.userprofile.get_subordinates()
         form = self.form_class(self.request.GET)
         if form.is_valid() and self.search_fields:
-            search_terms = ["{}__icontains".format(x) for x in self.search_fields]
+            search_terms = [
+                "{}__icontains".format(x) for x in self.search_fields]
             query = Q()
             for term in search_terms:
                 query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)

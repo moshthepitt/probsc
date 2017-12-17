@@ -182,7 +182,35 @@ class UserProfile(models.Model):
                 models.Q(
                     position__supervisor=self.user) | models.Q(
                     position__department__manager=self.user))
-        return queryset
+
+        # get job positions of subs
+        subordinate_positions = Position.objects.filter(
+                                    userprofile__in=queryset)
+        # get any position that may report to these positions
+
+        # list of position ids of Positions that report to
+        # subordinate_positions
+        reporting_jp_ids = []
+
+        for sub_p in subordinate_positions:
+            reporting_jps = sub_p.get_descendants(include_self=False)
+            if reporting_jps is not None:
+                reporting_jp_ids = reporting_jp_ids + list(
+                    reporting_jps.values_list('id', flat=True))
+        reporting_jp_ids = list(set(reporting_jp_ids))
+
+        # get user profiles wiht positions that report to subordinate_positions
+        reporting_profiles = UserProfile.objects.active().filter(
+            position__id__in=reporting_jp_ids)
+
+        queryset = queryset.union(reporting_profiles)
+        # unions result in weird filtering so we create a new queryset
+        queryset_ids = [x.id for x in queryset]
+        if queryset_ids:
+            queryset = UserProfile.objects.filter(id__in=queryset_ids)
+        else:
+            queryset = UserProfile.objects.none()
+        return queryset.distinct()
 
     def has_subordinates(self):
         return self.get_subordinates().exists()
