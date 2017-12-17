@@ -215,6 +215,11 @@ class UserProfile(models.Model):
     def has_subordinates(self):
         return self.get_subordinates().exists()
 
+    def get_department(self):
+        if self.position is not None:
+            return self.position.department.name
+        return None
+
     def get_absolute_url(self):
         return "#"
 
