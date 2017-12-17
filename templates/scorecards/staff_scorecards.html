@@ -3,7 +3,11 @@
 
 {% block page_title %} {{this_object.userprofile.get_name}} | {{verbose_name_plural}} {% endblock %}
 
-{% block page_content %} 
+{% block extrahead %}
+	{{form.media.css}}
+{% endblock %}
+
+{% block page_content %}
 	<div class="row">
 		<div class="col-md-12 content-box-info">
 			<div class="content-box-header">
@@ -22,4 +26,8 @@
 			</div>
 		</div>
 	</div>
+{% endblock %}
+
+{% block footerjs %}
+	{{form.media.js}}
 {% endblock %}

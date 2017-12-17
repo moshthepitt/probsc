@@ -127,15 +127,12 @@ class UserScorecard(LoginRequiredMixin, VerboseNameMixin, BelongsToUserMixin,
         return self.get_kpis()
 
 
-class StaffScorecards(CoreListView):
+class StaffScorecards(ScorecardSearchMixin, CoreListView):
 
     """ manager/supervisor viewing his people's scorecards"""
     model = Scorecard
     table_class = StaffScorecardTable
     template_name = "scorecards/staff_scorecards.html"
-    search_fields = ['name', 'description', 'user__first_name',
-                     'user__last_name', 'user__email']
-    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(StaffScorecards, self).get_context_data(**kwargs)
@@ -296,15 +293,12 @@ class UserDeleteScorecard(AccessScorecard, CoreGenericDeleteView):
                                     args=[self.object.id]))
 
 
-class UserScorecards(CoreListView):
+class UserScorecards(ScorecardSearchMixin, CoreListView):
 
     """the user viewing his own scorecards"""
     model = Scorecard
     table_class = UserScorecardTable
     template_name = "scorecards/user_scorecards.html"
-    search_fields = ['name', 'description', 'user__first_name',
-                     'user__last_name', 'user__email']
-    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(UserScorecards, self).get_context_data(**kwargs)
