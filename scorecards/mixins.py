@@ -125,3 +125,14 @@ class KPICreateMixin(object):
         redirect_url = super(ScorecardFormMixin, self).form_valid(form)
         ScorecardKPI.objects.create(kpi=self.object, scorecard=self.scorecard)
         return redirect_url
+
+
+class ScorecardQuersetMixin(object):
+    """
+    Process the queryset returned on scorecard list views
+    """
+
+    def get_queryset(self):
+        queryset = super(ScorecardQuersetMixin, self).get_queryset()
+        queryset = queryset.filter(user__userprofile__active=True)
+        return queryset

@@ -22,14 +22,18 @@ from core.generic_views import CoreGenericDeleteView
 from core.mixins import VerboseNameMixin, EditorAccess
 from users.mixins import BelongsToUserMixin
 from scorecards.mixins import ScorecardMixin, ScorecardFormMixin
-from .tables import ScorecardTable, UserScorecardTable, StaffScorecardTable
-from .tables import UserScorecardKPITable, InitiativeTable, EvidenceTable
-from .tables import ScorecardReportKPITable, ScorecardReportTable, ScoreTable
-from .forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
-from .forms import UserScorecardForm, ScorecardApprovalForm
-from .forms import StaffScorecardApprovalForm, EvidenceForm
-from .mixins import ScorecardKPIModalFormMixin, AccessScorecard
-from .models import Scorecard, ScorecardKPI, Initiative, Score, Evidence
+from scorecards.tables import ScorecardTable, UserScorecardTable
+from scorecards.tables import UserScorecardKPITable, InitiativeTable
+from scorecards.tables import ScorecardReportKPITable, ScorecardReportTable
+from scorecards.tables import ScoreTable, EvidenceTable, StaffScorecardTable
+from scorecards.forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
+from scorecards.forms import UserScorecardForm, ScorecardApprovalForm
+from scorecards.forms import StaffScorecardApprovalForm, EvidenceForm
+from scorecards.mixins import ScorecardKPIModalFormMixin, AccessScorecard
+from scorecards.mixins import ScorecardQuersetMixin
+from scorecards.models import Scorecard, ScorecardKPI, Initiative
+from scorecards.models import Score, Evidence
+from scorecards.filters import ScorecardFilter
 
 
 class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard,
@@ -131,6 +135,7 @@ class StaffScorecards(CoreListView):
     template_name = "scorecards/staff_scorecards.html"
     search_fields = ['name', 'description', 'user__first_name',
                      'user__last_name', 'user__email']
+    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(StaffScorecards, self).get_context_data(**kwargs)
@@ -155,14 +160,16 @@ class StaffScorecards(CoreListView):
         return super(StaffScorecards, self).dispatch(*args, **kwargs)
 
 
-class ScorecardReportsListview(EditorAccess, CoreListView):
+class ScorecardReportsListview(EditorAccess, ScorecardQuersetMixin,
+                               CoreListView):
 
-    """ generic (admin) list of scorecards"""
+    """ generic (admin) list of scorecards  does not show inactive users"""
     model = Scorecard
     table_class = ScorecardReportTable
     template_name = "scorecards/reports.html"
     search_fields = ['name', 'description', 'user__first_name',
                      'user__last_name', 'user__email']
+    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardReportsListview, self).get_context_data(
@@ -179,6 +186,7 @@ class ScorecardListview(EditorAccess, CoreListView):
     table_class = ScorecardTable
     search_fields = ['name', 'description', 'user__first_name',
                      'user__last_name', 'user__email']
+    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardListview, self).get_context_data(**kwargs)
@@ -302,6 +310,7 @@ class UserScorecards(CoreListView):
     template_name = "scorecards/user_scorecards.html"
     search_fields = ['name', 'description', 'user__first_name',
                      'user__last_name', 'user__email']
+    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(UserScorecards, self).get_context_data(**kwargs)

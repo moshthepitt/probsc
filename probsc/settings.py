@@ -68,6 +68,7 @@ INSTALLED_APPS = [
     'mptt',
     'phonenumber_field',
     'easy_select2',
+    'django_filters',
 ]
 
 MIDDLEWARE = [

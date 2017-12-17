@@ -74,9 +74,16 @@ class ListViewSearchMixin(object):
     """
     form_class = ListViewSearchForm
     search_fields = ['name', 'description']
+    filter_class = None
 
     def get_queryset(self):
+
         queryset = super(ListViewSearchMixin, self).get_queryset()
+
+        if self.filter_class:
+            f = self.filter_class(self.request.GET, queryset=queryset)
+            queryset = f.qs
+
         form = self.form_class(self.request.GET)
         if form.is_valid() and self.search_fields:
             search_terms = [
