@@ -60,3 +60,8 @@
 td .btn.btn-xs {
 	margin-bottom:5px;
 }
+
+
+#search-form .select2-container .select2-selection--single {
+    height: 30px!important;
+}

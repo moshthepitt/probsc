@@ -10,6 +10,7 @@ class ListViewSearchForm(forms.Form):
     q = forms.CharField(label=_("Search Query"), required=False)
 
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ListViewSearchForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_tag = True

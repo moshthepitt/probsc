@@ -12,8 +12,8 @@ from allauth.account import app_settings
 from easy_select2.widgets import Select2
 
 from customers.models import Customer
-from .models import Department, Position, UserProfile
-from .fields import UserModelChoiceField
+from users.models import Department, Position, UserProfile
+from users.fields import UserModelChoiceField
 
 
 class DepartmentForm(forms.ModelForm):
@@ -42,10 +42,11 @@ class DepartmentForm(forms.ModelForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['parent'].queryset = Department.objects.active().filter(
+            self.fields['parent'].queryset = \
+                Department.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
             self.fields['manager'].queryset = User.objects.filter(
-                userprofile__customer__id=self.request.user.userprofile.customer.pk)
+                userprofile__customer__id=self.request.user.userprofile.customer.pk)  # noqa
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -61,9 +62,11 @@ class DepartmentForm(forms.ModelForm):
             Field('active'),
             Field('customer', type="hidden"),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn', _('Submit'),
+                       css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}"
+                    "</a>".format(
                         reverse('users:departments_list'), _("Back")))
             )
         )
@@ -99,10 +102,11 @@ class PositionForm(forms.ModelForm):
                 id__in=[self.request.user.userprofile.customer.pk])
             self.fields['parent'].queryset = Position.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
-            self.fields['department'].queryset = Department.objects.active().filter(
-                customer__id=self.request.user.userprofile.customer.pk)
+            self.fields['department'].queryset = \
+                Department.objects.active().filter(
+                    customer__id=self.request.user.userprofile.customer.pk)
             self.fields['supervisor'].queryset = User.objects.filter(
-                userprofile__customer__id=self.request.user.userprofile.customer.pk)
+                userprofile__customer__id=self.request.user.userprofile.customer.pk)  # noqa
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.render_required_fields = True
@@ -119,9 +123,11 @@ class PositionForm(forms.ModelForm):
             Field('active'),
             Field('customer', type="hidden"),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn', _('Submit'),
+                       css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}"
+                    "</a>".format(
                         reverse('users:positions_list'), _("Back")))
             )
         )
@@ -162,7 +168,8 @@ class UserProfileForm(BaseUserProfileForm):
         if self.request and self.request.user.userprofile.customer:
             self.fields['customer'].queryset = Customer.objects.filter(
                 id__in=[self.request.user.userprofile.customer.pk])
-            self.fields['position'].queryset = Position.objects.active().filter(
+            self.fields['position'].queryset = \
+                Position.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
         self.helper = FormHelper()
         self.helper.form_tag = True
@@ -181,9 +188,11 @@ class UserProfileForm(BaseUserProfileForm):
             Field('active'),
             Field('customer', type="hidden"),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn', _('Submit'),
+                       css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}"
+                    "</a>".format(
                         reverse('users:userprofiles_list'), _("Back")))
             )
         )
@@ -191,8 +200,10 @@ class UserProfileForm(BaseUserProfileForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if email and self.instance:
-            if UserProfile.objects.exclude(id=self.instance.id).filter(user__email=email).count() > 0:
-                raise forms.ValidationError(_('This email address if already in use.'))
+            if UserProfile.objects.exclude(
+                    id=self.instance.id).filter(user__email=email).count() > 0:
+                raise forms.ValidationError(
+                    _('This email address if already in use.'))
         return email
 
     def save(self, commit=True):
@@ -232,7 +243,8 @@ class AddUserProfileForm(BaseUserProfileForm):
         self.request = kwargs.pop('request', None)
         super(AddUserProfileForm, self).__init__(*args, **kwargs)
         if self.request and self.request.user.userprofile.customer:
-            self.fields['position'].queryset = Position.objects.active().filter(
+            self.fields['position'].queryset = \
+                Position.objects.active().filter(
                 customer__id=self.request.user.userprofile.customer.pk)
         self.helper = FormHelper()
         self.helper.form_tag = True
@@ -251,9 +263,11 @@ class AddUserProfileForm(BaseUserProfileForm):
             Field('role'),
             Field('active'),
             FormActions(
-                Submit('submitBtn', _('Submit'), css_class='btn-success btn-250'),
+                Submit('submitBtn', _('Submit'),
+                       css_class='btn-success btn-250'),
                 HTML(
-                    "<a class='btn btn-default btn-250' href='{}'>{}</a>".format(
+                    "<a class='btn btn-default btn-250' href='{}'>{}"
+                    "</a>".format(
                         reverse('users:userprofiles_list'), _("Back")))
             )
         )

@@ -2,9 +2,12 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 from core.mixins import CoreFormMixin
 from scorecards.models import Scorecard, ScorecardKPI
+from scorecards.filters import ScorecardFilter
+from scorecards.forms import ScorecardListViewSearchForm
 
 
 class ScorecardKPIModalFormMixin(CoreFormMixin):
@@ -135,4 +138,32 @@ class ScorecardQuersetMixin(object):
     def get_queryset(self):
         queryset = super(ScorecardQuersetMixin, self).get_queryset()
         queryset = queryset.filter(user__userprofile__active=True)
-        return queryset
+        return queryset.distinct()
+
+
+class ScorecardSearchMixin(object):
+    """
+    makes scorecard search better
+    """
+    filter_class = ScorecardFilter
+    form_class = ScorecardListViewSearchForm
+    search_fields = ['name', 'description', 'user__first_name',
+                     'user__last_name', 'user__email']
+    template_name = "scorecards/list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ScorecardSearchMixin, self).get_context_data(
+            **kwargs)
+        initial = {'year': timezone.now().year}
+        if self.request.GET.get('q'):
+            initial['q'] = self.request.GET.get('q')
+        if self.request.GET.get('year'):
+            initial['year'] = self.request.GET.get('year')
+        if self.request.GET.get('approved'):
+            initial['approved'] = self.request.GET.get('approved')
+        if self.request.GET.get('user__position__department'):
+            initial['user__position__department'] = \
+                self.request.GET.get('user__position__department')
+        form = self.form_class(request=self.request, initial=initial)
+        context['form'] = form
+        return context

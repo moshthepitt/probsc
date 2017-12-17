@@ -6,15 +6,16 @@ from django.conf import settings
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, HTML
-from crispy_forms.bootstrap import Field, FormActions
+from crispy_forms.bootstrap import Field, FormActions, FieldWithButtons
 from easy_select2.widgets import Select2
 
 from customers.models import Customer
 from core.widgets import MiniTextarea
 from core.utils import get_year_choices
 from users.fields import UserModelChoiceField
+from users.models import Department
 from kpis.models import KPI
-from .models import Scorecard, Initiative, Score, Evidence
+from scorecards.models import Scorecard, Initiative, Score, Evidence
 
 
 class ScoreModalForm(forms.ModelForm):
@@ -377,3 +378,50 @@ class EvidenceForm(forms.ModelForm):
         if value._size > settings.MAX_UPLOAD_SIZE:
             raise forms.ValidationError(_('Maximum file upload size is 5MB.'))
         return value
+
+
+class ScorecardListViewSearchForm(forms.ModelForm):
+    q = forms.CharField(label=_("Search Query"), required=False)
+    year = forms.ChoiceField(
+            label=_("Year"), required=False,
+            widget=Select2(select2attrs={'width': '170',
+                                         'placeholder': _('Year')}),
+            choices=[(x, x) for x in range(2012, 3000)])
+    approved = forms.ChoiceField(
+                label=_("Approved"), required=False,
+                choices=[(None, ""), (True, _("Yes")), (False, _("No"))],
+                widget=Select2(select2attrs={'width': '170',
+                                             'placeholder': _('Approved')}))
+    user__position__department = forms.ModelChoiceField(
+        label=_("Department"), required=False, widget=Select2(
+            select2attrs={'width': '170', 'placeholder': _('Department')}),
+        queryset=Department.objects.all())
+
+    class Meta:
+        model = Scorecard
+        fields = ['year', 'approved']
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ScorecardListViewSearchForm, self).__init__(*args, **kwargs)
+        if self.request:
+            self.fields['user__position__department'].queryset = Department.objects.filter(customer=self.request.user.userprofile.customer)  # noqa
+        self.helper = FormHelper()
+        self.helper.form_tag = True
+        self.helper.form_method = 'get'
+        self.helper.render_required_fields = True
+        self.helper.form_show_labels = False
+        self.helper.html5_required = True
+        self.helper.include_media = False
+        self.helper.form_id = 'search-form'
+        self.helper.form_class = 'form-inline'
+        self.helper.field_template = 'bootstrap3/layout/inline_field.html'
+        self.helper.layout = Layout(
+            Field('user__position__department', css_class="input-sm"),
+            Field('approved', css_class="input-sm"),
+            Field('year', css_class="input-sm"),
+            FieldWithButtons(
+                Field('q', css_class="input-sm"),
+                Submit('submitBtn', _('Filter'), css_class='btn-sm')
+            ),
+        )

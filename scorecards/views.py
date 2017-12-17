@@ -30,7 +30,7 @@ from scorecards.forms import ScorecardForm, InitiativeModalForm, ScoreModalForm
 from scorecards.forms import UserScorecardForm, ScorecardApprovalForm
 from scorecards.forms import StaffScorecardApprovalForm, EvidenceForm
 from scorecards.mixins import ScorecardKPIModalFormMixin, AccessScorecard
-from scorecards.mixins import ScorecardQuersetMixin
+from scorecards.mixins import ScorecardQuersetMixin, ScorecardSearchMixin
 from scorecards.models import Scorecard, ScorecardKPI, Initiative
 from scorecards.models import Score, Evidence
 from scorecards.filters import ScorecardFilter
@@ -161,15 +161,12 @@ class StaffScorecards(CoreListView):
 
 
 class ScorecardReportsListview(EditorAccess, ScorecardQuersetMixin,
-                               CoreListView):
+                               ScorecardSearchMixin, CoreListView):
 
     """ generic (admin) list of scorecards  does not show inactive users"""
     model = Scorecard
     table_class = ScorecardReportTable
     template_name = "scorecards/reports.html"
-    search_fields = ['name', 'description', 'user__first_name',
-                     'user__last_name', 'user__email']
-    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardReportsListview, self).get_context_data(
@@ -179,14 +176,11 @@ class ScorecardReportsListview(EditorAccess, ScorecardQuersetMixin,
         return context
 
 
-class ScorecardListview(EditorAccess, CoreListView):
+class ScorecardListview(EditorAccess, ScorecardSearchMixin, CoreListView):
 
     """ generic (admin) list of scorecards"""
     model = Scorecard
     table_class = ScorecardTable
-    search_fields = ['name', 'description', 'user__first_name',
-                     'user__last_name', 'user__email']
-    filter_class = ScorecardFilter
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardListview, self).get_context_data(**kwargs)
