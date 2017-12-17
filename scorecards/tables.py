@@ -254,7 +254,8 @@ class ScorecardTable(tables.Table):
 
 
 class ScorecardReportTable(tables.Table):
-    action = tables.Column(verbose_name="", accessor='pk', orderable=False)
+    action = tables.Column(verbose_name="", accessor='pk', orderable=False,
+                           exclude_from_export=True)
     score = tables.Column(verbose_name=_("Score"),
                           accessor='pk',
                           orderable=False)
@@ -298,6 +299,10 @@ class ScorecardReportTable(tables.Table):
             b=report['contextual_rating'],
         )
 
+    def value_score(self, record):
+        report = record.get_report()
+        return report['total'].quantize(TWOPLACES)
+
     def render_action(self, record):
         return format_html(
             "<a href='{c}'>{d}</a>",
@@ -309,10 +314,10 @@ class ScorecardReportTable(tables.Table):
 class UserScorecardTable(tables.Table):
     edit = tables.Column(verbose_name=_("Edit"),
                          accessor='pk',
-                         orderable=False)
+                         orderable=False, exclude_from_export=True)
     action = tables.Column(verbose_name=_("Reporting"),
                            accessor='pk',
-                           orderable=False)
+                           orderable=False, exclude_from_export=True)
     score = tables.Column(verbose_name=_("Score"),
                           accessor='pk',
                           orderable=False)
@@ -351,6 +356,9 @@ class UserScorecardTable(tables.Table):
             record.name
         )
 
+    def value_name(self, record):
+        return record.name
+
     def render_approved_by(self, record):
         return record.approved_by.userprofile.get_name()
 
@@ -361,6 +369,10 @@ class UserScorecardTable(tables.Table):
             a=report['total'].quantize(TWOPLACES),
             b=report['contextual_rating'],
         )
+
+    def value_score(self, record):
+        report = record.get_report()
+        return report['total'].quantize(TWOPLACES)
 
     def render_action(self, record):
         return format_html(

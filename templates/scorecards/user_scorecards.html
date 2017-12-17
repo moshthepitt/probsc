@@ -16,6 +16,13 @@
 					<div class="btn-group pull-right margin-left-10">
 						<a href="{% url 'scorecards:user_scorecards_add' %}" class="btn btn-primary btn-sm btn-100">{% trans 'Add New' %}</a>
 					</div>
+					<div class="btn-group pull-right  margin-left-10">
+						{% if not request.GET %}
+						<a href="{% querystring '_export'='xls' %}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span></a>
+						{% else %}
+						<a href="{% querystring '_export'='xls' %}" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-arrow-down"></span></a>
+						{% endif %}
+					</div>
 					<div class="btn-group pull-right">
 						{% crispy form %}
 					</div>

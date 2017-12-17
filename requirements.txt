@@ -41,6 +41,7 @@ rjsmin==1.0.12
 six==1.10.0
 sqlparse==0.2.3
 statistics==1.0.3.5
+tablib==0.12.1
 urllib3==1.21.1
 vine==1.1.4
 whitenoise==3.3.0

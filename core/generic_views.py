@@ -7,6 +7,7 @@ from django.contrib import messages
 
 from braces.views import LoginRequiredMixin, FormMessagesMixin
 from django_tables2 import SingleTableView
+from django_tables2.export.views import ExportMixin
 
 from core.mixins import CoreFormMixin, ListViewSearchMixin, VerboseNameMixin
 from customers.mixins import CustomerFormMixin, CustomerCheckMixin
@@ -15,7 +16,7 @@ from customers.mixins import CustomerFilterMixin, CustomerExistsMixin
 
 class CoreListView(LoginRequiredMixin, CustomerExistsMixin,
                    CustomerFilterMixin, VerboseNameMixin, ListViewSearchMixin,
-                   SingleTableView, ListView):
+                   ExportMixin, SingleTableView, ListView):
     template_name = "core/crud/list.html"
 
 
