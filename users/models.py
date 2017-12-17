@@ -205,12 +205,12 @@ class UserProfile(models.Model):
 
         queryset = queryset.union(reporting_profiles)
         # unions result in weird filtering so we create a new queryset
-        queryset_ids = [x.id for x in queryset]
+        queryset_ids = list(set([x.id for x in queryset]))
         if queryset_ids:
             queryset = UserProfile.objects.filter(id__in=queryset_ids)
         else:
             queryset = UserProfile.objects.none()
-        return queryset.distinct()
+        return queryset
 
     def has_subordinates(self):
         return self.get_subordinates().exists()
