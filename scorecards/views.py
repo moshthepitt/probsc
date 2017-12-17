@@ -33,7 +33,6 @@ from scorecards.mixins import ScorecardKPIModalFormMixin, AccessScorecard
 from scorecards.mixins import ScorecardQuersetMixin, ScorecardSearchMixin
 from scorecards.models import Scorecard, ScorecardKPI, Initiative
 from scorecards.models import Score, Evidence
-from scorecards.filters import ScorecardFilter
 
 
 class InitiativeListSnippet(LoginRequiredMixin, AccessScorecard,

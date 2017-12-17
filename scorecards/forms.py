@@ -392,7 +392,7 @@ class ScorecardListViewSearchForm(forms.ModelForm):
                 choices=[(None, ""), (True, _("Yes")), (False, _("No"))],
                 widget=Select2(select2attrs={'width': '170',
                                              'placeholder': _('Approved')}))
-    user__position__department = forms.ModelChoiceField(
+    user__userprofile__position__department = forms.ModelChoiceField(
         label=_("Department"), required=False, widget=Select2(
             select2attrs={'width': '170', 'placeholder': _('Department')}),
         queryset=Department.objects.all())
@@ -405,7 +405,7 @@ class ScorecardListViewSearchForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(ScorecardListViewSearchForm, self).__init__(*args, **kwargs)
         if self.request:
-            self.fields['user__position__department'].queryset = Department.objects.filter(customer=self.request.user.userprofile.customer)  # noqa
+            self.fields['user__userprofile__position__department'].queryset = Department.objects.filter(customer=self.request.user.userprofile.customer)  # noqa
         self.helper = FormHelper()
         self.helper.form_tag = True
         self.helper.form_method = 'get'
@@ -417,7 +417,8 @@ class ScorecardListViewSearchForm(forms.ModelForm):
         self.helper.form_class = 'form-inline'
         self.helper.field_template = 'bootstrap3/layout/inline_field.html'
         self.helper.layout = Layout(
-            Field('user__position__department', css_class="input-sm"),
+            Field('user__userprofile__position__department',
+                  css_class="input-sm"),
             Field('approved', css_class="input-sm"),
             Field('year', css_class="input-sm"),
             FieldWithButtons(

@@ -161,9 +161,9 @@ class ScorecardSearchMixin(object):
             initial['year'] = self.request.GET.get('year')
         if self.request.GET.get('approved'):
             initial['approved'] = self.request.GET.get('approved')
-        if self.request.GET.get('user__position__department'):
-            initial['user__position__department'] = \
-                self.request.GET.get('user__position__department')
+        if self.request.GET.get('user__userprofile__position__department'):
+            initial['user__userprofile__position__department'] = \
+                self.request.GET.get('user__userprofile__position__department')
         form = self.form_class(request=self.request, initial=initial)
         context['form'] = form
         return context

@@ -20,7 +20,7 @@
 			</div>
 			<div class="content-box-large box-with-header">
 				{% render_table table %}
-				{% if request.GET.q or request.GET.year or request.GET.approved or request.GET.user__position__department %}
+				{% if request.GET.q or request.GET.year or request.GET.approved or request.GET.user__userprofile__position__department %}
 					<a href="{{list_view_url}}" class="btn btn-default btn-sm btn-100">{% trans 'Clear Search' %}</a>
 				{% endif %}
 			</div>

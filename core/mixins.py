@@ -80,20 +80,21 @@ class ListViewSearchMixin(object):
 
         queryset = super(ListViewSearchMixin, self).get_queryset()
 
-        form = self.form_class(self.request.GET)
-        if form.is_valid() and self.search_fields:
-            search_terms = [
-                "{}__icontains".format(x) for x in self.search_fields]
-            query = Q()
-            for term in search_terms:
-                query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)
-            queryset = queryset.filter(query)
-
         if self.filter_class:
             f = self.filter_class(self.request.GET, queryset=queryset)
             queryset = f.qs
 
-        return queryset
+        if self.request.GET.get('q'):
+            form = self.form_class(self.request.GET)
+            if form.is_valid() and self.search_fields:
+                search_terms = [
+                    "{}__icontains".format(x) for x in self.search_fields]
+                query = Q()
+                for term in search_terms:
+                    query.add(Q(**{term: form.cleaned_data['q']}), Q.OR)
+                queryset = queryset.filter(query)
+
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super(ListViewSearchMixin, self).get_context_data(**kwargs)
