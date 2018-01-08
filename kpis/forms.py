@@ -1,7 +1,8 @@
 from decimal import Decimal
 
 from django import forms
-from django.db.models import Sum
+from django.db.models import Sum, Value
+from django.db.models.functions import Coalesce
 from django.utils.translation import ugettext as _
 from django.urls import reverse
 
@@ -34,7 +35,7 @@ def clean_weight_func(value, kpi, scorecard):
                 scorecard_kpis = scorecard_kpis.exclude(kpi=kpi)
 
             sum_dict = scorecard_kpis.aggregate(
-                            weight_sum=Sum('kpi__weight'))
+                            weight_sum=Coalesce(Sum('kpi__weight'), Value(0)))
             # sum of all weights in the scorecard, excluding the
             # current one
             weight_sum = sum_dict['weight_sum']
