@@ -47,6 +47,16 @@ def clean_weight_func(value, kpi, scorecard):
                       ' of other weights in this scorecard.'))
 
 
+def clean_customer_func(value, scorecard):
+    """
+    ensure that the customer is set properly
+    """
+    if scorecard:
+        if value != scorecard.customer:
+            raise forms.ValidationError(_("Wrong Customer"))
+    return value
+
+
 class KPIForm(forms.ModelForm):
     """
     generic scorecard kpi form
@@ -81,6 +91,14 @@ class KPIForm(forms.ModelForm):
         value = self.cleaned_data['weight']
         # ensure that the sum of weights in a scorecard <= 100
         clean_weight_func(value, self.instance, self.scorecard)
+        return value
+
+    def clean_customer(self):
+        """
+        ensure that the customer is set properly
+        """
+        value = self.cleaned_data['customer']
+        clean_customer_func(value, self.scorecard)
         return value
 
     def __init__(self, *args, **kwargs):
@@ -165,6 +183,14 @@ class UserKPIForm(forms.ModelForm):
         value = self.cleaned_data['weight']
         # ensure that the sum of weights in a scorecard <= 100
         clean_weight_func(value, self.instance, self.scorecard)
+        return value
+
+    def clean_customer(self):
+        """
+        ensure that the customer is set properly
+        """
+        value = self.cleaned_data['customer']
+        clean_customer_func(value, self.scorecard)
         return value
 
     def __init__(self, *args, **kwargs):
