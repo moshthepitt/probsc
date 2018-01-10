@@ -44,8 +44,10 @@ class ScorecardKPITable(KPITable):
     def render_action(self, record):
         return format_html(
             '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
-            reverse('scorecards:scorecards_kpis_edit', args=[record.pk, self.scorecard.pk]),
-            reverse('scorecards:scorecards_kpis_delete', args=[record.pk, self.scorecard.pk])
+            reverse('scorecards:scorecards_kpis_edit', args=[record.pk,
+                    self.scorecard.pk]),
+            reverse('scorecards:scorecards_kpis_delete', args=[record.pk,
+                    self.scorecard.pk])
         )
 
     def __init__(self, *args, **kwargs):
@@ -62,8 +64,10 @@ class UserScorecardKPITable(KPITable):
     def render_action(self, record):
         return format_html(
             '<a href="{}">Edit</a> | <a href="{}">Delete</a>',
-            reverse('scorecards:user_scorecards_kpis_edit', args=[record.pk, self.scorecard.pk]),
-            reverse('scorecards:user_scorecards_kpis_delete', args=[record.pk, self.scorecard.pk])
+            reverse('scorecards:user_scorecards_kpis_edit',
+                    args=[record.pk, self.scorecard.pk]),
+            reverse('scorecards:user_scorecards_kpis_delete',
+                    args=[record.pk, self.scorecard.pk])
         )
 
     def __init__(self, *args, **kwargs):

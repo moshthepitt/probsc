@@ -43,8 +43,7 @@ class ScorecardKPIListview(ScorecardMixin, KPIBaseListview):
         return kwargs
 
     def get_queryset(self):
-        queryset = super(ScorecardKPIListview, self).get_queryset()
-        return queryset.filter(scorecard=self.scorecard)
+        return self.scorecard.kpis.all()
 
     def get_context_data(self, **kwargs):
         context = super(ScorecardKPIListview, self).get_context_data(**kwargs)
